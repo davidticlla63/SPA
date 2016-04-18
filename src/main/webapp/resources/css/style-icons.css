@@ -1,0 +1,22 @@
+.ui-icon.login { background-image: url("../icons/user.png"); }
+.ui-icon.nuevo { background-image: url(../icons/add.png); }
+.ui-icon.guardar { background-image: url(../icons/save.png); }
+.ui-icon.limpiar { background-image: url(../icons/paint_brush.png); }
+.ui-icon.eliminar { background-image: url(../icons/delete.png); }
+.ui-icon.editar { background-image: url(../icons/edit.png); }
+.ui-icon.ok { background-image: url(../icons/accept.png); }
+.ui-icon.cancelar { background-image: url(../icons/block.png); }
+.ui-icon.foto { background-image: url(../icons/image.png); }
+.ui-icon.camara { background-image: url(../icons/camera_icon_1.png); }
+.ui-icon.agenda_telefonica { background-image: url(../icons/phone_book.png); }
+
+.ui-icon.btn_red { background-image: url(../icons/red_button.png); }
+.ui-icon.btn_yellow { background-image: url(../icons/orange_button.png); }
+.ui-icon.btn_green { background-image: url(../icons/green_button.png); }
+
+.ui-icon.reporte { background-image: url(../icons/report.png); }
+.ui-icon.aviso { background-image: url(../icons/mms.png); }
+.ui-icon.llave { background-image: url(../icons/key.png); }
+
+.ui-icon.lock { background-image: url(../icons/lock.png); }
+.ui-icon.unlock { background-image: url(../icons/unlock.png); }

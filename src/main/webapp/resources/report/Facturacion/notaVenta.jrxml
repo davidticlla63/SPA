@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" language="groovy" pageWidth="204" pageHeight="577" columnWidth="184" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" isIgnorePagination="true" uuid="b5a7327c-2f6c-48ca-8118-3e780db2cf10">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select suc.telefono as suc_telefono, nv.id,nv.fecha_registro,nv.concepto as nota_venta,nv.total_literal,nv.nit_ci,nv.total_pagar,nv.nombre_cliente,suc.actividad,suc.nombre as sucursal,suc.direccion,
+ dn.codigo,dn.concepto,dn.cantidad,dn.precio_unitario,dn.precio_total,e.razonsocial as empresa,e.ciudad
+ from nota_venta nv,sucursal suc, detalle_nota_venta dn,empresa e
+where  nv.id =$P{id} and suc.id=nv.id_sucursal and nv.id=dn.id_nota_venta and nv.id_empresa=e.id]]>
+	</queryString>
+	<field name="suc_telefono" class="java.lang.String"/>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="fecha_registro" class="java.sql.Timestamp"/>
+	<field name="nota_venta" class="java.lang.String"/>
+	<field name="total_literal" class="java.lang.String"/>
+	<field name="nit_ci" class="java.lang.String"/>
+	<field name="total_pagar" class="java.lang.Double"/>
+	<field name="nombre_cliente" class="java.lang.String"/>
+	<field name="actividad" class="java.lang.String"/>
+	<field name="sucursal" class="java.lang.String"/>
+	<field name="direccion" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="concepto" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Double"/>
+	<field name="precio_unitario" class="java.lang.Double"/>
+	<field name="precio_total" class="java.lang.Double"/>
+	<field name="empresa" class="java.lang.String"/>
+	<field name="ciudad" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="99" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="13" width="184" height="15" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="f51c6698-0637-4be6-bdee-75979f7dafc7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SUCURSAL Nro. "+$F{sucursal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-1" y="25" width="185" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="65850699-5334-456a-9744-f5e92b3bbaee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="47" width="183" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="8d87a13d-3a17-403a-9b42-64a63ffcc718"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TELÉFONO "+$F{suc_telefono}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="58" width="183" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="aa65058a-0018-4ab1-aee2-94e926db0dbf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ciudad}+" - BOLIVIA"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="69" width="183" height="30" forecolor="#000000" uuid="a1fa97c5-62c3-4604-85f3-efd4939f1d9d"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Courier New" size="26" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NOTA VENTA]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="-10" y="0" width="202" height="15" uuid="ac567a4b-4bca-471d-916e-29730b235c39"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="99" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="-4" width="184" height="1" forecolor="#000000" uuid="7a4db4be-2f94-49aa-9640-a938b3f98784"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="-1" y="37" width="185" height="1" forecolor="#000000" uuid="f6b07922-8ec1-40d4-9664-974afbacb981"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="12" width="105" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="0890ba27-1e88-447a-8217-1b55ed39f3cd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nro. Nota Venta: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="105" y="12" width="79" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="ad56483f-41d8-42b4-9b54-9f808316ba52"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="61" width="72" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="e607090d-c596-4f4e-8c20-2e1eafabf87a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="72" width="72" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="313bb9e7-d1a5-4a5e-91c4-00d89172723d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NIT/CI: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-4" y="83" width="95" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="fc2b3fac-7747-4894-bc20-20ddb1f96ffa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NOMB. R. SOCIAL: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement x="73" y="61" width="57" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="8409f07c-c8ca-450e-9fba-0f2c573fdc73"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_registro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="73" y="72" width="111" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="3bfe449c-ed33-4cd0-8ca1-ace68de770f9"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nit_ci}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="91" y="83" width="97" height="15" forecolor="#000000" uuid="6c31d78f-bce1-4a0a-aa7b-90372e2b1aa2"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="HH:mm">
+				<reportElement x="148" y="61" width="36" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="7221a049-0711-4cfb-9436-98a2e6c2398c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_registro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="130" y="61" width="18" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="b6ca22d8-d162-4238-8971-c0f9ef29050a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["H:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="40" width="183" height="21" uuid="e111e289-bff6-4ba2-a61b-7ea9826aeb3d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actividad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14">
+			<staticText>
+				<reportElement x="1" y="3" width="22" height="11" forecolor="#000000" uuid="10694df6-7c4d-41c9-8d92-dd56fea5f723"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="3" width="93" height="11" forecolor="#000000" uuid="f7318395-a7df-4414-be04-701e7a5fd098"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="3" width="32" height="11" forecolor="#000000" uuid="ad411210-57a6-4e0c-a758-ed78cd91aead"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[P/U]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="3" width="36" height="11" forecolor="#000000" uuid="a892a773-248f-4abb-803a-1a8fa63b5beb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="2" width="184" height="1" forecolor="#000000" uuid="9a43f117-cce8-463e-a32c-7f2616081913"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="13" width="184" height="1" forecolor="#000000" uuid="1ab2b77f-03cf-485b-84ed-7e3b40fcf4ac"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="1" y="0" width="22" height="10" forecolor="#000000" uuid="38c70afc-1cae-4e4d-87a4-c48460ff924a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="23" y="0" width="93" height="10" forecolor="#000000" uuid="82e90c3d-ce26-4233-9984-f3b42d0e00b8"/>
+				<textElement>
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="116" y="0" width="32" height="10" forecolor="#000000" uuid="e2cbf8a4-5d2f-47f7-b519-5272a16677c8"/>
+				<textElement textAlignment="Right">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio_unitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="148" y="0" width="36" height="10" forecolor="#000000" uuid="d64a8482-92ad-4337-bdd3-39e9fef32af8"/>
+				<textElement textAlignment="Right">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="36" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="0" width="123" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="09a70853-d5d6-47b3-b6a8-65d6161fb1f9"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL Bs "]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="184" height="1" forecolor="#000000" uuid="d47877c5-9d18-47d9-a8f8-b0f4b4a8e0e8"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="14" width="184" height="11" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="4b3f997d-ea3e-49d1-b6d0-09f04b99959a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SON: "+$F{total_literal}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-1" y="27" width="185" height="1" forecolor="#000000" uuid="81a13f55-54f3-4d2f-abca-fc0c2faa5721"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement x="124" y="0" width="60" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="69f880d0-5f73-4d7f-97a9-585b69ca4ba9"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

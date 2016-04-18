@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Facturacion</title>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<p:commandLink id="buttonCrear1" value="&#160; Nueva Factura"
+									styleClass="btn btn-success ion-plus-round"
+									rendered="#{facturaLisPizzeriaController.crear}"
+									style="height:31px;"
+									onclick="location.href='#{request.contextPath}/pages/formulario/facturacion-pizza.xhtml'">
+								</p:commandLink>
+								<p:commandLink id="buttonCancelar" value="&#160; Cancelar"
+									styleClass="btn btn-warning ion-minus-circled"
+									rendered="#{facturaLisPizzeriaController.seleccionarFactura}"
+									style="height:31px; padding:center"
+									update="formBotonesHeader,formTableFacturas,:formDatosFactura"
+									action="#{facturaLisPizzeriaController.actualizarFormReg()}">
+								</p:commandLink>
+
+								<p:commandLink id="buttonAnular" value="&#160; Anular"
+									styleClass="btn orange ion-alert"
+									rendered="#{facturaLisPizzeriaController.seleccionarFactura  and facturaLisPizzeriaController.selectedFactura.estado=='V'}"
+									style="height:31px; padding:center"
+									update="formBotonesHeader,formTableFacturas,:formDatosFactura"
+									action="#{facturaLisPizzeriaController.anularFactura()}">
+								</p:commandLink>
+								<p:commandLink id="buttonModificar" value="&#160; Imprimir"
+									styleClass="btn btn-info ion-printer"
+									rendered="#{facturaLisPizzeriaController.seleccionarFactura and facturaLisPizzeriaController.selectedFactura.estado=='V' or facturaLisPizzeriaController.selectedFactura.estado=='A'}"
+									style="height:31px;" update=":formModalVistaPrevia"
+									action="#{facturaLisPizzeriaController.armarUrl()}"
+									oncomplete="PF('dlgFacturaVistaPrevia').show();">
+								</p:commandLink>
+
+								<p:commandLink id="buttonRevisar" value="&#160; Revisar"
+									styleClass="btn btn-info ion-printer" style="height:31px;"
+									action="#{facturaLisPizzeriaController.revisarFacturas()}">
+								</p:commandLink>
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/formulario/facturacion_list.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active" style="font-size: 12px;">Facturación</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formDatosFactura">				`
+						<div class="col-sm-6 col-md-4" align="left">
+								<h:panelGrid columns="1" style="border: 0px;"
+									rendered="#{!facturaLisPizzeriaController.crear}">
+									<h:column>
+										<p:graphicImage
+											value="#{facturaLisPizzeriaController.urlCodeQR}"
+											width="150px;" height="150px;" />
+
+										<span class="label label-success"><h:outputText
+												rendered="#{facturaLisPizzeriaController.selectedFactura.estado=='V'}"
+												value="Factura Valida" /></span>
+
+										<span class="label label-warning"><h:outputText
+												rendered="#{facturaLisPizzeriaController.selectedFactura.estado=='E'}"
+												value="Factura Extraviada" /></span>
+
+										<span class="label label-danger"><h:outputText
+												rendered="#{facturaLisPizzeriaController.selectedFactura.estado=='A'}"
+												value="Factura Anulada" /></span>
+										<span class="label label-danger"><h:outputText
+												rendered="#{facturaLisPizzeriaController.selectedFactura.estado=='C'}"
+												value="Factura Emitida
+												Contingencia" /></span>
+										<span class="label label-default"><h:outputText
+												rendered="#{facturaLisPizzeriaController.selectedFactura.estado=='N'}"
+												value="Factura No Utilizada" /></span>
+
+									</h:column>
+								</h:panelGrid>
+
+
+							</div>
+							<div class="col-sm-6 col-md-4">
+								<h:panelGrid columns="4"
+									rendered="#{!facturaLisPizzeriaController.crear}">
+
+									<div class="form-group" align="left">
+										<label for="numCCID" class="col-lg-6 control-label">Nro.
+											FACTURA</label>
+										<div class="col-lg-4">
+											<p:inputText id="numCCID" styleClass="form-control"
+												value="#{facturaLisPizzeriaController.selectedFactura.numeroFactura}"
+												required="true" requiredMessage="NIT es Requerido."
+												disabled="true">
+												<p:ajax event="change" />
+											</p:inputText>
+											<p:watermark value="Nro Factura" for="numCCID" />
+											<p:message for="numCCID" />
+										</div>
+									</div>
+
+									<div class="form-group" align="left">
+										<label for="facturaNitID" class="col-lg-2 control-label">NIT/CI</label>
+										<div class="col-lg-8">
+											<p:inputText id="facturaNitID" styleClass="form-control"
+												value="#{facturaLisPizzeriaController.selectedFactura.nitCi}"
+												required="true" requiredMessage="NIT es Requerido."
+												disabled="true">
+												<p:ajax event="change" />
+											</p:inputText>
+											<p:watermark value="NIT / CI" for="facturaNitID" />
+											<p:message for="facturaNitID" />
+										</div>
+									</div>
+
+									<div class="form-group" align="left">
+										<label for="nombreClienteID" class="col-lg-2 control-label">CLIENTE</label>
+										<div class="col-lg-8">
+											<p:inputText id="nombreClienteID" styleClass="form-control"
+												value="#{facturaLisPizzeriaController.selectedFactura.nombreFactura}"
+												size="40" required="true"
+												requiredMessage="Cliente es Requerido." disabled="true">
+												<p:ajax event="change" />
+											</p:inputText>
+											<p:watermark value="Nombre de Cliente" for="nombreClienteID" />
+											<p:message for="nombreClienteID" />
+										</div>
+									</div>
+
+								</h:panelGrid>
+
+
+
+							</div>
+
+							<div class="col-sm-6 col-md-4">
+
+
+								<h:panelGrid columns="4"
+									rendered="#{!facturaLisPizzeriaController.crear}">
+
+									<div class="form-group" align="left">
+										<label for="autorizaCCID" class="col-lg-6 control-label">AUTORIZACION</label>
+										<div class="col-lg-4">
+											<p:inputText id="autorizaCCID" styleClass="form-control"
+												value="#{facturaLisPizzeriaController.selectedFactura.numeroAutorizacion}"
+												required="true" requiredMessage="NIT es Requerido."
+												disabled="true">
+												<p:ajax event="change" />
+											</p:inputText>
+											<p:watermark value="Nro Autorizacion" for="autorizaCCID" />
+											<p:message for="autorizaCCID" />
+										</div>
+									</div>
+
+									<div class="form-group" align="left">
+										<label for="facturaCCID" class="col-lg-6 control-label">CONTROL</label>
+										<div class="col-lg-4">
+											<p:inputText id="facturaCCID" styleClass="form-control"
+												value="#{facturaLisPizzeriaController.selectedFactura.codigoControl}"
+												required="true" requiredMessage="NIT es Requerido."
+												disabled="true">
+												<p:ajax event="change" />
+											</p:inputText>
+											<p:watermark value="NIT / CI" for="facturaCCID" />
+											<p:message for="facturaCCID" />
+										</div>
+									</div>
+
+									<div class="form-group" align="left">
+										<label for="facturaFechaEmisionID"
+											class="col-lg-6 control-label">FECHA</label>
+										<div class="col-lg-4">
+											<p:calendar
+												value="#{facturaLisPizzeriaController.selectedFactura.fechaFactura}"
+												style="text-align:right;" pattern="dd/MM/yyyy"  disabled="true" />
+
+										</div>
+									</div>
+
+								</h:panelGrid>
+
+							</div>
+						</h:form>
+					</div>
+
+					<div class="row">
+						<h:form id="formTableFacturas">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">Lista de Facturas</h3>
+										<h:panelGrid columns="5">
+											<h:outputText value="Desde:" />
+											<p:calendar
+												value="#{facturaLisPizzeriaController.fechaInicio}"
+												pattern="dd/MM/yyyy"></p:calendar>
+											<h:outputText value="Hasta:" />
+											<p:calendar value="#{facturaLisPizzeriaController.fechaFin}"
+												pattern="dd/MM/yyyy"></p:calendar>
+											<p:commandLink id="buttonBuscarID" value="&#160; Consultar"
+												styleClass="btn orange ion-search"
+												style="height:31px; padding:center"
+												update=":formBotonesHeader,:formTableFacturas"
+												action="#{facturaLisPizzeriaController.consultar()}">
+											</p:commandLink>
+										</h:panelGrid>
+
+
+									</div>
+									<!-- start here datatable -->
+									<div class="form-group">
+										<p:dataTable id="dataTableFactura" var="item" rendered="true"
+											value="#{facturaLisPizzeriaController.listFactura}"
+											reflow="true" emptyMessage="No se encontraron facturaes"
+											selectionMode="single" rowIndexVar="index"
+											style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="10 20 30 40 50" first="0"
+											paginator="true" rows="10"
+											selection="#{facturaLisPizzeriaController.selectedFactura}"
+											rowKey="#{item.id}">
+											<p:ajax event="rowSelect"
+												update=":formBotonesHeader,:formDatosFactura,:formTableFacturas"
+												listener="#{facturaLisPizzeriaController.onRowSelect}" />
+
+											<f:facet name="header">V=FACTURA VALIDA, A=FACTURA ANULADA</f:facet>
+											<p:column headerText="Nº" width="4%"
+												style="text-align:center;">
+												<h:outputText value="#{index+1}" />
+											</p:column>
+
+											<p:column headerText="Nº Factura"
+												filterBy="#{item.numeroFactura}" filterMatchMode="exact"
+												filterStyle="width: 100%; height:25px;" width="7%"
+												style="text-align:center;">
+												<center>
+													<span class="label label-warning"> <h:outputText
+															value="#{item.numeroFactura}" />
+													</span>
+												</center>
+											</p:column>
+											<p:column headerText="Fecha" width="15%"
+												style="text-align:center;">
+												<p:calendar value="#{item.fechaRegistro}"
+													style="text-align:right;" pattern="dd/MM/yyyy"  />
+
+											</p:column>
+
+											<p:column headerText="Autorizacion"
+												filterBy="#{item.numeroAutorizacion}" width="10%"
+												filterMatchMode="contains"
+												filterStyle="width: 100%; height:25px;">
+												<h:outputText value="#{item.numeroAutorizacion}" />
+											</p:column>
+
+
+
+											<p:column headerText="NIT Comprador" width="10%"
+												filterBy="#{item.nitCi}" filterMatchMode="contains"
+												filterStyle="width: 100%; height:25px;">
+												<h:outputText value="#{item.nitCi}" />
+											</p:column>
+											<p:column headerText="Razon Social"
+												filterBy="#{item.nombreFactura}" width="20%"
+												filterMatchMode="contains"
+												filterStyle="width: 100%; height:25px;">
+												<h:outputText value="#{item.nombreFactura}" />
+											</p:column>
+
+											<p:column headerText="Total Venta" width="10%"
+												filterBy="#{item.totalFacturado}" filterMatchMode="contains"
+												style="text-align: right;"
+												filterStyle="width: 100%; height:25px;">
+												<h:outputText value="#{item.totalFacturado}">
+													<f:convertNumber pattern="#,##0.00" />
+												</h:outputText>
+											</p:column>
+											<p:column headerText="Codigo Control"
+												filterBy="#{item.codigoControl}" filterMatchMode="contains"
+												filterStyle="width: 100%; height:25px;" width="10%">
+												<h:outputText value="#{item.codigoControl}" />
+											</p:column>
+											<p:column headerText="Estado" filterBy="#{item.estado}"
+												width="5%" filterMatchMode="contains"
+												filterStyle="width: 100%; height:25px;">
+												<center>
+													<h:outputText value="#{item.estado}" />
+												</center>
+											</p:column>
+										</p:dataTable>
+									</div>
+
+								</div>
+							</div>
+
+						</h:form>
+					</div>
+
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+		<!-- START GROWL :formGrowl:msgs1 -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+
+
+
+
+
+		<!-- VISTA PREVIA REPORTE -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgFacturaVistaPrevia" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPrevia">
+			<h:form id="formModalVistaPrevia">
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<p:media player="pdf" rendered="true"
+								value="#{facturaLisPizzeriaController.url}" width="750px"
+								height="480px" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+							<p:commandLink value="Cerrar"
+											styleClass="btn btn-primary btn-block"
+											action="#{facturaLisPizzeriaController.dialogClose()}" />
+							
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+
+
+
+
+	</ui:define>
+
+</ui:composition>

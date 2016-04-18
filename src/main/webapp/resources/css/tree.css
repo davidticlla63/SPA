@@ -1,0 +1,288 @@
+.nav-list {
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-bottom: 0;
+}
+
+.nav-list-main {
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-bottom: 0;
+}
+
+span.nav-toggle-icon {
+	font-size: 7px !important;
+	top: -2px !important;
+	color: #888 !important;
+}
+
+/**.nav-list-main li>label.nav-toggle::before {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  display: inline-block;
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-left: 4px solid #ccc;
+  border-left-color: rgba(0, 0, 0, 0.4);
+  content: '';
+}
+
+
+
+
+.nav-list-main li>label.nav-toggle::after {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  display: inline-block;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid red;
+  border-left-color: rgba(0, 0, 0, 0.4);
+  content: '';
+}*/
+
+
+/* 
+.tree {
+    min-height:20px;
+    padding:19px;
+    margin-bottom:20px;
+    background-color:#fbfbfb;
+    border:1px solid #999;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+}
+.tree li {
+    list-style-type:none;
+    margin:0;
+    padding:10px 5px 0 5px;
+    position:relative
+}
+.tree li::before, .tree li::after {
+    content:'';
+    left:-20px;
+    position:absolute;
+    right:auto
+}
+.tree li::before {
+    border-left:1px solid #999;
+    bottom:50px;
+    height:100%;
+    top:0;
+    width:1px
+}
+.tree li::after {
+    border-top:1px solid #999;
+    height:20px;
+    top:25px;
+    width:25px
+}
+.tree li span {
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #999;
+    border-radius:5px;
+    display:inline-block;
+    padding:3px 8px;
+    text-decoration:none
+}
+.tree li.parent_li>span {
+    cursor:pointer
+}
+.tree>ul>li::before, .tree>ul>li::after {
+    border:0
+}
+.tree li:last-child::before {
+    height:30px
+}
+.tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
+    background:#eee;
+    border:1px solid #94a0b4;
+    color:#000
+}
+ */
+
+
+
+
+/*
+ * Imageless CSS3 Treeview with Checkbox Support
+ * @namespace window.AcidJs
+ * @class CSS3Treeview
+ * @version 3.0
+ * @author Martin Ivanov
+ * @url developer website: http://wemakesites.net/
+ * @url developer twitter: https://twitter.com/#!/wemakesitesnet
+ * @url developer blog http://acidmartin.wordpress.com/
+ **/
+ 
+/*
+ * Do you like this solution? Please, donate:
+ * https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QFUHPWJB2JDBS
+ **/
+.acidjs-css3-treeview,
+.acidjs-css3-treeview *
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+ 
+.acidjs-css3-treeview label[for]::before,
+.acidjs-css3-treeview label span::before
+{
+    content: "\25b6";
+    display: inline-block;
+    margin: 0px 0 0;
+    width: 13px;
+    height: 0px;
+    vertical-align: top;
+    text-align: center;
+    color: #e74c3c;
+    font-size: 8px;
+    line-height: 13px;
+}
+ 
+.acidjs-css3-treeview li ul
+{
+    margin: 0 0 0 25px;
+}
+ 
+.acidjs-css3-treeview *
+{
+    vertical-align: middle;
+}
+ 
+.acidjs-css3-treeview
+{
+    font: normal 11px/16px "Segoe UI", Arial, Sans-serif;
+}
+ 
+.acidjs-css3-treeview li
+{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+ 
+.acidjs-css3-treeview input[type="checkbox"]
+{
+    display: none;
+}
+ 
+.acidjs-css3-treeview label
+{
+    cursor: pointer;
+}
+ 
+.acidjs-css3-treeview label[for]::before
+{
+    -webkit-transform: translatex(-24px);
+    -moz-transform: translatex(-24px);
+    -ms-transform: translatex(-24px);
+    -o-transform: translatex(-24px);
+    transform: translatex(-24px);
+}
+ 
+.acidjs-css3-treeview label span::before
+{
+    -webkit-transform: translatex(16px);
+    -moz-transform: translatex(16px);
+    -ms-transform: translatex(16px);
+    -o-transform: translatex(16px);
+    transform: translatex(16px);
+}
+ 
+.acidjs-css3-treeview input[type="checkbox"][id]:checked ~ label[for]::before
+{
+    content: "\25bc";
+}
+ 
+.acidjs-css3-treeview input[type="checkbox"][id]:not(:checked) ~ ul
+{
+    display: none;
+}
+ 
+.acidjs-css3-treeview label:not([for])
+{
+    margin: 0 8px 0 0;
+}
+ 
+.acidjs-css3-treeview label span::before
+{
+    content: "";
+    border: solid 1px #1375b3;
+    color: #1375b3;
+    opacity: .50;
+}
+ 
+.acidjs-css3-treeview label input:checked + span::before
+{
+    content: "\2714";
+    box-shadow: 0 0 2px rgba(0, 0, 0, .25) inset;
+    opacity: 1;
+}
+
+
+
+
+
+/* deslizable */
+
+#tab {
+    width:40px;
+    height:50px;
+    position: absolute;
+    right: 0;
+    top: 25px;
+    display:block;
+    cursor:pointer;
+    background-color:#232526;
+    border-radius: 10px 0 0 10px;
+    padding: 5px 0 5px 5px; 
+}       
+#tab_interna {
+    border-radius: 5px 0 0 5px;
+    width: 100%;            
+    height: 100%;
+    background: #CCC url('images/arrow_posts_left.png') no-repeat center center;
+}               
+#tab_interna:hover {
+    background-position: 5px 13px;
+}
+.expandida {
+    background: #CCC url('images/arrow_posts_right.png') no-repeat center center !important;            
+}       
+.expandida:hover {
+    background-position: 11px 13px !important;
+}
+ 
+#panel {
+	overflow:scroll;
+    position: absolute;
+    right: 0;
+    top:25px;
+    background-color:#CCC;
+    height:100%;
+    width:0;
+    font: 18px Arial;
+    color: #707275;
+    text-align: left;
+    border-radius: 0 0 0 15px;
+}
+#panel h3 {
+    margin: 0;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+ 
+#panel .content {
+    width:320px;
+    margin: 5px auto;
+}

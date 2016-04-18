@@ -1,0 +1,361 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:a="http://richfaces.org/a"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	template="/WEB-INF/templates/templateModuloVentas.xhtml">
+
+	<ui:define name="head">
+		<title>Consulta Ventas</title>
+	</ui:define>
+
+	<ui:define name="header">
+
+		<div class="row">
+			<div class="col-sm-12 col-md-12" align="left">
+
+				<ol class="breadcrumb">
+					<li class="fuente-link-sidebar">
+						<div class="lsf symbol">sitemap</div>
+					</li>
+
+					<li class="fuente-link-sidebar"><a href="/MediFact/">
+							Inicio </a></li>
+					<li class="fuente-link-sidebar"><a
+						href="/MediFact/pages/ventas/home.xhtml"> Modulo Ventas </a></li>
+					<li><a class="fuente-link-sidebar"
+						href="/MediFact/pages/ventas/home-reporte.xhtml">Reporte</a></li>
+					<li class="active" style="color: orange;"><a
+						style="color: orange;" class="fuente-link-sidebar"
+						href="/MediFact/pages/ventas/informe-ventas.xhtml">Informe
+							Ventas</a></li>
+				</ol>
+			</div>
+		</div>
+
+
+	</ui:define>
+
+	<ui:define name="content">
+
+
+
+		<h:form id="formRegistroServicio">
+
+
+
+			<div class="panel-body" style="padding: 0px 0px 0px 0px;">
+
+				<div class="row">
+					<p:tabView id="tabviwID"
+						activeIndex="#{informeVentasController.tabIndex}">
+						<p:ajax event="tabChange"
+							listener="#{informeVentasController.onTabChange}" />
+						<p:tab title="Pendientes por Cobrar">
+							<div class="row">
+								<div class="col-sm-9 col-md-12" align="left">
+
+									<div id="newServiciosMessages" class="update" />
+
+									<div class="panel panel-default">
+										<!-- Default panel contents -->
+										<div class="panel-heading">
+											<strong> <i aria-hidden="true"
+												class="glyphicon glyphicon-th-list"></i> RESULTADO - VENTAS
+												PENDIENTES POR PAGAR
+											</strong>
+										</div>
+
+										<!-- Table -->
+										<div class="table-responsive">
+
+											<p:dataTable
+												styleClass="table table-condensed table-hover table-responsive table-striped table-bordered"
+												id="pendientesTable" var="_proforma"
+												value="#{informeVentasController.listProformaVentaPendiente}"
+												emptyMessage="No se encontraron registros."
+												rowIndexVar="item">
+												<p:column>
+												<p:commandLink id="quitarCompuestoID2"
+															dir="/MediFact/pages/ventas/facturacion.xhtml"
+															action="#{informeVentasController.cobrarProformaVenta(_proforma)}">
+															<span class="badge alert-danger">Cobrar</span>
+														</p:commandLink>
+												</p:column>
+												<p:column headerText="Codigo" filterBy="#{_proforma.id}"
+													filterMatchMode="contains">
+													<center>
+														<span class="badge"><h:outputText
+																value="#{_proforma.id}" /></span>
+													</center>
+												</p:column>
+
+
+												<p:column headerText="Cliente"
+													filterBy="#{_proforma.cliente.nombreCompleto}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.cliente.nombreCompleto}" />
+												</p:column>
+
+												<p:column headerText="Medico"
+													filterBy="#{_proforma.medico.nombre}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.medico.nombre}" />
+												</p:column>
+
+												<p:column headerText="Obsservacion"
+													filterBy="#{_proforma.observacion}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.observacion}" />
+												</p:column>
+
+												<p:column headerText="Entrega"
+													filterBy="#{_proforma.fechaEntrega}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.fechaEntrega}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Registro"
+													filterBy="#{_proforma.usuarioRegistro}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.usuarioRegistro}" />
+												</p:column>
+
+												<p:column headerText="Descuento"
+													filterBy="#{_proforma.totalDescuento}"
+													filterMatchMode="contains">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{_proforma.totalDescuento}">
+														<f:convertNumber pattern="#,##0.0000" locale="en" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Total"
+													filterBy="#{_proforma.totalPagar}"
+													filterMatchMode="contains">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{_proforma.totalPagar}">
+														<f:convertNumber pattern="#,##0.0000" locale="en" />
+													</h:outputText>
+												</p:column>
+											</p:dataTable>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="Ventas al Credito">
+							<div class="row">
+								<div class="col-sm-9 col-md-12" align="left">
+
+									<div id="newServiciosMessages" class="update" />
+
+									<div class="panel panel-default">
+										<!-- Default panel contents -->
+										<div class="panel-heading">
+											<strong> <i aria-hidden="true"
+												class="glyphicon glyphicon-th-list"></i> RESULTADO - VENTAS
+												AL CREDITO
+											</strong>
+										</div>
+
+										<!-- Table -->
+										<div class="table-responsive">
+
+											<p:dataTable
+												styleClass="table table-condensed table-hover table-responsive table-striped table-bordered"
+												id="cretidoTable" var="_proforma"
+												value="#{informeVentasController.listProformaVentaCredito}"
+												emptyMessage="No se encontraron registros."
+												rowIndexVar="item">
+
+												<p:column headerText="Codigo" filterBy="#{_proforma.id}"
+													filterMatchMode="contains">
+													<center>
+														<span class="badge"><h:outputText
+																value="#{_proforma.id}" /></span>
+													</center>
+												</p:column>
+
+
+												<p:column headerText="Cliente"
+													filterBy="#{_proforma.cliente.nombreCompleto}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.cliente.nombreCompleto}" />
+												</p:column>
+
+												<p:column headerText="Medico"
+													filterBy="#{_proforma.medico.nombre}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.medico.nombre}" />
+												</p:column>
+
+												<p:column headerText="Obsservacion"
+													filterBy="#{_proforma.observacion}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.observacion}" />
+												</p:column>
+
+												<p:column headerText="Entrega"
+													filterBy="#{_proforma.fechaEntrega}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.fechaEntrega}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Registro"
+													filterBy="#{_proforma.usuarioRegistro}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.usuarioRegistro}" />
+												</p:column>
+
+												<p:column headerText="Descuento"
+													filterBy="#{_proforma.totalDescuento}"
+													filterMatchMode="contains">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{_proforma.totalDescuento}">
+														<f:convertNumber pattern="#,##0.0000" locale="en" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Total"
+													filterBy="#{_proforma.totalPagar}"
+													filterMatchMode="contains">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{_proforma.totalPagar}">
+														<f:convertNumber pattern="#,##0.0000" locale="en" />
+													</h:outputText>
+												</p:column>
+											</p:dataTable>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="Ventas al Contado">
+							<div class="row">
+								<div class="col-sm-9 col-md-12" align="left">
+
+									<div id="newServiciosMessages" class="update" />
+
+									<div class="panel panel-default">
+										<!-- Default panel contents -->
+										<div class="panel-heading">
+											<strong> <i aria-hidden="true"
+												class="glyphicon glyphicon-th-list"></i> RESULTADO - VENTAS
+												AL CONTADO
+											</strong>
+										</div>
+
+										<!-- Table -->
+										<div class="table-responsive">
+
+											<p:dataTable
+												styleClass="table table-condensed table-hover table-responsive table-striped table-bordered"
+												id="contadoTable" var="_proforma"
+												value="#{informeVentasController.listProformaVentaContado}"
+												emptyMessage="No se encontraron registros."
+												rowIndexVar="item">
+
+												<p:column headerText="Codigo" filterBy="#{_proforma.id}"
+													filterMatchMode="contains">
+													<center>
+														<span class="badge"><h:outputText
+																value="#{_proforma.id}" /></span>
+													</center>
+												</p:column>
+
+
+												<p:column headerText="Cliente"
+													filterBy="#{_proforma.cliente.nombreCompleto}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.cliente.nombreCompleto}" />
+												</p:column>
+
+												<p:column headerText="Medico"
+													filterBy="#{_proforma.medico.nombre}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.medico.nombre}" />
+												</p:column>
+
+												<p:column headerText="Obsservacion"
+													filterBy="#{_proforma.observacion}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.observacion}" />
+												</p:column>
+
+												<p:column headerText="Entrega"
+													filterBy="#{_proforma.fechaEntrega}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.fechaEntrega}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Registro"
+													filterBy="#{_proforma.usuarioRegistro}"
+													filterMatchMode="contains">
+													<h:outputText value="#{_proforma.usuarioRegistro}" />
+												</p:column>
+
+												<p:column headerText="Descuento"
+													filterBy="#{_proforma.totalDescuento}"
+													filterMatchMode="contains">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{_proforma.totalDescuento}">
+														<f:convertNumber pattern="#,##0.0000" locale="en" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Total"
+													filterBy="#{_proforma.totalPagar}"
+													filterMatchMode="contains">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{_proforma.totalPagar}">
+														<f:convertNumber pattern="#,##0.0000" locale="en" />
+													</h:outputText>
+												</p:column>
+											</p:dataTable>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</p:tab>
+					</p:tabView>
+
+
+
+
+
+				</div>
+			</div>
+
+
+
+
+		</h:form>
+
+
+		
+
+	</ui:define>
+
+	<ui:define name="footer">
+
+
+	</ui:define>
+
+
+
+</ui:composition>

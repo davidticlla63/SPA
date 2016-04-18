@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Venta</title>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="content">
+
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<p:commandLink id="buttonCancelar1" value="&#160; Cancelar"
+									styleClass="btn btn-warning ion-minus-circled"
+									style="height:31px;"
+									onclick="location.href='#{request.contextPath}/pages/formulario/facturacion2.xhtml'">
+								</p:commandLink>
+
+								<p:commandLink id="iniciarID" value="&#160; Facturar" update=""
+									rendered="#{ventaController.modificar=='true' and ventaController.estadoVenta=='NINGUNO' and ventaController.ordenVenta.tipoTansaccion=='NUEVO'}"
+									styleClass="btn btn-success ion-plus-round"
+									style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+										listener="#{ventaController.crearFactura()}" />
+								</p:commandLink>
+
+								<p:commandLink id="terminarID" value="&#160; Nota Venta"
+									rendered="#{ventaController.modificar=='true' and ventaController.estadoVenta=='NINGUNO'  and ventaController.ordenVenta.tipoTansaccion=='NUEVO'}"
+									styleClass="btn btn-primary ion-checkmark" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+										listener="#{ventaController.crearNotaVenta()}" />
+								</p:commandLink>
+
+								<p:commandLink id="facturarID" value="&#160; Registrar Factura"
+									rendered="#{ventaController.modificar=='true' and ventaController.estadoVenta=='FACTURA' and ventaController.puedofacturar=='true'}"
+									styleClass="btn btn-success ion-checkmark" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader,:formModalProcesar"
+										oncomplete="PF('dlgProcesar').show();" />
+								</p:commandLink>
+
+								<p:commandLink id="notaventaID"
+									value="&#160; Registrar Nota Venta"
+									rendered="#{ventaController.modificar=='true' and ventaController.estadoVenta=='NOTAVENTA'}"
+									styleClass="btn btn-success ion-checkmark" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader,:formModalNotaVistaPrevia"
+										listener="#{ventaController.registrarEImprimirNotaVenta()}" />
+								</p:commandLink>
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/parametrizacion/tamanoHoja.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active">TamanoHoja</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formTableDatos">
+
+							<ui:fragment rendered="#{ventaController.estadoVenta=='FACTURA'}">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default">
+											<strong> <span class="alert-warning"><h:outputText
+														lang="es"
+														rendered="#{ventaController.diasrestantes lt 30}"
+														value="Faltan #{ventaController.diasrestantes} dias">
+														<f:convertNumber pattern="0######" />
+													</h:outputText></span>
+											</strong>
+											<div class="panel-heading">
+												<h3 class="panel-title">Registro de Facturación</h3>
+
+											</div>
+											<div class="panel-body">
+												<div class="col-md-12">
+													<div class="col-md-4">
+														<div class="form-group ">
+															<div class="col-md-12">Nro. Factura:</div>
+															<div class="col-md-12">
+																<div class="col-md-12">
+																	<h:inputText value="#{ventaController.numeroFactura}"
+																		style=" color: #555555; background-image: none;"
+																		styleClass="input-sm form-control" readonly="true">
+																	</h:inputText>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group ">
+															<div class="col-md-12">Fecha Emision:</div>
+															<div class="col-md-12">
+																<div class="col-md-12">
+																	<p:calendar id="popup" pattern="dd/MM/yyyy"
+																		value="#{newFactura.fechaFactura}"
+																		style=" width:100%; color: #555555; background-image: none !important;"
+																		readonly="true">
+																		<p:ajax />
+																	</p:calendar>
+
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group ">
+															<div class="col-md-12">Autorizacion:</div>
+															<div class="col-md-12">
+																<div class="col-md-12">
+																	<h:inputText
+																		value="#{ventaController.dosificacion.numeroAutorizacion}"
+																		style=" color: #555555; background-image: none;"
+																		styleClass="input-sm form-control" readonly="true">
+																	</h:inputText>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-12">
+													<div class="col-md-4">
+														<div class="form-group">
+															<div class="col-md-12">NIT/CI:</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<div class="col-md-12">
+																		<p:autoComplete id="autoCompleteNit"
+																			inputStyleClass="input-sm form-control"
+																			style="width:100%; height:100%; color: #555555; background-image: none;"
+																			value="#{ventaController.textoAutoCompleteNit}"
+																			completeMethod="#{ventaController.completeTextNit}"
+																			maxResults="10">
+																			<p:ajax event="itemSelect"
+																				update=":formTableDatos,:formBotonesHeader"
+																				listener="#{ventaController.onItemSelectNit}" />
+																			<p:ajax event="change"
+																				update=":formTableDatos,:formBotonesHeader" />
+
+																		</p:autoComplete>
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													</div>
+													<!-- start register -->
+													<div class="col-md-4">
+														<div class="form-group">
+															<div class="col-md-12">Cliente:</div>
+															<div class="col-md-12">
+																<div class="form-group">
+																	<div class="col-md-12">
+																		<p:autoComplete id="autoCompleteCuenta"
+																			inputStyleClass="input-sm form-control"
+																			style="width:100%; height:100%; color: #555555; background-image: none;"
+																			value="#{ventaController.textoAutoCompleteCliente}"
+																			completeMethod="#{ventaController.completeTextCliente}"
+																			maxResults="10">
+																			<p:ajax event="itemSelect"
+																				update=":formTableDatos,:formBotonesHeader"
+																				listener="#{ventaController.onItemSelectCliente}" />
+																			<p:ajax event="change"
+																				update=":formTableDatos,:formBotonesHeader" />
+																		</p:autoComplete>
+																	</div>
+
+																</div>
+															</div>
+
+														</div>
+													</div>
+													<div class="col-md-4"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">DETALLE</h3>
+
+											</div>
+											<div class="form-group">
+												<p:dataTable var="_serv"
+													style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+													value="#{ventaController.listDetalleNotaVenta}" reflow="true">
+
+													<p:column headerText="Codigo" style="width:10%;">
+														<span class="badge alert-warning"><h:outputText
+																value="#{_serv.codigo}" /></span>
+													</p:column>
+
+													<p:column headerText="Cantidad" style="width:10%;">
+														<h:outputText value="#{_serv.cantidad}" />
+													</p:column>
+
+
+													<p:column headerText="Concepto" style="width:20%;">
+														<h:outputText value="#{_serv.concepto}" />
+													</p:column>
+
+													<p:column headerText="Precio"
+														style="width:10%;text-align:right;">
+														<h:outputText value="#{_serv.precioUnitario}" />
+													</p:column>
+
+													<p:column headerText="Total"
+														style="width:10%;text-align:right;">
+														<h:outputText value="#{_serv.precioTotal}" />
+													</p:column>
+
+													<p:column headerText="Empleado"
+														style="width:10%;text-align:right;">
+														<h:outputText value="#{_serv.empleado.nombre}" />
+
+													</p:column>
+
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column colspan="4" footerText="Total: "
+																style="text-align:right" />
+															<p:column style="text-align:right">
+																<f:facet name="footer">
+																	<h:outputText value="Bs.- " />
+																	<h:outputText value="#{ventaController.totals}">
+																		<f:convertNumber pattern="#,##0.00" locale="en" />
+																	</h:outputText>
+																</f:facet>
+															</p:column>
+														</p:row>
+													</p:columnGroup>
+													<f:facet name="footer">
+														<h:outputText
+															value="#{ventaController.listDetalleNotaVenta.size()} Registros en Total" />
+													</f:facet>
+												</p:dataTable>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ui:fragment>
+
+							<ui:fragment
+								rendered="#{ventaController.estadoVenta=='NOTAVENTA'}">
+
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group">
+											<div class="col-md-12">NIT/CI:</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<div class="col-md-12">
+														<p:autoComplete id="autoCompleteNitNota"
+															inputStyleClass="input-sm form-control"
+															style="width:100%; height:100%; color: #555555; background-image: none;"
+															value="#{ventaController.textoAutoCompleteNit}"
+															completeMethod="#{ventaController.completeTextNit}"
+															maxResults="10">
+															<p:ajax event="itemSelect"
+																update=":formTableDatos,:formBotonesHeader"
+																listener="#{ventaController.onItemSelectNit}" />
+															<p:ajax event="change"
+																update=":formTableDatos,:formBotonesHeader" />
+
+														</p:autoComplete>
+													</div>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<!-- start register -->
+									<div class="col-md-4">
+										<div class="form-group">
+											<div class="col-md-12">Cliente:</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<div class="col-md-12">
+														<p:autoComplete id="autoCompleteCliente"
+															inputStyleClass="input-sm form-control"
+															style="width:100%; height:100%; color: #555555; background-image: none;"
+															value="#{ventaController.textoAutoCompleteCliente}"
+															completeMethod="#{ventaController.completeTextCliente}"
+															maxResults="10">
+															<p:ajax event="itemSelect"
+																update=":formTableDatos,:formBotonesHeader"
+																listener="#{ventaController.onItemSelectCliente}" />
+															<p:ajax event="change"
+																update=":formTableDatos,:formBotonesHeader" />
+														</p:autoComplete>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="col-md-4"></div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">DETALLE</h3>
+
+										</div>
+										<div class="form-group">
+											<p:dataTable var="_serv"
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+												value="#{ventaController.listDetalleNotaVenta}" reflow="true">
+
+												<p:column headerText="Codigo" style="width:10%;">
+													<span class="badge alert-warning"><h:outputText
+															value="#{_serv.codigo}" /></span>
+												</p:column>
+
+												<p:column headerText="Cantidad" style="width:10%;">
+													<h:outputText value="#{_serv.cantidad}" />
+												</p:column>
+
+
+												<p:column headerText="Concepto" style="width:20%;">
+													<h:outputText value="#{_serv.concepto}" />
+												</p:column>
+
+												<p:column headerText="Precio"
+													style="width:10%;text-align:right;">
+													<h:outputText value="#{_serv.precioUnitario}" />
+												</p:column>
+
+												<p:column headerText="Total"
+													style="width:10%;text-align:right;">
+													<h:outputText value="#{_serv.precioTotal}" />
+												</p:column>
+
+												<p:column headerText="Empleado"
+													style="width:10%;text-align:right;">
+													<h:outputText value="#{_serv.empleado.nombre}" />
+
+												</p:column>
+
+												<p:columnGroup type="footer">
+													<p:row>
+														<p:column colspan="4" footerText="Total: "
+															style="text-align:right" />
+														<p:column style="text-align:right">
+															<f:facet name="footer">
+																<h:outputText value="Bs.- " />
+																<h:outputText value="#{ventaController.totals}">
+																	<f:convertNumber pattern="#,##0.00" locale="en" />
+																</h:outputText>
+															</f:facet>
+														</p:column>
+													</p:row>
+												</p:columnGroup>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{ventaController.listDetalleNotaVenta.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+									</div>
+								</div>
+
+							</ui:fragment>
+						</h:form>
+					</div>
+					<div class="row">
+						<h:form id="formTableProducto">
+							<ui:fragment
+								rendered="#{ventaController.modificar=='false' or ventaController.estadoVenta=='NINGUNO'}">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">LISTA DE ORDENES DE VENTA</h3>
+											<br />
+											<h:panelGrid columns="2">
+												<h:outputText value="Fecha:" />
+												<p:calendar value="#{ventaController.fecha}"
+													pattern="dd/MM/yyyy">
+													<p:ajax event="dateSelect" update=":formTableProducto"
+														listener="#{ventaController.consultarOrdenVentaPorFecha()}" />
+												</p:calendar>
+											</h:panelGrid>
+										</div>
+										<div class="form-group">
+											<p:dataTable var="_ord"
+												style="font-size: 11px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+												selection="#{ventaController.ordenVenta}"
+												selectionMode="single" rowKey="#{_ord.id}"
+												value="#{ventaController.listOrdenVenta}"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="10 20 30 40 50" first="0"
+												paginator="true" rows="20" reflow="true">
+
+
+												<p:ajax event="rowSelect"
+													update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+													listener="#{ventaController.onRowSelectOrdenVenta}" />
+
+												<p:column headerText="Id" style="width:20%;"
+													filterBy="#{_ord.id}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.id}" />
+												</p:column>
+												<p:column headerText="Cliente" style="width:30%;"
+													filterBy="#{_ord.cliente.nombre}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.cliente.nombre}" />
+												</p:column>
+												<p:column headerText="Fecha"
+													style="width:50%; text-align:center;"
+													filterBy="#{_ord.nombre}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<p:column headerText="Precio"
+													style="width:20%;text-align:right;"
+													filterBy="#{_ord.total}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.total}" />
+												</p:column>
+												<p:column headerText="Estado"
+													style="width:20%;text-align:right;">
+													<span class="label label-success"><h:outputText
+															rendered="#{_ord.tipoTansaccion=='NUEVO'}" value="NUEVO" /></span>
+													<span class="label label-primary"><h:outputText
+															rendered="#{_ord.tipoTansaccion=='FACTURADO'}"
+															value="FACTURADO" /></span>
+													<span class="label label-primary"><h:outputText
+															rendered="#{_ord.tipoTansaccion=='NOTA VENTA'}"
+															value="NOTA VENTA" /></span>
+												</p:column>
+
+
+											</p:dataTable>
+										</div>
+									</div>
+								</div>
+
+							</ui:fragment>
+						</h:form>
+					</div>
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<!-- VISTA PREVIA REPORTE -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgFacturaVistaPrevia" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}" closable="false"
+			id="modalVistaPrevia">
+			<h:form id="formModalVistaPrevia">
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<p:media player="pdf" rendered="true"
+								value="#{ventaController.url}" width="750px" height="480px" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p:commandLink value="Cerrar"
+									styleClass="btn btn-primary btn-block"
+									action="#{ventaController.dialogClose()}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- END DIALOG -->
+
+
+		<!-- VISTA PREVIA REPORTE -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgNotaVistaPrevia" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalNotaVistaPrevia" closable="false">
+			<h:form id="formModalNotaVistaPrevia">
+			
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<p:media player="pdf" rendered="true"
+								value="#{ventaController.urlNotaVenta}" width="750px"
+								height="480px" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<p:commandLink value="Cerrar"
+									styleClass="btn btn-primary btn-block"
+									action="#{ventaController.dialogClose()}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- END DIALOG -->
+
+		<!-- END DIALOG -->
+
+
+<p:dialog showEffect="explode" header="Registrar Pago"
+			widgetVar="dlgProcesar" resizable="false" modal="true"
+			position="center" width="600" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalProcesar" closable="false">
+			<h:form id="formModalProcesar">
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Nit</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{ventaController.textoAutoCompleteNit}"
+										style=" color: #555555; background-image: none;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="form-group ">
+								<div class="col-md-4">Cliente</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{ventaController.textoAutoCompleteCliente}"
+										style=" color: #555555; background-image: none;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Total</div>
+								<div class="col-md-8">
+									<p:inputText value="#{ventaController.totals}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Efectivo Bolivianos</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{ventaController.efectivoBolivianos}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<p:ajax event="change" update=":formModalProcesar"
+											listener="#{ventaController.calcularCambioDePago()}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Efectivo Dolares</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{ventaController.efectivoDolares}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<p:ajax event="change" update=":formModalProcesar"
+											listener="#{ventaController.calcularCambioDePago()}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Cambio</div>
+								<div class="col-md-8">
+									<p:inputText value="#{ventaController.totalCambio}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+
+								<p:commandLink id="buttonGuardar1" value="&#160; Guardar"
+									styleClass="btn btn-success ion-checkmark" style="height:31px;"
+									onclick="PF('dlgProcesar').hide();" immediate="true">
+									<p:ajax
+										listener="#{ventaController.registrarEImprimir()}"
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader,:formModalProcesar,:formModalVistaPrevia" />
+								</p:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

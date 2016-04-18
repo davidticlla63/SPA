@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_dashboard.xhtml">
+	<ui:define name="head">
+		<title>Dashboard</title>
+	</ui:define>
+
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="panel-body">
+
+			<div class="row">
+
+				<h:form id="formTableProducto">
+					<div class="btn-group-demo">
+						<div class="btn-group">
+							<div class="form-group" style="padding: 0px 0px 0px 50px;">
+								<p:commandLink id="buttonCancelar" value="&#160; Cancelar"
+									styleClass="btn btn-warning ion-minus-circled"
+									style="height:31px; padding:center" update="formTableProducto"
+									action="#{generarTicketsController.loadDefault()}">
+								</p:commandLink>
+
+								<p:commandLink id="bottonNuevo" value="&#160; Nueva Orden"
+									styleClass="btn btn-success ion-checkmark"
+									rendered="#{generarTicketsController.crear=='true'}"
+									style="height:31px; padding:center"
+									update="formTableProducto,formGrowl:msgs1,:formModalVistaPreviaTicket"
+									actionListener="#{generarTicketsController.nuevaOrden()}">
+								</p:commandLink>
+
+								<p:commandLink id="ajaxsd" value="&#160; Registrar"
+									styleClass="btn btn-success ion-checkmark"
+									rendered="#{(not empty generarTicketsController.listDetalleOrdenServicio  or not empty generarTicketsController.listDetalleOrdenPruducto) and generarTicketsController.crear=='false'}"
+									style="height:31px; padding:center"
+									update="formTableProducto,formGrowl:msgs1,:formModalVistaPreviaTicket"
+									actionListener="#{generarTicketsController.registrarProducto()}">
+								</p:commandLink>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="col-md-12" align="center">
+							<h3>
+								<p:selectOneButton
+									rendered="#{generarTicketsController.crear=='false'}"
+									value="#{generarTicketsController.selectedVista}">
+									<f:selectItem itemLabel="Producto" itemValue="producto" />
+									<f:selectItem itemLabel="Servicio" itemValue="servicio" />
+									<p:ajax event="change" update=":formTableProducto" />
+								</p:selectOneButton>
+							</h3>
+						</div>
+						<ui:fragment
+							rendered="#{generarTicketsController.selectedVista == 'servicio'}">
+							<div class="col-md-5">
+								<p:dataTable id="checkboxDT" var="serv"
+									style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+									value="#{generarTicketsController.listServicios}"
+									selection="#{generarTicketsController.selectedServicios}"
+									rowKey="#{serv.id}" scrollable="true" scrollHeight="150" reflow="true">
+									<f:facet name="header">
+										      Lista de Servicios
+										    </f:facet>
+									<p:column selectionMode="multiple"
+										style="width:10%;text-align:center" />
+									<p:column headerText="Id" style="width:20%;"
+										filterBy="#{serv.id}" filterStyle="width: 100%; height:25px;">
+										<h:outputText value="#{serv.id}" />
+									</p:column>
+									<p:column headerText="Nombre" style="width:50%;"
+										filterBy="#{serv.nombre}"
+										filterStyle="width: 100%; height:25px;">
+										<h:outputText value="#{serv.nombre}" />
+									</p:column>
+									<p:column headerText="Precio"
+										style="width:20%;text-align:right;"
+										filterBy="#{serv.precioReferencial}"
+										filterStyle="width: 100%; height:25px;">
+										<h:outputText value="#{serv.precioReferencial}" />
+									</p:column>
+
+								</p:dataTable>
+							</div>
+							<div class="col-md-1">
+								<p:commandLink id="ajax0"
+									styleClass="btn btn-primary ion-chevron-right"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.add()}">
+								</p:commandLink>
+								<p:commandLink id="ajax1"
+									styleClass="btn btn-success ion-arrow-right-c"
+									style="height:31px;  width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.addAll()}">
+								</p:commandLink>
+								<p:commandLink id="ajax2"
+									styleClass="btn alert-warning ion-chevron-left"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.remove()}">
+								</p:commandLink>
+								<p:commandLink id="ajax3"
+									styleClass="btn alert-danger ion-arrow-left-c"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.removeAll()}">
+								</p:commandLink>
+							</div>
+							<div class="col-md-5">
+								<p:dataTable id="checkboxDTd" var="servdet"
+									style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+									value="#{generarTicketsController.listDetalleOrdenServicio}"
+									selection="#{generarTicketsController.selectedDetalleOrdenServicio}"
+									rowKey="#{servdet.id}" scrollable="true" scrollHeight="150" reflow="true">
+									<f:facet name="header">
+       								Lista de Servicios Seleccionados
+   								 </f:facet>
+
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center" />
+									<p:column headerText="Id" style="width:5%; text-align:right;">
+										<h:outputText value="#{servdet.servicios.id}" />
+									</p:column>
+									<p:column headerText="Nombre" style="width:30%;">
+										<h:outputText value="#{servdet.servicios.nombre}" />
+									</p:column>
+									<p:column headerText="Precio"
+										style="width:20%; text-align:right;">
+										<h:outputText value="#{servdet.servicios.precioReferencial}" />
+									</p:column>
+
+
+									<p:columnGroup type="footer">
+										<p:row>
+											<p:column colspan="2" footerText="Total: "
+												style="text-align:right" />
+
+											<p:column style="text-align:right">
+												<f:facet name="footer">
+													<h:outputText value="Bs.- " />
+													<h:outputText value="#{generarTicketsController.total}">
+														<f:convertNumber pattern="#,##0.000" locale="en" />
+													</h:outputText>
+												</f:facet>
+											</p:column>
+										</p:row>
+									</p:columnGroup>
+									<f:facet name="footer">
+										<h:outputText
+											value="#{generarTicketsController.listDetalleOrdenServicio.size()} Registros en Total" />
+									</f:facet>
+								</p:dataTable>
+							</div>
+						</ui:fragment>
+
+
+
+						<ui:fragment
+							rendered="#{generarTicketsController.selectedVista == 'producto'}">
+							<div class="col-md-5">
+
+
+								<p:dataTable id="checkboxProductoDT" var="pro"
+									style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+									value="#{generarTicketsController.listProducto}"
+									selection="#{generarTicketsController.selectedProducto}"
+									rowKey="#{pro.id}" scrollable="true" scrollHeight="150" reflow="true">
+									<f:facet name="header">
+										      Lista de Producto
+										    </f:facet>
+									<p:column selectionMode="multiple"
+										style="width:10%;text-align:center" />
+									<p:column headerText="Id" style="width:20%;"
+										filterBy="#{serv.id}" filterStyle="width: 100%; height:25px;">
+										<h:outputText value="#{pro.id}" />
+									</p:column>
+									<p:column headerText="Nombre" style="width:50%;"
+										filterBy="#{pro.nombre}"
+										filterStyle="width: 100%; height:25px;">
+										<h:outputText value="#{pro.nombre}" />
+										#{'    '}
+										<h:outputText value="#{pro.contenidoNeto}" />
+										<h:outputText value="#{pro.unidadMedida.nombre}" />
+									</p:column>
+									<p:column headerText="Precio"
+										style="width:20%;text-align:right;"
+										filterBy="#{pro.precioVenta}"
+										filterStyle="width: 100%; height:25px;">
+										<h:outputText value="#{pro.precioVenta}" />
+									</p:column>
+
+								</p:dataTable>
+							</div>
+							<div class="col-md-1">
+								<p:commandLink id="ajax01"
+									styleClass="btn btn-primary ion-chevron-right"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.addProdcucto()}">
+								</p:commandLink>
+								<p:commandLink id="ajax11"
+									styleClass="btn btn-success ion-arrow-right-c"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.addAllProdcucto()}">
+								</p:commandLink>
+								<p:commandLink id="ajax21"
+									styleClass="btn alert-warning ion-chevron-left"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.removeProducto()}">
+								</p:commandLink>
+								<p:commandLink id="ajax31"
+									styleClass="btn alert-danger ion-arrow-left-c"
+									style="height:31px; width:70px; padding:center"
+									update="formTableProducto,formGrowl:msgs1"
+									action="#{generarTicketsController.removeAllProducto()}">
+								</p:commandLink>
+							</div>
+							<div class="col-md-5">
+
+								<p:dataTable id="checkboxproductoDTd" var="prodet"
+									style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+									value="#{generarTicketsController.listDetalleOrdenPruducto}"
+									selection="#{generarTicketsController.selectedDetalleOrdenProducto}"
+									rowKey="#{prodet.id}" scrollable="true" scrollHeight="150" reflow="true">
+									<f:facet name="header">
+       								Lista de Producto Seleccionados
+   								 </f:facet>
+
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center" />
+									<p:column headerText="Id" style="width:5%; text-align:right;">
+										<h:outputText value="#{prodet.producto.id}" />
+									</p:column>
+									<p:column headerText="Nombre" style="width:30%;">
+										<h:outputText value="#{prodet.producto.nombre}" />
+										#{'			'}
+										<h:outputText value="#{prodet.producto.contenidoNeto}" />
+										<h:outputText value="#{prodet.producto.unidadMedida.nombre}" />
+									</p:column>
+									<p:column headerText="Precio"
+										style="width:20%; text-align:right;">
+										<h:outputText value="#{prodet.producto.precioVenta}" />
+									</p:column>
+
+
+									<p:columnGroup type="footer">
+										<p:row>
+											<p:column colspan="2" footerText="Total: "
+												style="text-align:right" />
+
+											<p:column style="text-align:right">
+												<f:facet name="footer">
+													<h:outputText value="Bs.- " />
+													<h:outputText
+														value="#{generarTicketsController.totalProducto}">
+														<f:convertNumber pattern="#,##0.000" locale="en" />
+													</h:outputText>
+												</f:facet>
+											</p:column>
+										</p:row>
+									</p:columnGroup>
+									<f:facet name="footer">
+										<h:outputText
+											value="#{generarTicketsController.listDetalleOrdenPruducto.size()} Registros en Total" />
+									</f:facet>
+								</p:dataTable>
+
+							</div>
+						</ui:fragment>
+					</div>
+
+				</h:form>
+			</div>
+		</div>
+
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<!-- VISTA PREVIA LIBRO DE VENTAS SFV -->
+		<p:dialog showEffect="explode" header="Vista Previa Ticket"
+			widgetVar="dlgVistaPreviaTicket" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPreviaTicket">
+
+			<h:form id="formModalVistaPreviaTicket">
+
+				<div class="modal-body">
+					<p:media player="pdf" value="#{generarTicketsController.urlTicket}"
+						width="700px" height="500px" />
+
+				</div>
+			</h:form>
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" styleClass="btn btn-default"
+						onclick="dlgVistaPreviaTicket.hide()" />
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+		<!-- END DIALOG -->
+
+	</ui:define>
+</ui:composition>

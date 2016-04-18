@@ -1,0 +1,376 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:a="http://richfaces.org/a"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	template="/WEB-INF/templates/templateModuloVentas.xhtml">
+
+
+
+	<ui:define name="head">
+		<title>Libros IVA</title>
+	</ui:define>
+	
+	
+	 <ui:define name="header">
+
+		<div class="row">
+			<div class="col-sm-12 col-md-12" align="left">
+
+				<ol class="breadcrumb">
+					<li class="fuente-link-sidebar">
+						<div class="lsf symbol">sitemap</div>
+					</li>
+
+					<li class="fuente-link-sidebar"><a href="/MediFact/"> Inicio </a></li>
+						<li class="fuente-link-sidebar"><a href="/MediFact/pages/ventas/home.xhtml"> Modulo
+							Ventas </a></li>
+					<li class="fuente-link-sidebar"><a href="/MediFact/pages/ventas/libros-iva.xhtml"> Libros IVA </a></li>
+					<li class="active" style="color: orange;"><a
+						style="color: orange;" class="fuente-link-sidebar" href="/MediFact/pages/ventas/exportacion-ventas.xhtml">Exportar Libro de Ventas</a>
+					</li>
+				</ol>
+			</div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="content">
+		
+		<h:form id="formVentas" styleClass="form-horizontal">
+			
+					<div class="row">
+						<div class="col-sm-6 col-md-3">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<strong> <i aria-hidden="true"
+										class="glyphicon glyphicon-random"></i> EXPORTAR LIBRO DE VENTAS
+									</strong>
+								</div>
+								<div class="panel-body">
+						
+									<h:panelGrid columns="3">
+
+										<h:outputLabel for="mesID" value="Mes: " />
+										<h:selectOneMenu id="mesID"
+											title="Seleccionar el mes de las ventas."
+											value="#{exportacionController.mes}"
+											styleClass="form-control" required="true"
+											requiredMessage="Requerido.">
+											<f:selectItem itemValue="01" itemLabel="Enero" />
+											<f:selectItem itemValue="02" itemLabel="Febrero" />
+											<f:selectItem itemValue="03" itemLabel="Marzo" />
+											<f:selectItem itemValue="04" itemLabel="Abril" />
+											<f:selectItem itemValue="05" itemLabel="Mayo" />
+											<f:selectItem itemValue="06" itemLabel="Junio" />
+											<f:selectItem itemValue="07" itemLabel="Julio" />
+											<f:selectItem itemValue="08" itemLabel="Agosto" />
+											<f:selectItem itemValue="09" itemLabel="Septiembre" />
+											<f:selectItem itemValue="10" itemLabel="Octubre" />
+											<f:selectItem itemValue="11" itemLabel="Noviembre" />
+											<f:selectItem itemValue="12" itemLabel="Diciembre" />
+											<p:ajax event="change" update=":formVentas" />
+										</h:selectOneMenu>
+										<p:message for="mesID" errorClass="invalid" />
+
+										<h:outputLabel for="gestionID" value="Gestion: " />
+										<h:selectOneMenu id="gestionID"
+											title="Seleccionar la gestion de las ventas."
+											value="#{exportacionController.gestion}"
+											styleClass="form-control" effect="fade" required="true"
+											requiredMessage="Requerido.">
+											<f:selectItems
+												value="#{exportacionController.listaGestiones}"
+												var="_gestion" itemLabel="#{_gestion}"
+												itemValue="#{_gestion}" />
+											<p:ajax event="change" update=":formVentas" />
+										</h:selectOneMenu>
+										<p:message for="gestionID" />
+
+										<h:outputLabel for="sucursalID" value="Sucursal: " />
+										<h:selectOneMenu id="sucursalID"
+											title="Seleccionar la sucursal para obtener sus ventas."
+											value="#{exportacionController.sucursalID}"
+											styleClass="form-control" effect="fade" required="true"
+											requiredMessage="Requerido.">
+											<f:selectItems
+												value="#{exportacionController.listaSucursales}"
+												var="_sucursal" itemLabel="#{_sucursal.nombre}"
+												itemValue="#{_sucursal.id}" />
+											<p:ajax event="change" update=":formVentas" />
+										</h:selectOneMenu>
+										<p:message for="sucursalID" />
+
+
+										<h:outputLabel for="folioID" value="Nº_Folio: " />
+										<p:inputText id="folioID"
+											title="Nº Folio es necesario unicamente para el libro notariado."
+											value="#{exportacionController.numeroFolio}"
+											validatorMessage="Invalido." styleClass="form-control"
+											>
+											<f:convertNumber pattern="#,##0" />
+											<f:validateDoubleRange minimum="0" />
+											<p:ajax event="change" />
+										</p:inputText>
+										<p:message for="folioID" errorClass="invalid" />
+
+
+									</h:panelGrid>
+
+								<p:tooltip id="toolTipMes" for="mesID" showEvent="focus"
+									hideEvent="blur" />
+								<p:tooltip id="toolTipGestion" for="gestionID" showEvent="focus"
+									hideEvent="blur" />
+								<p:tooltip id="toolTipSucursal" for="sucursalID"
+									showEvent="focus" hideEvent="blur" />
+								<p:tooltip id="toolTipFolio" for="folioID" showEvent="focus"
+									hideEvent="blur" />
+							
+							</div>
+							</div>
+							
+							
+							</div>
+							
+							<div class="col-sm-6 col-md-9">
+								
+								<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<strong><span class="glyphicon glyphicon-circle-arrow-down"/>
+									DESCARGAR LIBRO DE VENTAS</strong>
+								</h4>
+							</div>
+							<div class="panel-body">
+
+
+								<div class="row">
+									<div class="col-sm-3 col-md-4">
+										<h4>
+											<span class="label label-default">NSF-07</span>
+										</h4>
+										<div class="thumbnail">
+											<h:graphicImage sclass="thumbnail" name="pdf.png"
+												library="gfx" width="100px;" height="150px;" />
+											<div class="caption">
+												<h4>Libro Notariado</h4>
+												<p>Todo contribuyente alcanzado por el IVA debe tener
+													sus libros de ventas notariado.</p>
+												<p>
+													<p:commandButton value="Exportar"
+														styleClass="btn btn-danger" ajax="false"
+														icon="ui-icon-document">
+														<p:fileDownload
+															value="#{exportacionController.streamedLibroVentas}" />
+													</p:commandButton>
+
+													<p:commandButton icon="ui-icon-search"
+														action="#{exportacionController.armarURLVentasNSF}"
+														update=":formModalVistaPrevia"
+														oncomplete="dlgVistaPrevia.show()"
+														styleClass="btn btn-default" value="Vista Previa" />
+
+
+												</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-3 col-md-4">
+										<h4>
+											<span class="label label-default">NSF-07</span>
+										</h4>
+										<div class="thumbnail">
+											
+											<h:graphicImage sclass="thumbnail" name="excel.jpg"
+												library="gfx" width="100px;" height="150px;" />
+											<div class="caption">
+												<h4>Libro DaVinci</h4>
+												<p>Formato LCV da vinci para generar libros TXT
+													automaticamente, y presentar las Ventas.</p>
+												<p>
+													<p:commandButton value="Exportar"
+														styleClass="btn btn-success" ajax="false"
+														icon="ui-icon-document">
+														<p:fileDownload
+															value="#{exportacionController.streamedLibroVentasDaVinci}" />
+													</p:commandButton>
+
+												</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-3 col-md-4">
+										<h4>
+											<span class="label label-default">NSF-07</span>
+										</h4>
+										<div class="thumbnail">
+											
+											<h:graphicImage sclass="thumbnail" name="txt.png"
+												library="gfx" width="100px;" height="150px;" />
+											<div class="caption">
+												<h4>Libro en TXT</h4>
+												<p>Generación del archivo plato TXT del libro de ventas
+													en base al formato Da Vinci.</p>
+												<p>
+													<p:commandButton value="Exportar"
+														styleClass="btn btn-primary" ajax="false"
+														icon="ui-icon-document">
+														<p:fileDownload
+															value="#{exportacionController.streamedLibroVentasTXT}" />
+													</p:commandButton>
+												</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-3 col-md-4">
+
+										<h4>
+											<span class="label label-warning">Nuevo SFV-14</span>
+										</h4>
+
+										<div class="thumbnail">
+											
+											<h:graphicImage sclass="thumbnail" name="pdf2.png"
+												library="gfx" width="100px;" height="150px;" />
+											<div class="caption">
+												<h4>
+													<h:outputText value="Libro Ventas" />
+												</h4>
+												<p>
+													<h:outputText
+														value="Libro de Ventas, segun la normativa Nº 10-0025-14, SISTEMA DE FACTURACIÓN VIRTUAL." />
+												</p>
+												<p>
+													<p:commandButton value="Exportar"
+														styleClass="btn btn-danger" ajax="false"
+														icon="ui-icon-document">
+														<p:fileDownload
+															value="#{exportacionController.streamedLibroVentasSFV}" />
+													</p:commandButton>
+
+													<p:commandButton icon="ui-icon-search"
+														action="#{exportacionController.armarURLVentasSFV}"
+														update=":formModalVistaPreviaSFV"
+														oncomplete="dlgVistaPreviaSFV.show()"
+														styleClass="btn btn-default" value="Vista Previa" />
+
+												</p>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="col-sm-3 col-md-4">
+
+										<h4>
+											<span class="label label-warning"><h:outputText
+													value="Nuevo SFV-14" /> </span>
+										</h4>
+										<div class="thumbnail">
+											
+											<h:graphicImage sclass="thumbnail" name="excel1.png"
+												library="gfx" width="100px;" height="150px;" />
+											<div class="caption">
+												<h4>
+													<h:outputText value="Libro Ventas" />
+												</h4>
+												<p>
+													<h:outputText
+														value="Libro de Ventas, segun la normativa Nº 10-0025-14, SISTEMA DE FACTURACIÓN VIRTUAL." />
+												</p>
+												<p>
+													<p:commandButton value="Exportar"
+														styleClass="btn btn-success" ajax="false"
+														icon="ui-icon-document">
+														<p:fileDownload
+															value="#{exportacionController.streamedLibroVentasSFVExcel}" />
+													</p:commandButton>
+												</p>
+											</div>
+										</div>
+
+									</div>
+
+
+
+								</div>
+
+							</div>
+						</div>
+								
+							</div>
+						</div>
+					
+
+		</h:form>
+
+		<!-- VISTA PREVIA LIBRO DE VENTAS -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgVistaPrevia" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPrevia">
+
+			<h:form id="formModalVistaPrevia">
+
+				<div class="modal-body">
+					<p:media player="pdf" value="#{exportacionController.urlVentasNSF}"
+						width="700px" height="500px" />
+
+				</div>
+			</h:form>
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" styleClass="btn btn-default"
+						onclick="dlgVistaPrevia.hide()" />
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+		<!-- VISTA PREVIA LIBRO DE VENTAS SFV -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgVistaPreviaSFV" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPreviaSFV">
+
+			<h:form id="formModalVistaPreviaSFV">
+
+				<div class="modal-body">
+					<p:media player="pdf" value="#{exportacionController.urlVentasSFV}"
+						width="700px" height="500px" />
+
+				</div>
+			</h:form>
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" styleClass="btn btn-default"
+						onclick="dlgVistaPreviaSFV.hide()" />
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+
+
+	</ui:define>
+
+	<ui:define name="footer">
+
+	</ui:define>
+
+</ui:composition>

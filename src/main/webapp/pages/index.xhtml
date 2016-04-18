@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_index.xhtml">
+	<ui:define name="head">
+		<title>Empresa - Gestión</title>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;"></div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li class="active" style="font-size: 12px;">SELECCION DE
+							EMPRESA - GESTION</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formTableEmpresaGestion">
+							<ui:fragment rendered="#{creacionController.seleccionarForm1}">
+								<div class="col-md-8">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">IMAGENES</h3>
+										</div>
+										<div class="panel-body">
+											<!-- start here register -->
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+													<div class="form-group "
+														style="padding-left: 10px; padding-right: 10px;">
+														<!-- <h:graphicImage value="/resources/gfx/empresa2.jpeg" -->
+														<!-- 	alt="media" styleClass="img-responsive" /> -->
+														 <h:graphicImage value="/resources/gfx/spalucy.jpg" 
+														alt="media" styleClass="img-responsive" /> 
+													</div>
+												</div>
+											</div>
+											<!-- end here register -->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">#{creacionController.formTitulo}</h3>
+										</div>
+										<div class="panel-body">
+											<!-- start here register -->
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+													<p:dataTable id="dataTableEmpresa" var="item"
+														rendered="#{creacionController.seleccionadaFormEmpresa}"
+														value="#{creacionController.listaEmpresaActivas}"
+														selectionMode="single"
+														selection="#{creacionController.selectedEmpresa}"
+														style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+														rowKey="#{item.id}">
+														<f:facet name="header">
+           													SELECCIONA UNA EMPRESA
+        												</f:facet>
+														<p:ajax event="rowSelect"
+															listener="#{creacionController.onRowSelectEmpresa2}"
+															update="formTableEmpresaGestion" />
+														<p:column headerText="Detalle" style="color: #555555;">
+															<h:outputText value="#{item.razonSocial}" />
+														</p:column>
+													</p:dataTable>
+
+													<p:dataTable id="dataTableSucursal" var="item"
+														rendered="#{creacionController.seleccionadaFormAgregarSucursal}"
+														value="#{creacionController.listaSucursalesActivas}"
+														selectionMode="single"
+														selection="#{creacionController.selectSucursal}"
+														style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+														rowKey="#{item.id}">
+														<f:facet name="header">
+           													SELECCIONA UNA SUCURSAL
+        												</f:facet>
+														<p:ajax event="rowSelect"
+															listener="#{creacionController.onRowSelectSucursal}"
+															update="formTableEmpresaGestion" />
+														<p:column headerText="Detalle" style="color: #555555;">
+															<h:outputText value="#{item.nombre}" />
+														</p:column>
+													</p:dataTable>
+
+													<p:dataTable id="dataTableGestion" var="item"
+														value="#{creacionController.listaGestion}"
+														rendered="#{creacionController.seleccionadaFormGestion}"
+														selectionMode="single"
+														style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+														selection="#{creacionController.selectedGestion}"
+														rowKey="#{item.id}">
+														<f:facet name="header">
+           													SELECCIONE UNA GESTION
+        												</f:facet>
+														<p:ajax event="rowSelect"
+															listener="#{creacionController.onRowSelectGestion}"
+															update="formTableEmpresaGestion" />
+														<p:column headerText="Detalle" style="color: #555555;">
+															<h:outputText value="#{item.gestion}" />
+														</p:column>
+													</p:dataTable>
+												</div>
+											</div>
+											<br />
+											<div class="row">
+												<div class="col-md-12">
+													<p:commandLink id="buttonAgregarEmpresa"
+														value="Nueva Empresa"
+														styleClass="btn btn-primary btn-block"
+														rendered="#{creacionController.seleccionadaFormAgregarEmpresa}"
+														onclick="location.href='#{request.contextPath}/pages/index_.xhtml'">
+													</p:commandLink>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<p:commandLink id="buttonAtras" value="Atras"
+														rendered="#{creacionController.seleccionadaFormGestion}"
+														styleClass="btn btn-warning btn-block">
+														<p:ajax update="formTableEmpresaGestion"
+															listener="#{creacionController.formButtonAtras()}" />
+													</p:commandLink>
+												</div>
+												<div class="col-md-6"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+					</div>
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+	</ui:define>
+
+</ui:composition>

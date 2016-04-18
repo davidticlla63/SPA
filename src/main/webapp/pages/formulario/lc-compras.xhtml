@@ -1,0 +1,476 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:a="http://richfaces.org/a"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	template="/WEB-INF/templates/templateModuloVentas.xhtml">
+
+
+
+	<ui:define name="head">
+		<title>Libros IVA</title>
+	</ui:define>
+
+	<ui:define name="header">
+
+		<div class="row">
+			<div class="col-sm-12 col-md-12" align="left">
+
+				<ol class="breadcrumb">
+					<li class="fuente-link-sidebar">
+						<div class="lsf symbol">sitemap</div>
+					</li>
+
+					<li class="fuente-link-sidebar"><a href="/MediFact/"> Inicio </a></li>
+					<li class="fuente-link-sidebar"><a href="/MediFact/pages/ventas/home.xhtml"> Modulo
+							Ventas </a></li>
+					<li class="fuente-link-sidebar"><a
+						href="/MediFact/pages/ventas/libros-iva.xhtml">
+							Libros IVA </a></li>
+					<li class="active" style="color: orange;"><a
+						style="color: orange;" class="fuente-link-sidebar"
+						href="/MediFact/pages/ventas/lc-compras.xhtml">Libro de
+							Compras</a></li>
+				</ol>
+			</div>
+		</div>
+
+	</ui:define>
+
+
+	<ui:define name="content">
+
+		<h:form id="formCompras" styleClass="form-horizontal">
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<span class="icon"> <i aria-hidden="true" class="icon-list"></i>
+						</span> 
+						<strong>#{compraController.tituloPanel} -
+							#{compraController.usuarioSession.sucursal.normaAplicada}</strong>
+					</h3>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3 col-md-3" align="left" >
+
+
+						<h:panelGrid columns="3">
+
+
+							<h:outputLabel value="Fecha_Factura" for="fechaFacturaCompraID" />
+							<p:calendar id="fechaFacturaCompraID" showOn="button"
+								value="#{compraController.newCompra.fechaFactura}"
+								pattern="dd/MM/yyyy" required="true"
+								requiredMessage="Requerido.">
+								<p:ajax event="change" />
+							</p:calendar>
+							<p:message for="fechaFacturaCompraID" />
+
+							<h:outputLabel value="NIT_Proveedor" for="nitProveedorID" />
+							<p:inputText id="nitProveedorID" styleClass="form-control"
+								value="#{compraController.newCompra.nitProveedor}"
+								required="true" requiredMessage="Requerido."
+								validatorMessage="Invalido.">
+								<f:validateLength maximum="13" />
+								<f:validateRegex pattern="[0-9]+" />
+							</p:inputText>
+							<p:message for="nitProveedorID" />
+
+							<h:outputLabel value="Razon_Social" for="razonSocialID" />
+							<p:inputText id="razonSocialID" styleClass="form-control"
+								value="#{compraController.newCompra.razonSocial}"
+								required="true" requiredMessage="Requerido." />
+							<p:message for="razonSocialID" />
+
+							<h:outputLabel value="Nº_Factura" for="numeroFacturaID" />
+							<p:inputText id="numeroFacturaID"
+								value="#{compraController.newCompra.numeroFactura}"
+								styleClass="form-control" required="true"
+								requiredMessage="Requerido." />
+							<p:message for="numeroFacturaID" />
+
+							<h:outputLabel value="Nº_Autorización" for="numeroAutorizacionID" />
+							<p:inputText id="numeroAutorizacionID"
+								value="#{compraController.newCompra.numeroAutorizacion}"
+								styleClass="form-control" required="true"
+								requiredMessage="Requerido." />
+							<p:message for="numeroAutorizacionID" />
+
+						</h:panelGrid>
+
+
+					</div>
+
+					<div class="col-sm-3 col-md-3" align="left" >
+						<p:outputPanel autoUpdate="true">
+							<h:panelGrid columns="3">
+
+								<h:outputLabel value="Importe_Total_Compra"
+									for="importeTotalCompraID" />
+								<p:inputText id="importeTotalCompraID"
+									value="#{compraController.newCompra.importeTotal}"
+									styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+									<p:ajax event="change"
+										listener="#{compraController.actualizarImportes}" />
+								</p:inputText>
+								<p:message for="importeTotalCompraID" />
+
+
+								<h:outputLabel value="Importe_I.C.E." for="importeICEID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}" />
+								<p:inputText id="importeICEID"
+									value="#{compraController.newCompra.importeICE}"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}"
+									styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+									<p:ajax event="change"
+										listener="#{compraController.actualizarImportes}" />
+								</p:inputText>
+								<p:message for="importeICEID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}" />
+
+								<h:outputLabel value="Importe_Excentos" for="importeExcentosID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}" />
+								<p:inputText id="importeExcentosID"
+									value="#{compraController.newCompra.importeExcentos}"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}"
+									styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+									<p:ajax event="change"
+										listener="#{compraController.actualizarImportes}" />
+								</p:inputText>
+								<p:message for="importeExcentosID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}" />
+
+
+								<h:outputLabel value="No_Sujeto_C.F."
+									for="importeNoSujetoCreditoID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+								<p:inputText id="importeNoSujetoCreditoID"
+									value="#{compraController.newCompra.importeNoSujetoCreditoFiscal}"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}"
+									styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+									<p:ajax event="change"
+										listener="#{compraController.actualizarImportes}" />
+								</p:inputText>
+								<p:message for="importeNoSujetoCreditoID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+
+								<h:outputLabel value="Sub_Total" for="subTotalID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+								<p:inputText id="subTotalID"
+									value="#{compraController.newCompra.importeSubTotal}"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}"
+									disabled="true" styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+								</p:inputText>
+								<p:message for="subTotalID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+
+								<h:outputLabel value="Descuentos" for="descuentosID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+								<p:inputText id="descuentosID"
+									value="#{compraController.newCompra.descuentosBonosRebajas}"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}"
+									styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+									<p:ajax event="change"
+										listener="#{compraController.actualizarImportes}" />
+								</p:inputText>
+								<p:message for="descuentosID"
+									rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+
+								<h:outputLabel value="Importe_Base" for="importeBaseID" />
+								<p:inputText id="importeBaseID"
+									value="#{compraController.newCompra.importeBaseCreditoFiscal}"
+									disabled="true" styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+								</p:inputText>
+								<p:message for="importeBaseID" />
+
+								<h:outputLabel value="Credito_Fiscal" for="creditoFiscalID" />
+								<p:inputText id="creditoFiscalID"
+									value="#{compraController.newCompra.creditoFiscal}"
+									disabled="true" styleClass="form-control" required="true"
+									requiredMessage="Requerido.">
+									<f:convertNumber pattern="#,##0.00"  locale="en" />
+								</p:inputText>
+								<p:message for="creditoFiscalID" />
+
+							</h:panelGrid>
+
+						</p:outputPanel>
+
+					</div>
+
+					<div class="col-sm-6 col-md-6" align="left" >
+
+						<h:panelGrid columns="3">
+
+							<h:outputLabel value="Codigo_Control" for="codigoControlID" />
+							<p:inputText id="codigoControlID"
+								value="#{compraController.newCompra.codigoControl}"
+								styleClass="form-control" required="true"
+								requiredMessage="Requerido." />
+							<p:message for="codigoControlID" />
+
+							<h:outputLabel value="Nº_DUI" for="numeroDUIID" />
+							<p:inputText id="numeroDUIID"
+								value="#{compraController.newCompra.numeroDUI}"
+								styleClass="form-control" required="true"
+								requiredMessage="Requerido." />
+							<p:message for="numeroDUIID" />
+
+							<h:outputLabel value="Tipo_Compra" for="tipoCompraID"
+								rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+							<h:selectOneMenu id="tipoCompraID"
+								value="#{compraController.newCompra.tipoCompra}"
+								styleClass="form-control"
+								rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}"
+								required="true" requiredMessage="Requerido.">
+								<f:selectItem itemValue="1"
+									itemLabel="Compras para mercado interno con destino a actividades gravadas" />
+								<f:selectItem itemValue="2"
+									itemLabel="Compras para mercado interno con destino a actividades no gravadas" />
+								<f:selectItem itemValue="3"
+									itemLabel="Compras sujetas a proporcionalidad" />
+								<f:selectItem itemValue="4"
+									itemLabel="Compras para exportaciones" />
+								<f:selectItem itemValue="5"
+									itemLabel="Compras tanto para el mercado interno como para exportaciones" />
+								<p:ajax event="change" update="tipoCompraID" />
+							</h:selectOneMenu>
+							<p:message for="tipoCompraID"
+								rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='SFV-14'}" />
+
+							<h:outputLabel value="Tipo_Compra" for="tipoCompra2ID"
+								rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}" />
+							<h:selectOneMenu id="tipoCompra2ID"
+								value="#{compraController.newCompra.tipoCompra}"
+								styleClass="form-control"
+								rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}"
+								required="true" requiredMessage="Requerido.">
+								<f:selectItem itemValue="1"
+									itemLabel="Compras para mercado interno" />
+								<f:selectItem itemValue="2"
+									itemLabel="Compras para exportaciones" />
+								<f:selectItem itemValue="3"
+									itemLabel="Compras tanto para mercado interno como para exportaciones" />
+								<p:ajax event="change" update="tipoCompra2ID" />
+							</h:selectOneMenu>
+							<p:message for="tipoCompra2ID"
+								rendered="#{compraController.usuarioSession.sucursal.normaAplicada=='NSF-07'}" />
+
+							<h:outputLabel for="sucursalID" value="Sucursal" />
+							<h:selectOneMenu id="sucursalID"
+								value="#{compraController.newCompra.idSucursal}"
+								styleClass="form-control" effect="fade" required="true"
+								requiredMessage="Requerida.">
+								<f:selectItems value="#{sucursalesActivas}" var="_sucursales"
+									itemDisabled="#{_sucursales.numeroSucursal!=0}"
+									itemLabel="#{_sucursales.nombre}" itemValue="#{_sucursales.id}" />
+								<p:ajax event="change" update="sucursalID" />
+							</h:selectOneMenu>
+							<p:message for="sucursalID" />
+
+							<h:outputLabel value="Fecha_Registro" for="fechaRegistroID" />
+							<p:calendar id="fechaRegistroID"
+								value="#{compraController.newCompra.fechaRegistro}"
+								datePattern="dd/MM/yyyy" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+							<p:message for="fechaRegistroID" />
+
+						</h:panelGrid>
+
+					</div>
+
+				</div>
+
+
+			</div>
+			<div class="btn-group btn-group-sm" style="width: 100%;">
+
+				<p:commandButton rendered="#{compraController.modificar=='true'}"
+					icon="ui-icon-minus" action="#{compraController.initNewCompra()}"
+					update=":formCompras" styleClass="btn btn-default" value="Cancelar"
+					type="submit" />
+
+				<p:commandButton rendered="#{compraController.modificar=='false'}"
+					icon="ui-icon-disk" action="#{compraController.registrarCompra()}"
+					update=":formCompras, :growl" styleClass="btn btn-primary"
+					value="Guardar" type="submit" />
+
+				<p:commandButton rendered="#{compraController.modificar=='true'}"
+					icon="ui-icon-refresh"
+					action="#{compraController.modificarCompra()}"
+					update=":formCompras, :growl" styleClass="btn btn-primary"
+					value="Modificar" type="submit" />
+
+				<p:commandButton rendered="#{compraController.modificar=='true'}"
+					icon="ui-icon-circle-close"
+					action="#{compraController.eliminarCompra()}"
+					update=":formCompras, :growl" styleClass="btn btn-danger"
+					value="Borrar" type="submit" />
+
+			</div>
+
+
+			<div id="newUserMessages" class="update" />
+
+			<h:panelGroup rendered="#{empty listaCompras}">
+				<em>No se encontraron Compras Registradas.</em>
+			</h:panelGroup>
+
+			<div class="panel panel-default">
+				<!-- Default panel contents -->
+				<div class="panel-heading">
+					<span class="icon"> <i aria-hidden="true" class="icon-list"></i>
+						</span> <strong>LIBRO IVA - COMPRAS</strong>
+				</div>
+
+				<!-- Table -->
+				<div class="table-responsive">
+
+
+					<p:dataTable
+						styleClass="table table-condensed table-hover table-responsive table-striped table-bordered"
+						selection="#{compraController.selectedCompra}"
+						selectionMode="single" rowKey="#{_compra.id}"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10 20 30 40 50" first="0" paginator="true"
+						rows="10" emptyMessage="No se encontraron Compras registradas."
+						id="comprasTable" var="_compra" value="#{listaCompras}"
+						rendered="#{not empty listaCompras}">
+
+						<p:ajax event="rowSelect" update=":formCompras"
+							listener="#{compraController.onRowSelectCompraClick}" />
+
+						<p:column headerText="ID">
+							<center>#{_compra.correlativo}</center>
+						</p:column>
+						<p:column headerText="Fecha Factura">
+							<h:outputText value="#{_compra.fechaFactura}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="NIT Proveedor"
+							filterBy="#{_compra.nitProveedor}" filterMatchMode="contains">
+                      #{_compra.nitProveedor}
+                   </p:column>
+						<p:column headerText="Razon Social"
+							filterBy="#{_compra.razonSocial}" filterMatchMode="contains">
+                      #{_compra.razonSocial}
+                   </p:column>
+						<p:column headerText="Nº Factura"
+							filterBy="#{_compra.numeroFactura}" filterMatchMode="contains">
+							<h:outputText value="#{_compra.numeroFactura}"
+								style="text-align: right;" />
+						</p:column>
+						<!--                    <p:column headerText="Nº DUI" filterBy="#{_compra.numeroDUI}" filterMatchMode="contains"> -->
+						<!--                       #{_compra.numeroDUI} -->
+						<!--                    </p:column> -->
+						<p:column headerText="Nº Autorizacion"
+							filterBy="#{_compra.numeroDUI}" filterMatchMode="contains">
+							<h:outputText value="#{_compra.numeroAutorizacion}"
+								style="text-align: right;" />
+						</p:column>
+						<p:column headerText="Importe Total"
+							filterBy="#{_compra.importeTotal}" filterMatchMode="contains">
+							<h:outputText value="#{_compra.importeTotal}"
+								style="text-align: right;">
+								<f:convertNumber pattern="#,##0.00"  locale="en" />
+							</h:outputText>
+						</p:column>
+						<!--                    <p:column headerText="Sin C.F." filterBy="#{_compra.importeNoSujetoCreditoFiscal}" filterMatchMode="contains"> -->
+						<!--                       <h:outputText value="#{_compra.importeNoSujetoCreditoFiscal}" > -->
+						<!--                       	<f:convertNumber pattern="#,##0.00"/> -->
+						<!--                       </h:outputText> -->
+						<!--                    </p:column> -->
+
+
+						<!--  
+                   <p:column headerText="SubTotal" filterBy="#{_compra.importeSubTotal}" filterMatchMode="contains">
+                      <h:outputText value="#{_compra.importeSubTotal}" >
+                      	<f:convertNumber pattern="#,##0.00"/>
+                      </h:outputText>
+                   </p:column>
+                   <p:column headerText="Descuentos" filterBy="#{_compra.descuentosBonosRebajas}" filterMatchMode="contains">
+                      <h:outputText value="#{_compra.descuentosBonosRebajas}" >
+                      	<f:convertNumber pattern="#,##0.00"/>
+                      </h:outputText>
+                   </p:column>
+-->
+
+						<p:column headerText="Importe Base"
+							filterBy="#{_compra.importeBaseCreditoFiscal}"
+							filterMatchMode="contains">
+							<h:outputText value="#{_compra.importeBaseCreditoFiscal}"
+								style="text-align: right;">
+								<f:convertNumber pattern="#,##0.00"  locale="en" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Credito Fiscal"
+							filterBy="#{_compra.creditoFiscal}" filterMatchMode="contains">
+							<h:outputText value="#{_compra.creditoFiscal}"
+								style="text-align: right;">
+								<f:convertNumber pattern="#,##0.00"  locale="en" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Codigo Control"
+							filterBy="#{_compra.codigoControl}" filterMatchMode="contains">
+							<h:outputText value="#{_compra.codigoControl}"
+								style="text-align: right;" />
+						</p:column>
+						<!--                    <p:column headerText="Tipo Compra"> -->
+						<!--                       #{_compra.tipoCompra} -->
+						<!--                    </p:column> -->
+
+						<p:column id="compra_estado" filterBy="#{_compra.estado}"
+							filterMatchMode="contains">
+							<f:facet name="header">Estado</f:facet>
+							<CENTER>
+								<span class="label label-success"><h:outputText
+										rendered="#{_compra.estado=='AC'}" value="Activo" /></span> <span
+									class="label label-danger"><h:outputText
+										rendered="#{_compra.estado=='IN'}" value="Inactivo" /></span>
+							</CENTER>
+						</p:column>
+						<!--                    <p:column id="sucursal_fechaReg"> -->
+						<!--                       <f:facet name="header">Fecha Registro</f:facet> -->
+						<!--                       <h:outputText value="#{_compra.fechaRegistro}" > -->
+						<!--                       	<f:convertDateTime pattern="dd/MM/yyyy"/> -->
+						<!--                       </h:outputText> -->
+						<!--                    </p:column> -->
+
+					</p:dataTable>
+
+				</div>
+			</div>
+
+
+
+
+
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="footer">
+
+	</ui:define>
+
+</ui:composition>

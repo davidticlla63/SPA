@@ -1,0 +1,34 @@
+10
+
+dir
+1404
+http://172.30.30.10/svn/proyectos/MediFact/src/main/webapp/resources/LandingPage
+http://172.30.30.10/svn/proyectos
+
+
+
+2015-05-05T02:49:20.405056Z
+1043
+ysaigalarza
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+46eb0f07-8022-4978-bf1b-a124778e9b26
+
+css
+dir
+
+js
+dir
+

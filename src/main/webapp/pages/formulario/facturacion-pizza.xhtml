@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Facturacion</title>
+		<style type="text/css">
+.vcenter {
+	display: inline-block;
+	vertical-align: middle;
+	float: none;
+}
+
+.vertical-align {
+	display: flex;
+	align-items: center;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<p:commandLink id="buttonCancelar1" value="&#160; Cancelar"
+									styleClass="btn btn-warning ion-minus-circled"
+									style="height:31px;"
+									onclick="location.href='#{request.contextPath}/pages/formulario/facturacion-pizza.xhtml'">
+								</p:commandLink>
+
+								<p:commandLink id="buttonImprimir1" value="&#160; Registrar"
+									update=""
+									rendered="#{facturaPizzeriaController.puedofacturar=='true' and facturaPizzeriaController.nuevo=='false' and  facturaPizzeriaController.impresion=='false'}"
+									styleClass="btn btn-info ion-printer" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formModalProcesar,:formRegisterFacturacion,:formImpresion,:formBotonesHeader"
+										listener="#{facturaPizzeriaController.registrarEImprimir()}" />
+								</p:commandLink>
+								<p:commandLink id="buttonGuardar" value="&#160; Hacer Pedido"
+									rendered="#{facturaPizzeriaController.nuevo=='true' and  facturaPizzeriaController.impresion=='false'}"
+									styleClass="btn btn-info ion-save" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formRegisterFacturacion,:formListaProducto,:formBotonesHeader"
+										listener="#{facturaPizzeriaController.pedido()}" />
+								</p:commandLink>
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/formulario/factura_pizza.xhtml"
+							style="color: #0090FF; font-size: 12px;">Formulario</a></li>
+						<li class="active" style="font-size: 12px;">Facturación</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row vertical-align">
+
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<strong> <span class="alert-warning"><h:outputText
+											lang="es"
+											rendered="#{facturaPizzeriaController.diasrestantes lt 30}"
+											value="Faltan #{facturaPizzeriaController.diasrestantes} dias">
+											<f:convertNumber pattern="0######" />
+										</h:outputText></span>
+								</strong>
+								<div class="row"
+									style="border: 1px solid green; background-color: white; border-radius: 6px;">
+									<h:form id="formListaProducto">
+										<ui:fragment
+											rendered="#{facturaPizzeriaController.nuevo=='true'}">
+											<p:selectOneButton
+												value="#{facturaPizzeriaController.pagina}"
+												style="  font-size: 12px;  font-weight:bold;  z-index: 9999; ">
+												<f:selectItems var="pag"
+													value="#{facturaPizzeriaController.listTipoProductos}"
+													itemLabel="#{pag.nombre}" itemValue="#{pag.nombre}" />
+												<p:ajax event="change"
+													update=":formRegisterFacturacion,:formListaProducto" />
+											</p:selectOneButton>
+											<p:separator />
+											<div class="panel-heading">
+												<h3 class="panel-title">
+													<h:outputText value="#{facturaPizzeriaController.pagina}"
+														style="color:red;  font-size: 20px;  font-weight:bold;  z-index: 9999; "></h:outputText>
+												</h3>
+											</div>
+											<div class="panel-body" style="text-align: center;">
+												<div class="col-md-8"
+													style="border: 1px solid orange; overflow: scroll; height: 450px; font-size: 11px; border-radius: 6px;">
+
+													<ui:repeat var="var1"
+														value="#{facturaPizzeriaController.listEdProducto}">
+
+														<ui:fragment
+															rendered="#{facturaPizzeriaController.pagina==var1.producto.tipoProducto.nombre}">
+
+															<div class="col-xs-6 col-md-4 col-lg-12 vcenter"
+																style="border: 1px solid orange; font-size: 11px; border-radius: 6px;">
+																<div class="form-group ">
+																	<div class="col-md-2">
+																		<h:outputText value="#{var1.producto.id}"
+																			style="color:blak;  font-size: 15px;  font-weight:bold;  z-index: 9999;" />
+																		.
+																	</div>
+																	<div class="col-md-10">
+																		<h:outputLabel value="#{var1.producto.nombre}"
+																			style="color:blak;  font-size: 15px;  font-weight:bold; " />
+																	</div>
+																	<div class="col-md-12">
+																		<div class="col-md-6" align="left">
+																			<h:outputText value="#{var1.producto.precioVenta}"
+																				style=" color:blak;  font-size: 15px;  font-weight:bold; ">
+																				<f:convertNumber type="number" groupingUsed="true"
+																					minFractionDigits="2" pattern="#0.00" locale="en" />
+																			</h:outputText>
+																			<h:outputText value="Bs."
+																				style="color:blak;  font-size: 15px;  font-weight:bold;" />
+
+																		</div>
+																		<div class="col-md-6" align="left">
+																			<h:outputText
+																				rendered="#{var1.producto.media=='true'}"
+																				value="Media"
+																				style="color:blak;  font-size: 11px;  font-weight:bold; ">
+
+																			</h:outputText>
+																			<p:selectBooleanCheckbox
+																				rendered="#{var1.producto.media=='true'}"
+																				value="#{var1.media}">
+																				<p:ajax event="change"
+																					update=":formRegisterFacturacion,:formListaProducto,:formBotonesHeader"
+																					listener="#{facturaPizzeriaController.hacerPedido2}" />
+																			</p:selectBooleanCheckbox>
+																		</div>
+																	</div>
+
+																	<div class="col-md-12">
+																		<h:outputText value="Cantidad:" />
+																		<p:inputText value="#{var1.cantidad}"
+																			style="text-align:right;">
+																			<f:convertNumber type="number" groupingUsed="true"
+																				minFractionDigits="1" pattern="#0.00" locale="en" />
+																			<p:ajax event="change"
+																				update=":formRegisterFacturacion,:formListaProducto,:formBotonesHeader"
+																				listener="#{facturaPizzeriaController.hacerPedido2}" />
+																		</p:inputText>
+																	</div>
+																</div>
+															</div>
+
+
+
+
+														</ui:fragment>
+													</ui:repeat>
+												</div>
+												<div class="col-md-4"
+													style="border: 1px solid olive; font-size: 11px; border-radius: 6px;">
+
+													<p:dataTable var="item"
+														value="#{facturaPizzeriaController.listDetalleFactura}"
+														reflow="true"
+														style="font-size: 10px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;">
+														<f:facet name="header">
+           												DETALLE
+       												</f:facet>
+														<p:column width="10%" headerText="Cantidad"
+															style="width:10%;text-align:right;">
+															<h:outputText value="#{item.cantidad}" />
+														</p:column>
+														<p:column width="35%" headerText="Concepto">
+															<h:outputText value="#{item.concepto}" />
+														</p:column>
+														<p:column headerText="Precio Unitario"
+															style="width:10%;text-align:right;">
+															<h:outputText value="#{item.precioUnitario}" />
+														</p:column>
+														<p:column headerText="Precio Total"
+															style="width:10%;text-align:right;">
+															<h:outputText value="#{item.precioTotal}" />
+														</p:column>
+													</p:dataTable>
+
+												<div class="col-md-6">
+													<h3>TOTAL
+														#{facturaPizzeriaController.monedaEmpresa.simbolo}</h3>
+												</div>
+												<div class="col-md-6">
+													<h:inputText
+														value="#{facturaPizzeriaController.totalImporte}"
+														style="font-size: 20pt; text-align:right; color: #555555; background-image: none;"
+														styleClass="input-lg form-control" readonly="true">
+														<f:convertNumber type="number" groupingUsed="true"
+															minFractionDigits="2" pattern="#0.00" locale="en" />
+													</h:inputText>
+												</div>
+
+												</div>
+											</div>
+										</ui:fragment>
+									</h:form>
+								</div>
+
+								<h:form id="formRegisterFacturacion">
+									<!-- start here register -->
+									<ui:fragment
+										rendered="#{facturaPizzeriaController.nuevo=='false'}">
+										<div class="panel-heading">
+											<h3 class="panel-title">Registro de Facturación</h3>
+
+										</div>
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-12">Nro. Factura:</div>
+														<div class="col-md-12">
+															<div class="col-md-12">
+																<h:inputText
+																	value="#{facturaPizzeriaController.numeroFactura}"
+																	style=" color: #555555; background-image: none;"
+																	styleClass="input-sm form-control" readonly="true">
+																</h:inputText>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-12">Fecha Emision:</div>
+														<div class="col-md-12">
+															<div class="col-md-12">
+																<p:calendar id="popup" pattern="dd/MM/yyyy"
+																	value="#{newFactura.fechaFactura}"
+																	style=" width:100%; color: #555555; background-image: none !important;"
+																	readonly="true">
+																	<p:ajax />
+																</p:calendar>
+
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-12">Autorizacion:</div>
+														<div class="col-md-12">
+															<div class="col-md-12">
+																<h:inputText
+																	value="#{facturaPizzeriaController.dosificacion.numeroAutorizacion}"
+																	style=" color: #555555; background-image: none;"
+																	styleClass="input-sm form-control" readonly="true">
+																</h:inputText>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-group">
+														<div class="col-md-12">NIT/CI:</div>
+														<div class="col-md-12">
+															<div class="form-group">
+																<div class="col-md-12">
+																	<p:autoComplete id="autoCompletesNit"
+																		inputStyleClass="input-sm form-control"
+																		style="width:100%; height:100%; color: #555555; background-image: none;"
+																		value="#{facturaPizzeriaController.textoAutoCompleteNit}"
+																		completeMethod="#{facturaPizzeriaController.completeTextNit}"
+																		maxResults="10">
+																		<p:ajax event="itemSelect"
+																			update=":formGrowl:msgs1,:formListaProducto,:formRegisterFacturacion"
+																			listener="#{facturaPizzeriaController.onItemSelectNit}" />
+																		<p:ajax event="change"
+																			update=":formGrowl:msgs1,:formListaProducto,:formRegisterFacturacion" />
+
+																	</p:autoComplete>
+																</div>
+															</div>
+														</div>
+
+													</div>
+												</div>
+												<!-- start register -->
+												<div class="col-md-4">
+													<div class="form-group">
+														<div class="col-md-12">Cliente:</div>
+														<div class="col-md-12">
+															<div class="form-group">
+																<div class="col-md-12">
+																	<p:autoComplete id="autoCompletesCuenta"
+																		inputStyleClass="input-sm form-control"
+																		style="width:100%; height:100%; color: #555555; background-image: none;"
+																		value="#{facturaPizzeriaController.textoAutoCompleteCliente}"
+																		completeMethod="#{facturaPizzeriaController.completeTextCliente}"
+																		maxResults="10">
+																		<p:ajax event="itemSelect"
+																			update=":formGrowl:msgs1,:formListaProducto,:formRegisterFacturacion"
+																			listener="#{facturaPizzeriaController.onItemSelectCliente}" />
+																		<p:ajax event="change"
+																			update=":formGrowl:msgs1,:formListaProducto,:formRegisterFacturacion" />
+																	</p:autoComplete>
+																</div>
+
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+											<p:separator />
+
+										</div>
+
+
+										<div class="row">
+											<div class="col-md-12">
+												<p:dataTable var="var"
+													value="#{facturaPizzeriaController.listDetalleFactura}"
+													reflow="true"
+													style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;">
+													<f:facet name="header">
+           												Productos
+       												</f:facet>
+													<p:column width="10%" headerText="Código">
+														<h:outputText value="#{var.codigoProducto}" />
+													</p:column>
+													<p:column width="35%" headerText="Concepto">
+														<h:outputText value="#{var.concepto}" />
+													</p:column>
+													<p:column width="10%" headerText="Cantidad"
+														style="width:10%;text-align:right;">
+														<h:outputText value="#{var.cantidad}" />
+													</p:column>
+													<p:column headerText="Precio Unitario"
+														style="width:10%;text-align:right;">
+														<h:outputText value="#{var.precioUnitario}" />
+													</p:column>
+													<p:column headerText="Precio Total"
+														style="width:10%;text-align:right;">
+														<h:outputText value="#{var.precioTotal}" />
+													</p:column>
+												</p:dataTable>
+												<!-- end data table -->
+											</div>
+										</div>
+
+
+										<div class="row">
+											<div class="form-group ">
+												<div class="col-md-2"></div>
+												<div class="col-md-2"></div>
+												<div class="col-md-2"></div>
+												<div class="col-md-2"></div>
+												<div class="col-md-2">
+													<h3>TOTAL
+														#{facturaPizzeriaController.monedaEmpresa.simbolo}</h3>
+												</div>
+												<div class="col-md-2">
+													<h:inputText
+														value="#{facturaPizzeriaController.totalImporte}"
+														style="font-size: 20pt; text-align:right; color: #555555; background-image: none;"
+														styleClass="input-lg form-control" readonly="true">
+														<f:convertNumber type="number" groupingUsed="true"
+															minFractionDigits="2" pattern="#0.00" locale="en" />
+													</h:inputText>
+												</div>
+											</div>
+
+										</div>
+									</ui:fragment>
+								</h:form>
+								<!-- end here register -->
+							</div>
+						</div>
+					</div>
+
+					<h:form id="formImpresion">
+						<ui:fragment
+							rendered="#{facturaPizzeriaController.impresion=='true'}">
+							<div class="row">
+								<div class="form-group ">
+									<div class="col-md-12" align="center">
+										<p:media player="pdf" rendered="true"
+											value="#{facturaPizzeriaController.url}" width="750px"
+											height="550px" />
+									</div>
+								</div>
+							</div>
+
+						</ui:fragment>
+					</h:form>
+
+				</section>
+			</section>
+		</div>
+
+		<!-- andterior section -->
+
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<p:dialog header="MODIFICAR PRODUCTO" widgetVar="dlg0" modal="true"
+			height="100%">
+			<h:form id="formDialogTipoCambio">
+				<div class="row">
+					<div class="form-group ">
+						<label class="col-sm-6 ">Cambiar de producto</label>
+					</div>
+					<div class="form-group ">
+						<p:commandButton value="Modal" type="Cancelar"
+							styleClass="GreenButton" onclick="PF('dlg0').hide();" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<div class="col-md-6">
+								<p:commandLink value="Cancelar"
+									styleClass="btn btn-warning btn-block"
+									onclick="PF('dlg0').hide();" />
+							</div>
+							<div class="col-md-6">
+								<p:commandLink id="buttonAceptarDialog0" value="Aceptar"
+									styleClass="btn btn-success btn-block"
+									onclick="PF('dlg0').hide();">
+								</p:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+
+
+
+
+		<!-- END DIALOG -->
+
+
+		<p:dialog showEffect="explode" header="Registrar Pago"
+			widgetVar="dlgProcesar" resizable="false" modal="true"
+			position="center" width="600" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalProcesar">
+			<h:form id="formModalProcesar">
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Nit</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{facturaPizzeriaController.textoAutoCompleteNit}"
+										style=" color: #555555; background-image: none;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="form-group ">
+								<div class="col-md-4">Cliente</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{facturaPizzeriaController.textoAutoCompleteCliente}"
+										style=" color: #555555; background-image: none;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Total</div>
+								<div class="col-md-8">
+									<p:inputText value="#{facturaPizzeriaController.totalImporte}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Efectivo Bolivianos</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{facturaPizzeriaController.efectivoBolivianos}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<p:ajax event="change" update=":formModalProcesar"
+											listener="#{facturaPizzeriaController.calcularCambioDePago()}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Efectivo Dolares</div>
+								<div class="col-md-8">
+									<p:inputText
+										value="#{facturaPizzeriaController.efectivoDolares}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<p:ajax event="change" update=":formModalProcesar"
+											listener="#{facturaPizzeriaController.calcularCambioDePago()}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group ">
+						<div class="col-md-12">
+							<div class="form-group ">
+								<div class="col-md-4">Cambio</div>
+								<div class="col-md-8">
+									<p:inputText value="#{facturaPizzeriaController.totalCambio}"
+										style=" color: #555555; background-image: none; text-align:right;"
+										styleClass="input-sm form-control" disabled="true">
+										<f:convertNumber type="number" groupingUsed="true"
+											minFractionDigits="2" pattern="#0.00" locale="en" />
+										<f:ajax />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+
+								<p:commandLink id="buttonGuardar1" value="&#160; Registrar Pago"
+									styleClass="btn btn-success ion-checkmark" style="height:31px;"
+									onclick="PF('dlgProcesar').hide();" immediate="true">
+									<p:ajax
+										listener="#{facturaPizzeriaController.registrarEImprimir()}"
+										update=":formGrowl:msgs1,:formModalProcesar,:formRegisterFacturacion,:formImpresion,:formBotonesHeader" />
+								</p:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!--END CONTENT-->
+	</ui:define>
+</ui:composition>

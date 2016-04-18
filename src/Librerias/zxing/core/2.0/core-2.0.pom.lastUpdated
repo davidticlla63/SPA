@@ -1,0 +1,20 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Tue May 12 10:51:55 BOT 2015
+http\://repository.primefaces.org/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to maven2-repository.primefaces.org (http\://repository.primefaces.org)\: connection timed out to http\://repository.primefaces.org/com/google/zxing/core/2.0/core-2.0.pom
+https\://oss.sonatype.org/content/repositories/java.net2/.lastUpdated=1431442259365
+default-http\://repo1.maven.org/maven2/.lastUpdated=1431442269641
+file\:/C\:/java/maven/repository/.lastUpdated=1431442300780
+default-http\://maven.repository.redhat.com/techpreview/all/.lastUpdated=1431442290337
+https\://repository.jboss.org/nexus/content/groups/public/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to jboss-public-repository-group (https\://repository.jboss.org/nexus/content/groups/public/)\: connection timed out to https\://repository.jboss.org/nexus/content/groups/public/com/google/zxing/core/2.0/core-2.0.pom
+http\://maven.repository.redhat.com/techpreview/all/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to redhat-techpreview-all-repository (http\://maven.repository.redhat.com/techpreview/all)\: connection timed out to http\://maven.repository.redhat.com/techpreview/all/com/google/zxing/core/2.0/core-2.0.pom
+default-https\://repository.jboss.org/nexus/content/groups/public/.lastUpdated=1431442300711
+http\://repo.maven.apache.org/maven2/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to central (http\://repo.maven.apache.org/maven2)\: connection timed out to http\://repo.maven.apache.org/maven2/com/google/zxing/core/2.0/core-2.0.pom
+file\:/C\:/java/maven/repository/.error=
+default-http\://repo.maven.apache.org/maven2/.lastUpdated=1431442315487
+https\://code.lds.org/nexus/content/groups/main-repo/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to codelds (https\://code.lds.org/nexus/content/groups/main-repo)\: connection timed out to https\://code.lds.org/nexus/content/groups/main-repo/com/google/zxing/core/2.0/core-2.0.pom
+http\://maven.repository.redhat.com/earlyaccess/all/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to jboss-earlyaccess-repository (http\://maven.repository.redhat.com/earlyaccess/all/)\: connection timed out to http\://maven.repository.redhat.com/earlyaccess/all/com/google/zxing/core/2.0/core-2.0.pom
+default-http\://maven.repository.redhat.com/earlyaccess/all/.lastUpdated=1431442280301
+default-http\://repository.primefaces.org/.lastUpdated=1431442223091
+https\://oss.sonatype.org/content/repositories/java.net2/.error=
+http\://repo1.maven.org/maven2/.error=Could not transfer artifact com.google.zxing\:core\:pom\:2.0 from/to maven2 (http\://repo1.maven.org/maven2)\: connection timed out to http\://repo1.maven.org/maven2/com/google/zxing/core/2.0/core-2.0.pom
+default-https\://code.lds.org/nexus/content/groups/main-repo/.lastUpdated=1431442212662

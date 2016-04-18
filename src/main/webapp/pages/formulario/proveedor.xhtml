@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Proveedor</title>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<p:commandLink id="buttonCancelar" value="&#160; Cancelar"
+									styleClass="btn btn-warning ion-minus-circled"
+									update=":formReg,:formBotonesHeader,:formTableProveedor,:formTableBienServicio"
+									rendered="#{proveedorController.modificar or proveedorController.registrar}"
+									style="height:31px; padding:center"
+									action="#{proveedorController.actualizarFormReg()}">
+								</p:commandLink>
+								<p:commandLink id="buttonCrear1" value="&#160; Nuevo Proveedor"
+									styleClass="btn btn-success ion-plus-round"
+									rendered="#{proveedorController.crear}"
+									update=":formTableProveedor,:formReg,:formGrowl:msgs1,:formBotonesHeader,:formTableBienServicio,:formDlgBienServicio"
+									action="#{proveedorController.cambiarAspecto()}"
+									style="height:31px;">
+								</p:commandLink>
+								<p:commandLink id="buttonRegistrar" value="&#160; Registrar"
+									styleClass="btn btn-success ion-checkmark"
+									rendered="#{proveedorController.registrar}"
+									update=":formTableProveedor,:formReg,formGrowl:msgs1,:formBotonesHeader,:formTableBienServicio"
+									style="height:31px; padding:center"
+									action="#{proveedorController.registrar()}">
+								</p:commandLink>
+								<p:commandLink id="buttonModificar" value="&#160; Modificar"
+									styleClass="btn btn-primary ion-edit"
+									rendered="#{proveedorController.modificar}"
+									style="height:31px; padding:center"
+									update=":formTableProveedor,:formReg,formGrowl:msgs1,:formBotonesHeader,:formTableBienServicio"
+									action="#{proveedorController.modificar()}">
+								</p:commandLink>
+								<p:commandLink id="buttonEliminar" value="&#160; Eliminar"
+									styleClass="btn btn-danger ion-close"
+									rendered="#{proveedorController.modificar}"
+									update=":formTableProveedor,:formReg,formGrowl:msgs1,:formBotonesHeader,:formTableBienServicio"
+									style="height:31px; padding:center"
+									action="#{proveedorController.eliminar()}">
+								</p:commandLink>
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/formulario/proveedor.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active" style="font-size: 12px;">Proveedores</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formReg">
+							<ui:fragment
+								rendered="#{proveedorController.modificar or proveedorController.registrar}">
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Registro Datos Proveedor</h3>
+										</div>
+										<div class="panel-body">
+											<!-- start here register -->
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+													<div class="form-group ">
+														<div class="col-md-4">Código</div>
+														<div class="col-md-8">
+															<h:inputText value="#{newProveedor.codigo}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Nombre</div>
+														<div class="col-md-8">
+															<h:inputText id="email" value="#{newProveedor.nombre}"
+																style=" color: #555555; background-image: none; "
+																styleClass="input-sm form-control ">
+																<p:ajax event="change" />
+															</h:inputText>
+
+														</div>
+														<h:message for="email" style="color:red" />
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Descripción</div>
+														<div class="col-md-8">
+															<h:inputText value="#{newProveedor.descripcion}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Dirección</div>
+														<div class="col-md-8">
+															<h:inputText value="#{newProveedor.direccion}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">NIT</div>
+														<div class="col-md-8">
+															<h:inputText value="#{newProveedor.nit}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Nro. Autorización</div>
+														<div class="col-md-8">
+															<h:inputText value="#{newProveedor.numeroAutorizacion}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Teléfono</div>
+														<div class="col-md-8">
+															<h:inputText value="#{newProveedor.telefono}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Seleccione
+															un Pais</label>
+														<div class="col-md-8">
+															<h:selectOneMenu id="pais"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{newUsuario.state =='SU'}" 
+																value="#{proveedorController.pais.id}" >
+																<f:selectItem  itemLabel="Seleccione uno" itemValue=""/>
+																<f:selectItems var="pais" itemLabel="#{pais.nombre}"
+																	itemValue="#{pais.id}"
+																	value="#{proveedorController.listPais}" />
+																<p:ajax event="change" update="formReg, formBotonesHeader"  listener="#{proveedorController.obtenerCiudadPorPais()}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="col-md-4 control-label">Seleccione
+															un Ciudad</label>
+														<div class="col-md-8">
+															<h:selectOneMenu id="ciudad"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{newUsuario.state =='SU'}" 
+																value="#{newProveedor.ciudad.id}"
+																required="true" requiredMessage="Seleccionar un Ciudad">
+																<p:ajax event="change" update="formReg, formBotonesHeader" />
+																<f:selectItem  itemLabel="Seleccione uno" itemValue=""/>
+																<f:selectItems var="ciudad" itemLabel="#{ciudad.nombre}"
+																	itemValue="#{ciudad.id}"
+																	value="#{proveedorController.listCiudad}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+													
+													
+													<div class="form-group ">
+														<div class="col-md-4">Cta. Proveedor</div>
+														<div class="col-md-8">
+															<p:autoComplete id="autoCompleteCuentaProveedor"
+																inputStyleClass="input-sm form-control" dropdown="true"
+																style="width:100%; height:100%; color: #555555; background-image: none;"
+																value="#{proveedorController.textoAutoCompleteCuenta}"
+																completeMethod="#{proveedorController.completeTextCuenta}"
+																maxResults="10">
+																<p:ajax event="itemSelect"
+																	listener="#{proveedorController.onItemSelectCuenta}" />
+															</p:autoComplete>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Cta. Anticipo</div>
+														<div class="col-md-8">
+															<p:autoComplete id="autoCompleteCuentaAnticipo"
+																inputStyleClass="input-sm form-control" dropdown="true"
+																style="width:100%; height:100%; color: #555555; background-image: none;"
+																value="#{proveedorController.textoAutoCompleteCuentaAnticipo}"
+																completeMethod="#{proveedorController.completeTextCuenta}"
+																maxResults="10">
+																<p:ajax event="itemSelect"
+																	listener="#{proveedorController.onItemSelectCuentaAnticipo}" />
+															</p:autoComplete>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Cliente</div>
+														<div class="col-md-6">
+															<div class="form-group ">
+																<div class="col-md-12">¿Agregar como Cliente?</div>
+															</div>
+														</div>
+														<div class="col-md-2">
+															<label class="switch switch-success switch-sm"> <h:selectBooleanCheckbox
+																	value="#{proveedorController.cliente}"
+																	styleClass="switch">
+																	<p:ajax update="formReg" />
+																</h:selectBooleanCheckbox><span class="switch"></span>
+															</label>
+														</div>
+													</div>
+													<ui:fragment rendered="#{proveedorController.cliente}">
+														<div class="form-group ">
+															<div class="col-md-4"></div>
+															<div class="col-md-8">
+																<p:commandLink id="buttonDatosCliente"
+																	value="&#160; Datos Cliente"
+																	styleClass="btn btn-primary ion-plus-round"
+																	style="height:31px; padding:center"
+																	onclick="PF('dlgDatosCliente').show();">
+																</p:commandLink>
+															</div>
+														</div>
+													</ui:fragment>
+													<div class="form-group ">
+														<div class="col-md-4">Estado</div>
+														<div class="col-md-8">
+															<h:selectOneMenu id="roles"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{newProveedor.estado =='SUPER'}"
+																immediate="true"
+																value="#{proveedorController.nombreEstado}">
+																<f:ajax />
+																<f:selectItems value="#{proveedorController.listEstado}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- end here register -->
+										</div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+						<h:form id="formTableProveedor">
+							<ui:fragment rendered="#{proveedorController.crear}">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de Proveedores</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableProveedor" var="item"
+												value="#{listProveedor}" selectionMode="single"
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{proveedorController.selectedProveedor}"
+												emptyMessage="No se encontraron Proveedores"
+												rowKey="#{item.id}" reflow="true"
+												filteredValue="#{proveedorController.listFilterProveedor}">
+												<p:ajax event="rowSelect"
+													listener="#{proveedorController.onRowSelect}"
+													update=":formReg,:formBotonesHeader,:formTableProveedor,:formTableBienServicio,:formDlgBienServicio,:formDlgDatosCliente" />
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Código"
+													filterBy="#{item.codigo}">
+													<h:outputText value="#{item.codigo}" />
+												</p:column>
+												<p:column width="18%"
+													filterStyle="width: 100%; height:25px;" headerText="Nombre"
+													filterBy="#{item.nombre}">
+													<h:outputText value="#{item.nombre}" />
+												</p:column>
+												<p:column width="12%"
+													filterStyle="width: 100%; height:25px;"
+													headerText="Descripción" filterBy="#{item.descripcion}">
+													<h:outputText value="#{item.descripcion}" />
+												</p:column>
+												<p:column width="12%"
+													filterStyle="width: 100%; height:25px;" headerText="Nombre"
+													filterBy="#{item.nombre}">
+													<h:outputText value="#{item.nombre}" />
+												</p:column>
+												<p:column width="12%"
+													filterStyle="width: 100%; height:25px;" headerText="NIT"
+													filterBy="#{item.nit}">
+													<h:outputText value="#{item.nit}" />
+												</p:column>
+												<p:column width="12%"
+													filterStyle="width: 100%; height:25px;"
+													headerText="Telefono" filterBy="#{item.telefono}">
+													<h:outputText value="#{item.telefono}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.estado}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.estado=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="9%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{listProveedor.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<!-- end here datatable -->
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+						<h:form id="formTableBienServicio">
+							<ui:fragment rendered="#{ ! proveedorController.crear}">
+								<div class="col-md-8">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Datos Bien / Servicio</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<div class="col-md-12">
+												<div class="tabbable-custom nav-justified">
+													<ul class="nav nav-tabs nav-justified">
+														<li class="active"><a href="#tab_12_1"
+															data-toggle="tab">BIEN / SERVICIO</a></li>
+														<li><a href="#tab_12_2" data-toggle="tab">CONTACTO</a></li>
+													</ul>
+													<div class="tab-content">
+														<div id="tab_12_1" class="tab-pane active">
+															<div class="row">
+																<p:dataTable id="dataTableBienServicio" var="item"
+																	value="#{proveedorController.listBienServicio}"
+																	selectionMode="single"
+																	style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+																	selection="#{proveedorController.selectedBienServicio}"
+																	emptyMessage="No se encontraron Bienes / Servicios"
+																	rowKey="#{item.nombre}" reflow="true"
+																	filteredValue="#{proveedorController.listFilterBienServicio}">
+																	<p:ajax event="rowSelect"
+																		listener="#{proveedorController.onRowSelectBienServicio}"
+																		update=":formReg,:formBotonesHeader,:formTableBienServicio" />
+																	<p:column width="10%"
+																		filterStyle="width: 100%; height:25px;"
+																		headerText="Código" filterBy="#{item.codigo}">
+																		<h:outputText value="#{item.codigo}" />
+																	</p:column>
+																	<p:column width="18%"
+																		filterStyle="width: 100%; height:25px;"
+																		headerText="Nombre" filterBy="#{item.nombre}">
+																		<h:outputText value="#{item.nombre}" />
+																	</p:column>
+																	<p:column width="12%"
+																		filterStyle="width: 100%; height:25px;"
+																		headerText="Precio Ref."
+																		filterBy="#{item.precioReferencial}">
+																		<h:outputText value="#{item.precioReferencial}" />
+																	</p:column>
+																	<p:column width="8%"
+																		filterStyle="width: 100%; height:25px;"
+																		style="text-align:center;" headerText="Estado"
+																		filterBy="#{item.estado}">
+																		<span class="label label-success"><h:outputText
+																				rendered="#{item.estado=='AC'}" value="Activo" /></span>
+																		<span class="label label-danger"><h:outputText
+																				rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+																	</p:column>
+																</p:dataTable>
+															</div>
+															<br />
+															<div class="row">
+																<div class="form-group ">
+																	<div class="col-md-3"></div>
+																	<div class="col-md-3"></div>
+																	<div class="col-md-3"></div>
+																	<div class="col-md-3">
+																		<p:commandLink id="buttonAgregarBienServicio"
+																			value="&#160; Agregar"
+																			styleClass="btn btn-success ion-plus-round"
+																			rendered="#{ ! proveedorController.crear}"
+																			onclick="PF('dlgBienServicio').show();"
+																			style="height:31px; padding:center">
+																		</p:commandLink>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div id="tab_12_2" class="tab-pane ">
+															<div class="row">
+																<div class="col-md-3"></div>
+																<div class="col-md-6">
+																	<div class="form-group ">
+																		<div class="col-md-4">Nombre</div>
+																		<div class="col-md-8">
+																			<h:inputText
+																				value="#{proveedorController.newContactoProveedor.nombre}"
+																				style=" color: #555555; background-image: none;"
+																				styleClass="input-sm form-control">
+																				<p:ajax event="change" />
+																			</h:inputText>
+																		</div>
+																	</div>
+																	<div class="form-group ">
+																		<div class="col-md-4">Celular</div>
+																		<div class="col-md-8">
+																			<h:inputText
+																				value="#{proveedorController.newContactoProveedor.celular}"
+																				style=" color: #555555; background-image: none;"
+																				styleClass="input-sm form-control">
+																				<p:ajax event="change" />
+																			</h:inputText>
+																		</div>
+																	</div>
+																	<div class="form-group ">
+																		<div class="col-md-4">Telefono</div>
+																		<div class="col-md-8">
+																			<h:inputText
+																				value="#{proveedorController.newContactoProveedor.telefono}"
+																				style=" color: #555555; background-image: none;"
+																				styleClass="input-sm form-control">
+																				<p:ajax event="change" />
+																			</h:inputText>
+																		</div>
+																	</div>
+																	<div class="form-group ">
+																		<div class="col-md-4">Correo</div>
+																		<div class="col-md-8">
+																			<h:inputText
+																				value="#{proveedorController.newContactoProveedor.correo}"
+																				style=" color: #555555; background-image: none;"
+																				styleClass="input-sm form-control">
+																				<p:ajax event="change" />
+																			</h:inputText>
+																		</div>
+																	</div>
+																	<div class="form-group ">
+																		<div class="col-md-4">Nota</div>
+																		<div class="col-md-8">
+																			<h:inputText
+																				value="#{proveedorController.newContactoProveedor.nota}"
+																				style=" color: #555555; background-image: none;"
+																				styleClass="input-sm form-control">
+																				<p:ajax event="change" />
+																			</h:inputText>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-3"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- end here datatable -->
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+					</div>
+				</section>
+			</section>
+		</div>
+
+		<!--END CONTENT-->
+
+		<!-- START GROWL formGrowl:msgs1 -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<p:dialog widgetVar="dlgBienServicio" header="Agregar Bien / Servicio"
+			width="35%" modal="true">
+			<h:form id="formDlgBienServicio">
+				<div class="row">
+					<div class="col-md-12 box-content form-horizontal">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="col-md-4">Código</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{proveedorController.newBienServicio.codigo}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<f:ajax />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-4">Nombre</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{proveedorController.newBienServicio.nombre}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<f:ajax />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-4">Precio Ref.</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{proveedorController.newBienServicio.precioReferencial}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<f:ajax />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Cuenta</div>
+									<div class="col-md-8">
+										<p:autoComplete id="autoCompleteCuentaProveedor"
+											inputStyleClass="input-sm form-control" dropdown="true"
+											dropdownMode=""
+											style="width:100%; height:100%; color: #555555; background-image: none;"
+											value="#{proveedorController.textoAutoCompleteCuentaServicio}"
+											completeMethod="#{proveedorController.completeTextCuenta}"
+											maxResults="10">
+											<p:ajax event="itemSelect"
+												listener="#{proveedorController.onItemSelectCuentaServicio}" />
+										</p:autoComplete>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Estado</div>
+									<div class="col-md-8">
+										<h:selectOneMenu id="roles" styleClass="input-sm form-control"
+											style=" color: #555555; height:25px; font-size:11px;"
+											value="#{proveedorController.nombreEstado}">
+											<f:ajax />
+											<f:selectItems value="#{proveedorController.listEstado}" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<div class="col-md-4"></div>
+									<div class="col-md-4">
+										<p:commandLink value="&#160; Cancelar"
+											styleClass="btn btn-warning ion-minus-circled btn-block"
+											onclick="PF('dlgBienServicio').hide();">
+										</p:commandLink>
+									</div>
+									<div class="col-md-4">
+										<ui:fragment rendered="#{proveedorController.registrar}">
+											<p:commandLink value="&#160; Aceptar1"
+												styleClass="btn btn-success ion-checkmark btn-block"
+												onclick="PF('dlgBienServicio').hide();">
+												<p:ajax
+													listener="#{proveedorController.agregarBienServicio(false)}" />
+											</p:commandLink>
+										</ui:fragment>
+										<ui:fragment rendered="#{ ! proveedorController.registrar}">
+											<p:commandLink value="&#160; Aceptar2"
+												styleClass="btn btn-success ion-checkmark btn-block"
+												onclick="PF('dlgBienServicio').hide();">
+												<p:ajax update=":formGrowl:msgs1"
+													listener="#{proveedorController.agregarBienServicio(true)}" />
+											</p:commandLink>
+										</ui:fragment>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgDatosCliente" header="DATOS CLIENTE"
+			width="35%" modal="true">
+			<h:form id="formDlgDatosCliente">
+				<div class="row">
+					<div class="col-md-12 box-content form-horizontal">
+						<div class="row">
+							<div class="col-md-12 box-content form-horizontal">
+								<div class="form-group ">
+									<div class="col-md-4">Nombre</div>
+									<div class="col-md-8">
+										<h:inputText value="#{proveedorController.newCliente.nombre}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Dirección</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{proveedorController.newCliente.direccion}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Correo</div>
+									<div class="col-md-8">
+										<h:inputText value="#{proveedorController.newCliente.correo}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">NIT</div>
+									<div class="col-md-8">
+										<h:inputText value="#{proveedorController.newCliente.nit}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control ">
+											<p:ajax event="change" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Telefono</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{proveedorController.newCliente.telefono}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Permitir Credito</div>
+									<div class="col-md-2">
+										<label class="switch switch-success switch-sm"> <h:selectBooleanCheckbox
+												value="#{proveedorController.permitirCreditoCliente}"
+												styleClass="switch">
+												<p:ajax update="formDlgDatosCliente" />
+											</h:selectBooleanCheckbox><span class="switch"></span>
+										</label>
+									</div>
+									<div class="col-md-6">
+										<ui:fragment
+											rendered="#{proveedorController.permitirCreditoCliente}">
+											<div class="form-group ">
+												<div class="col-md-8">
+													<h:inputText
+														value="#{proveedorController.newCliente.diasPermitidosCredito}"
+														style=" color: #555555; background-image: none;"
+														onkeypress="return validateOnlyNumber(event)"
+														styleClass="input-sm form-control">
+														<p:ajax event="change" />
+													</h:inputText>
+												</div>
+												<div class="col-md-4">Dias</div>
+											</div>
+										</ui:fragment>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<br />
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<div class="col-md-4"></div>
+									<div class="col-md-4">
+										<p:commandLink value="&#160; Cancelar"
+											styleClass="btn btn-warning ion-minus-circled btn-block"
+											onclick="PF('dlgDatosCliente').hide();">
+										</p:commandLink>
+									</div>
+									<div class="col-md-4">
+										<p:commandLink value="&#160; Aceptar"
+											styleClass="btn btn-success ion-checkmark btn-block"
+											onclick="PF('dlgDatosCliente').hide();">
+											<p:ajax listener="#{proveedorController.agregarCliente()}" />
+										</p:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		<!-- END DIALOG -->
+
+	</ui:define>
+
+	<ui:insert name="scripts">
+
+	</ui:insert>
+</ui:composition>

@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Orden Asignacion</title>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="content">
+
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<p:commandLink id="buttonCancelar1" value="&#160; Cancelar"
+									styleClass="btn btn-warning ion-minus-circled"
+									style="height:31px;"
+									onclick="location.href='#{request.contextPath}/pages/formulario/orden-asignacion.xhtml'">
+								</p:commandLink>
+								<p:commandLink id="nuevoID" value="&#160; Nueva Orden"
+									rendered="#{asignacionServicioController.modificar=='false'}"
+									styleClass="btn btn-success ion-checkmark" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+										listener="#{asignacionServicioController.crearOrdenVenta}" />
+								</p:commandLink>
+
+								<p:commandLink id="terminarID" value="&#160; Terminar"
+									disabled="#{asignacionServicioController.estadoFinalizado=='false' or asignacionServicioController.ordenVenta.tipoTansaccion=='NUEVO'}"
+									styleClass="btn btn-primary ion-checkmark" style="height:31px;">
+									<p:ajax
+										update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+										listener="#{asignacionServicioController.cambiarEstadoTerminado}" />
+								</p:commandLink>
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/parametrizacion/tamanoHoja.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active">TamanoHoja</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formTableDatos">
+							<ui:fragment
+								rendered="#{asignacionServicioController.modificar=='true'}">
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Datos Orden Venta</h3>
+										</div>
+										<div class="panel-body">
+											<!-- start here register -->
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+													<div class="form-group ">
+														<div class="col-md-4">Orden</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.ordenVenta.id}"
+																disabled="true"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control ">
+																<p:ajax event="change" />
+															</h:inputText>
+														</div>
+													</div>
+
+
+													<div class="form-group ">
+														<div class="col-md-4">Cliente</div>
+														<div class="col-md-8">
+															<p:autoComplete id="autoCompleteCC" dropdown="true"
+																style="width:100%; height:100%; color: #555555; background-image: none;"
+																value="#{asignacionServicioController.textoAutoCliente}"
+																completeMethod="#{asignacionServicioController.completeTextCliente}"
+																maxResults="10">
+																<p:ajax event="itemSelect"
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.onItemSelectCliente}" />
+															</p:autoComplete>
+
+															<span class="badge alert-success"><p:commandLink value="Nuevo"
+																	id="addID" style="height:31px;">
+																	<p:ajax
+																		update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader,:formModalCliente"
+																		listener="#{asignacionServicioController.crearCliente()}" />
+																</p:commandLink>+ </span>
+
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Numero Orden</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.ordenVenta.numeroOrden}"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change" />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Numero Secuencia</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.ordenVenta.numeroSecuencia}"
+																disabled="true"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change" />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Precio Total</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.ordenVenta.total}"
+																disabled="true"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change" />
+															</h:inputText>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<!-- end here register -->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8">
+
+									<div class="col-md-12">
+										<h3>
+											<p:selectOneButton
+												value="#{asignacionServicioController.selectedVista}">
+												<f:selectItem itemLabel="Producto" itemValue="producto" />
+												<f:selectItem itemLabel="Servicio" itemValue="servicio" />
+												<p:ajax event="change"
+													update=":formTableDatos,:formBotonesHeader" />
+											</p:selectOneButton>
+										</h3>
+									</div>
+									<p:fragment
+										rendered="#{asignacionServicioController.selectedVista=='servicio'}">
+										<div class="panel panel-default">
+
+											<div class="panel-heading">
+												<h3 class="panel-title">BUSQUEDA DE SERVICIO</h3>
+
+											</div>
+											<ui:fragment
+												rendered="#{asignacionServicioController.ordenVenta.estado=='AC'}">
+												<div class="col-md-8">
+													<div class="form-group ">
+														<div class="col-md-2">Servicio</div>
+														<div class="col-md-4">
+															<p:autoComplete id="autoCompleteServicioC"
+																inputStyleClass="input-sm form-control" dropdown="true"
+																style="width:100%; height:100%; color: #555555; background-image: none; text-align:right;"
+																value="#{asignacionServicioController.textoAutoServicio}"
+																completeMethod="#{asignacionServicioController.completeTextServicio}"
+																var="ser" itemValue="#{ser.nombre}"
+																forceSelection="true" maxResults="10" size="100">
+
+																<p:ajax event="itemSelect"
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.onItemSelectServicio}" />
+																<p:column style="width: 100%;">
+																	<h:outputText value="#{ser.tipoServicio.nombre}" />
+																|
+																	<h:outputText value="#{ser.nombre}" />
+																</p:column>
+
+																
+
+															</p:autoComplete>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="btn-group-demo">
+														<div class="btn-group">
+															<p:commandLink id="AgregarServicioID"
+																value="&#160; Agregar" styleClass="btn btn-success"
+																style="height:31px;"
+																update=":formGrowl:msgs1,:formTableDatos,:formBotonesHeader"
+																action="#{asignacionServicioController.agregarServicio()}">
+																<span class="btn-label"><i class="icon-plus"></i></span>
+															</p:commandLink>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-12">
+													<div class="form-group ">
+														<div class="col-md-4">Nombre Servicio:</div>
+														<div class="col-md-8">
+															<h:outputText
+																value="#{asignacionServicioController.nombre}"
+																style=" color: #555555; background-image: none;">
+															</h:outputText>
+														</div>
+													</div>
+												</div>
+												<br />
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-4">Cantidad</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.cantidadServicio}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.calculatesTotalServicio()}" />
+															</h:inputText>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-4">Precio</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.precioServicio}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.calculatesTotalServicio()}" />
+															</h:inputText>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-4">Total</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.totalsServicio}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change" />
+															</h:inputText>
+														</div>
+													</div>
+												</div>
+											</ui:fragment>
+										</div>
+
+
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">LISTA DE SERVICIOS</h3>
+
+											</div>
+											<div class="form-group">
+												<p:dataTable var="_serv"
+													style="font-size: 11px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+													selection="#{asignacionServicioController.detalleOrdenServicio}"
+													selectionMode="single" rowKey="#{_serv.id}"
+													value="#{asignacionServicioController.listDetalleOrdenServicio}"
+													reflow="true">
+
+
+													<p:ajax event="rowSelect"
+														update=":formTableProducto, :formTableDatos"
+														listener="#{asignacionServicioController.onRowDetalleOrdenServicio}" />
+
+													<p:column style="width:5%;">
+														<span class="badge alert-danger"><p:commandLink
+																id="EliminarServicio" value="X"
+																rendered="#{asignacionServicioController.ordenVenta.estado=='AC'}">
+																<p:ajax
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.eliminarServicio(_serv)}" />
+															</p:commandLink></span>
+													</p:column>
+
+													<p:column headerText="Id" style="width:5%;"
+														filterBy="#{_serv.id}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_serv.id}" />
+													</p:column>
+
+
+													<p:column headerText="Servicio" style="width:20%;"
+														filterBy="#{_serv.nombre}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_serv.nombre}" />
+													</p:column>
+													<p:column headerText="Cantidad"
+														style="width:10%; text-align:right;"
+														filterBy="#{_serv.cantidad}"
+														filterStyle="width: 100%; height:25px;">
+														<h:inputText value="#{_serv.cantidad}"
+															style=" color: #555555; background-image: none; text-align:right;"
+															styleClass="input-sm form-control"
+															disabled="#{asignacionServicioController.ordenVenta.estado=='PR'}">
+															<f:convertNumber pattern="#,##0.00" locale="en" />
+															<p:ajax event="change"
+																update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																listener="#{asignacionServicioController.actualizarCantidad(_serv)}" />
+														</h:inputText>
+													</p:column>
+													<p:column headerText="Precio"
+														style="width:10%;text-align:right;"
+														filterBy="#{_serv.precio}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_serv.precio}" />
+													</p:column>
+													<p:column headerText="Total"
+														style="width:10%;text-align:right;"
+														filterBy="#{_serv.total}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_serv.total}" />
+													</p:column>
+
+													<p:column headerText="Empleado Asignado"
+														style="width:20%;text-align:right;"
+														filterBy="#{_serv.vendedor.nombre}"
+														filterStyle="width: 100%; height:25px;">
+														<a class="icon-user" />
+														<h:outputText rendered="#{_serv.asignado=='true'}"
+															value="#{_serv.vendedor.nombre}" />
+
+
+														<p:commandLink
+															styleClass="btn btn-warning ion-minus-circle"
+															style="height:31px; padding:center"
+															rendered="#{_serv.asignado=='false'}"
+															update=":formTableProducto, :formTableDatos,:formModalAsignacion"
+															onclick="PF('dlgAsignacion').show();"
+															action="#{asignacionServicioController.listarEmpleado(_serv)}">
+															<span class="icon-user" />
+														</p:commandLink>
+													</p:column>
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column colspan="5" footerText="Total: "
+																style="text-align:right" />
+															<p:column style="text-align:right">
+																<f:facet name="footer">
+																	<h:outputText value="Bs.- " />
+																	<h:outputText
+																		value="#{asignacionServicioController.totalServicio}">
+																		<f:convertNumber pattern="#,##0.00" locale="en" />
+																	</h:outputText>
+																</f:facet>
+															</p:column>
+														</p:row>
+													</p:columnGroup>
+													<f:facet name="footer">
+														<h:outputText
+															value="#{asignacionServicioController.listDetalleOrdenServicio.size()} Registros en Total" />
+													</f:facet>
+												</p:dataTable>
+											</div>
+										</div>
+									</p:fragment>
+
+
+
+
+
+
+
+									<p:fragment
+										rendered="#{asignacionServicioController.selectedVista=='producto'}">
+										<div class="panel panel-default">
+
+											<div class="panel-heading">
+												<h3 class="panel-title">BUSQUEDA DE PRODUCTO</h3>
+
+											</div>
+											<ui:fragment
+												rendered="#{asignacionServicioController.ordenVenta.estado=='AC'}">
+												<div class="col-md-8">
+													<div class="form-group ">
+														<div class="col-md-2">Producto</div>
+														<div class="col-md-4">
+															<p:autoComplete id="autoCompleteC" inputStyleClass="input-sm form-control" dropdown="true"
+																style="width:100%; height:100%; color: #555555; background-image: none; text-align:right; "
+																value="#{asignacionServicioController.textoAutoProducto}"
+																completeMethod="#{asignacionServicioController.completeTextProducto}"
+																var="ser" itemValue="#{ser.nombre}"
+																forceSelection="true" maxResults="10" size="100">
+																<p:ajax event="itemSelect"
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.onItemSelectProducto}" />
+																<p:column style="width: 100%;">
+																	<h:outputText value="#{ser.tipoProducto.nombre}" />																
+																|
+																	<h:outputText value="#{ser.nombre}" />
+																
+																	#{'    '}
+																	<h:outputText value="#{ser.contenidoNeto}" />
+																	<h:outputText value="#{ser.unidadMedida.nombre}" />
+																</p:column>
+															</p:autoComplete>
+
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="btn-group-demo">
+														<div class="btn-group">
+															<p:commandLink id="AgregarID" value="&#160; Agregar"
+																styleClass="btn btn-success" style="height:31px;"
+																update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																action="#{asignacionServicioController.agregarProducto()}">
+																<span class="btn-label"><i class="icon-plus"></i></span>
+															</p:commandLink>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-12">
+													<div class="form-group ">
+														<div class="col-md-4">Nombre Producto:</div>
+														<div class="col-md-8">
+															<h:outputText
+																value="#{asignacionServicioController.nombre}"
+																style=" color: #555555; background-image: none;">
+															</h:outputText>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-4">Cantidad</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.cantidad}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update=":formTableProducto, :formTableDatos"
+																	listener="#{asignacionServicioController.calcularTotal()}" />
+															</h:inputText>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-4">Precio</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.precio}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update=":formTableProducto, :formTableDatos"
+																	listener="#{asignacionServicioController.calcularTotal()}" />
+															</h:inputText>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-md-4">
+													<div class="form-group ">
+														<div class="col-md-4">Total</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{asignacionServicioController.total}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change" />
+															</h:inputText>
+														</div>
+													</div>
+												</div>
+											</ui:fragment>
+										</div>
+
+										<div class="panel panel-default">
+
+											<div class="panel-heading">
+												<h3 class="panel-title">LISTA DE PRODUCTOS</h3>
+
+											</div>
+											<div class="form-group">
+												<p:dataTable var="_pro"
+													style="font-size: 11px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+													value="#{asignacionServicioController.listDetalleOrdenProducto}"
+													reflow="true">
+
+
+													<p:column style="width:5%;">
+														<span class="badge alert-danger"><p:commandLink
+																id="Eliminar" value="X"
+																rendered="#{asignacionServicioController.ordenVenta.estado=='AC'}">
+																<p:ajax
+																	update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																	listener="#{asignacionServicioController.eliminarProducto(_pro)}" />
+															</p:commandLink></span>
+													</p:column>
+													<p:column headerText="Id" style="width:5%;"
+														filterBy="#{_pro.id}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_pro.id}" />
+													</p:column>
+
+
+													<p:column headerText="Producto" style="width:20%;"
+														filterBy="#{_pro.nombre}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_pro.nombre}" />
+													</p:column>
+													<p:column headerText="Cantidad" style="width:10%;"
+														filterBy="#{_pro.cantidad}"
+														filterStyle="width: 100%; height:25px;">
+
+														<h:inputText value="#{_pro.cantidad}"
+															style=" color: #555555; background-image: none; text-align:right;"
+															styleClass="input-sm form-control"
+															disabled="#{asignacionServicioController.ordenVenta.estado=='PR'}">
+															<f:convertNumber pattern="#,##0.00" locale="en" />
+															<p:ajax event="change"
+																update=":formGrowl:msgs1,:formTableProducto, :formTableDatos,:formBotonesHeader"
+																listener="#{asignacionServicioController.actualizarCantidadProducto(_pro)}" />
+														</h:inputText>
+													</p:column>
+													<p:column headerText="Precio"
+														style="width:10%;text-align:right;"
+														filterBy="#{_pro.precio}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_pro.precio}" />
+													</p:column>
+
+													<p:column headerText="Total"
+														style="width:10%;text-align:right;"
+														filterBy="#{_pro.total}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_pro.total}" />
+													</p:column>
+
+													<p:column headerText="Vendedor"
+														style="width:20%;text-align:right;"
+														filterBy="#{_serv.vendedor.nombre}"
+														filterStyle="width: 100%; height:25px;">
+														<h:outputText value="#{_pro.vendedor.nombre}" />
+														<p:commandLink
+															styleClass="btn btn-warning ion-minus-circle"
+															style="height:31px; padding:center"
+															rendered="#{_pro.asignado=='false'}"
+															update=":formTableProducto, :formTableDatos,:formModalAsignacionProducto"
+															onclick="PF('dlgAsignacionProducto').show();"
+															action="#{asignacionServicioController.listarEmpleadoProducto(_pro)}">
+															<span class="icon-user" />
+														</p:commandLink>
+													</p:column>
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column colspan="5" footerText="Total: "
+																style="text-align:right" />
+															<p:column style="text-align:right">
+																<f:facet name="footer">
+																	<h:outputText value="Bs.- " />
+																	<h:outputText
+																		value="#{asignacionServicioController.totals}">
+																		<f:convertNumber pattern="#,##0.00" locale="en" />
+																	</h:outputText>
+																</f:facet>
+															</p:column>
+														</p:row>
+													</p:columnGroup>
+													<f:facet name="footer">
+														<h:outputText
+															value="#{asignacionServicioController.listDetalleOrdenProducto.size()} Registros en Total" />
+													</f:facet>
+												</p:dataTable>
+											</div>
+										</div>
+									</p:fragment>
+								</div>
+							</ui:fragment>
+						</h:form>
+					</div>
+					<div class="row">
+						<h:form id="formTableProducto">
+							<ui:fragment
+								rendered="#{asignacionServicioController.modificar=='false'}">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">LISTA DE ORDENES DE VENTA</h3>
+											<br />
+											<h:panelGrid columns="2">
+												<h:outputText value="Fecha:" />
+												<p:calendar value="#{asignacionServicioController.fecha}"
+													pattern="dd/MM/yyyy">
+													<p:ajax event="dateSelect"
+														update=":formTableProducto,:formBotonesHeader"
+														listener="#{asignacionServicioController.consultarOrdenVentaPorFecha()}" />
+												</p:calendar>
+											</h:panelGrid>
+										</div>
+										<div class="form-group">
+											<p:dataTable var="_ord"
+												style="font-size: 11px !important; line-height: 1.33846154 !important; font-family: sans-serif !important; padding: 0px 0px 0px 0px;"
+												selection="#{asignacionServicioController.ordenVenta}"
+												selectionMode="single" rowKey="#{_ord.id}"
+												value="#{asignacionServicioController.listOrdenVenta}"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="10 20 30 40 50" first="0"
+												paginator="true" rows="20" reflow="true">
+
+
+												<p:ajax event="rowSelect"
+													update=":formTableProducto, :formTableDatos,:formBotonesHeader"
+													listener="#{asignacionServicioController.onRowSelectOrdenVenta}" />
+
+												<p:column headerText="Id" style="width:5%;"
+													filterBy="#{_ord.id}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.id}" />
+												</p:column>
+												
+												<p:column headerText="Correlativo" style="width:5%;"
+													filterBy="#{_ord.numeroSecuencia}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.numeroSecuencia}" />
+												</p:column>
+												<p:column headerText="Cliente" style="width:50%;"
+													filterBy="#{_ord.cliente.nombre}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.cliente.nombre}" />
+												</p:column>
+												<p:column headerText="Fecha"
+													style="width:10%; text-align:center;"
+													filterBy="#{_ord.nombre}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+
+												<p:column headerText="Precio"
+													style="width:10%;text-align:right;"
+													filterBy="#{_ord.total}"
+													filterStyle="width: 100%; height:25px;">
+													<h:outputText value="#{_ord.total}" />
+												</p:column>
+
+												<p:column headerText="Estado"
+													style="width:10%;text-align:right;">
+													<span class="label label-success"><h:outputText
+															rendered="#{_ord.estado=='AC'}" value="NUEVO" /></span>
+													<span class="label label-primary"><h:outputText
+															rendered="#{_ord.estado=='PR'}" value="PROCESADO" /></span>
+												</p:column>
+
+											</p:dataTable>
+										</div>
+									</div>
+								</div>
+
+							</ui:fragment>
+						</h:form>
+					</div>
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<!-- VISTA PREVIA LIBRO DE VENTAS SFV -->
+		<p:dialog showEffect="explode" header="Vista Previa Ticket"
+			widgetVar="dlgVistaPreviaTicket" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPreviaTicket">
+
+			<h:form id="formModalVistaPreviaTicket">
+
+				<div class="modal-body"></div>
+			</h:form>
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" styleClass="btn btn-default"
+						onclick="dlgVistaPreviaTicket.hide()" />
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+		<!-- END DIALOG -->
+
+
+		<!-- DIALOG ASIGNACION DE EMPLEADO  -->
+
+		<p:dialog showEffect="explode" header="SELECCIONAR EMPLEADO"
+			widgetVar="dlgAsignacion" resizable="false" modal="true"
+			position="center" width="300" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalAsignacion">
+
+			<h:form id="formModalAsignacion">
+				<div class="col-md-12"
+					style="padding-left: 0px; padding-right: 0px;">
+					<div class="modal-body">
+						<div class="form-group">
+							<div class="col-md-12">Empleado</div>
+							<div class="col-md-12">
+								<p:autoComplete id="autoCompleteCC" dropdown="true"
+									style="width:100%; height:100%; color: #555555; background-image: none;"
+									value="#{asignacionServicioController.textoAutoCompleteEmpleado}"
+									completeMethod="#{asignacionServicioController.completeTextEmpleado}"
+									maxResults="10">
+									<p:ajax event="itemSelect"
+										update=":formTableProducto, :formTableDatos,:formModalAsignacion"
+										listener="#{asignacionServicioController.onItemSelectEmpleado}" />
+								</p:autoComplete>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+
+					<div class="btn-group btn-group-sm">
+						<p:commandButton value="Cancelar" style="width: 100px;"
+							icon="ui-icon-minus" styleClass="btn btn-default"
+							onclick="dlgAsignacion.hide()" />
+						<p:commandButton value="Aceptar" style="width: 100px;"
+							icon="ui-icon-check" styleClass="btn btn-default"
+							update=":formTableProducto, :formTableDatos,:formModalAsignacion,:formBotonesHeader"
+							actionListener="#{asignacionServicioController.asignarEmpleado()}"
+							onclick="dlgAsignacion.hide()" />
+					</div>
+
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+
+
+		<p:dialog showEffect="explode" header="NUEVO CLIENTE"
+			widgetVar="dlgCliente" resizable="false" modal="true"
+			position="center" width="400" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}" id="modalCliente">
+
+			<h:form id="formModalCliente">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Registro Clientes</h3>
+					</div>
+					<div class="panel-body">
+						<!-- start here register -->
+						<div class="row">
+							<div class="col-md-12 box-content form-horizontal">
+								
+								<div class="form-group ">
+									<div class="col-md-4">Nombre</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{asignacionServicioController.newClientes.nombre}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" update="formModalCliente" />
+										</h:inputText>
+									</div>
+								</div>
+								
+								<div class="form-group ">
+									<div class="col-md-4">CI</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{asignacionServicioController.newClientes.ci}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control ">
+											<p:ajax event="change" update="formModalCliente" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">NIT</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{asignacionServicioController.newClientes.nit}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control ">
+											<p:ajax event="change" update="formModalCliente" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Dirección</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{asignacionServicioController.newClientes.direccion}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change"  update="formModalCliente" />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Correo</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{asignacionServicioController.newClientes.correo}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" update="formModalCliente"  />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">Telefono</div>
+									<div class="col-md-8">
+										<h:inputText
+											value="#{asignacionServicioController.newClientes.telefono}"
+											style=" color: #555555; background-image: none;"
+											styleClass="input-sm form-control">
+											<p:ajax event="change" update="formModalCliente"  />
+										</h:inputText>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="col-md-4">
+										<h:outputLabel value="Tipo Persona" for="tipoPersona" />
+									</div>
+									<div class="col-md-8">
+										<h:selectOneMenu id="tipoPersona"
+											value="#{asignacionServicioController.newClientes.tipo}"
+											styleClass="form-control">
+											<p:ajax event="change" update="formModalCliente" immediate="true"></p:ajax>
+											<f:selectItem itemValue="NATURAL" itemLabel="NATURAL" />
+											<f:selectItem itemValue="JURIDICO" itemLabel="JURIDICO" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+								<ui:fragment
+									rendered="#{asignacionServicioController.newClientes.tipo.equals('JURIDICO')}">
+									<div class="form-group ">
+										<div class="col-md-4">NIT</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{asignacionServicioController.newClientes.nit}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control ">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">Razon Social</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{asignacionServicioController.newClientes.razonSocial}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control ">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+								</ui:fragment>
+								<div class="form-group ">
+									<div class="col-md-4">Permitir Credito</div>
+									<div class="col-md-2">
+										<label class="switch switch-success switch-sm"> <h:selectBooleanCheckbox
+												value="#{asignacionServicioController.permitirCredito}"
+												styleClass="switch">
+												<p:ajax event="change" update="formModalCliente"  />
+											</h:selectBooleanCheckbox><span class="switch"></span>
+										</label>
+									</div>
+									<div class="col-md-6">
+										<ui:fragment
+											rendered="#{asignacionServicioController.permitirCredito}">
+											<div class="form-group ">
+												<div class="col-md-8">
+													<h:inputText
+														value="#{asignacionServicioController.newClientes.diasPermitidosCredito}"
+														style=" color: #555555; background-image: none;"
+														onkeypress="return validateOnlyNumber(event)"
+														styleClass="input-sm form-control">
+														<p:ajax event="change" update="formModalCliente" />
+													</h:inputText>
+												</div>
+												<div class="col-md-4">Dias</div>
+											</div>
+										</ui:fragment>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<!-- end here register -->
+					</div>
+				</div>
+
+				<div class="modal-footer">
+
+					<div class="btn-group btn-group-sm">
+						<p:commandButton value="Cancelar" style="width: 100px;"
+							icon="ui-icon-minus" styleClass="btn btn-default"
+							onclick="dlgCliente.hide()" />
+						<p:commandButton value="Aceptar" style="width: 100px;"
+							icon="ui-icon-check" styleClass="btn btn-default"
+							update=":formTableProducto, :formModalCliente,:formBotonesHeader"
+							actionListener="#{asignacionServicioController.registrarCliente()}"
+							onclick="dlgCliente.hide()" />
+					</div>
+
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog showEffect="explode" header="SELECCIONAR EMPLEADO"
+			widgetVar="dlgAsignacionProducto" resizable="false" modal="true"
+			position="center" width="300" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalAsignacionProducto">
+
+			<h:form id="formModalAsignacionProducto">
+				<div class="col-md-12"
+					style="padding-left: 0px; padding-right: 0px;">
+					<div class="modal-body">
+						<div class="form-group">
+							<div class="col-md-12">Empleado</div>
+							<div class="col-md-12">
+								<p:autoComplete id="autoCompleteProductoCC" dropdown="true"
+									style="width:100%; height:100%; color: #555555; background-image: none;"
+									value="#{asignacionServicioController.textoAutoCompleteEmpleado}"
+									completeMethod="#{asignacionServicioController.completeTextEmpleado}"
+									maxResults="10">
+									<p:ajax event="itemSelect"
+										update=":formTableProducto, :formTableDatos,:formModalAsignacionProducto"
+										listener="#{asignacionServicioController.onItemSelectEmpleado}" />
+								</p:autoComplete>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+
+					<div class="btn-group btn-group-sm">
+
+						<p:commandButton value="Cancelar" style="width: 100px;"
+							icon="ui-icon-minus" styleClass="btn btn-default"
+							onclick="dlgAsignacionProducto.hide()" />
+						<p:commandButton value="Aceptar" style="width: 100px;"
+							icon="ui-icon-check" styleClass="btn btn-default"
+							update=":formTableProducto, :formTableDatos,:formModalAsignacionProducto,:formBotonesHeader"
+							actionListener="#{asignacionServicioController.asignarEmpleadoProducto()}"
+							onclick="dlgAsignacionProducto.hide()" />
+					</div>
+
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

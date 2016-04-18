@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_index.xhtml">
+
+	<ui:define name="head">
+		<title>Test</title>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--BEGIN CONTENT-->
+		<div class="content">
+
+			<section class="main-content"
+				style="padding-left: 0px; padding-right: 0px;">
+				<h:form id="form0">
+					<section class="content-header">
+						<div class="pull-left" style="padding-top: 2px;">
+							<div class="btn-group-demo" style="padding-left: 10px;">
+								<div class="btn-group">
+
+									<p:commandLink id="buttonBackUp" value="&#160; BackUp" type="file"
+										styleClass="btn btn-success ion-checkmark"
+										style="height:31px; padding:center"
+										update="@form,formGrowl:msgs1"
+										actionListener="#{backUpRestoreController.backUp()}">
+									</p:commandLink>
+
+									<p:fileUpload
+										fileUploadListener="#{backUpRestoreController.restore}"
+										label="Restore" auto="true" style="width: 11%" />
+								</div>
+							</div>
+						</div>
+
+						<div class="pull-right">
+							<ol class="breadcrumb">
+								<li><a href="#{request.contextPath}/pages/dashboard.xhtml"
+									style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+								<li><a style="color: #0090FF; font-size: 12px;">Codigo
+										Control</a></li>
+							</ol>
+						</div>
+					</section>
+
+					<section class="main-content" style="background-color: #f9fafa;">
+						<div class="row">
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<h3 class="panel-title">DATOS DE CONFIGURACION</h3>
+									</div>
+
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-md-12 box-content form-horizontal">
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="llaveControlID" value="Base de Datos" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="llaveControlID"
+															value="#{backUpRestoreController.configuracionDB.database}"
+															size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control " required="true"
+															requiredMessage="Llave Dosificacion Requerido.">
+														</p:inputText>
+
+													</div>
+
+													<p:watermark value="Nombre de Base de Datos"
+														for="llaveControlID" />
+													<p:message for="llaveControlID" errorClass="invalid" />
+
+												</div>
+
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="nroAutorizacionID" value="Usuario" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="nroAutorizacionID"
+															value="#{backUpRestoreController.configuracionDB.user}"
+															size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control " required="true"
+															requiredMessage="Nro. Autorizacion Requerido.">
+
+														</p:inputText>
+													</div>
+
+													<p:watermark value="Nombre Usuario" for="nroAutorizacionID" />
+													<p:message for="nroAutorizacionID" errorClass="invalid" />
+
+												</div>
+
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="nroFacturaID" value="Contraseña" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="nroFacturaID"
+															value="#{backUpRestoreController.configuracionDB.password}"
+															size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control " required="true"
+															requiredMessage="Nro. Factura Requerido.">
+														</p:inputText>
+													</div>
+													<p:watermark value="Password" for="nroFacturaID" />
+													<p:message for="nroFacturaID" errorClass="invalid" />
+												</div>
+
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="nitciID" value="Servidor o Host" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="nitciID"
+															value="#{backUpRestoreController.configuracionDB.host}"
+															size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control " required="true"
+															requiredMessage="CI/NIT Requerido.">
+														</p:inputText>
+													</div>
+													<p:watermark value="LocalHost" for="nitciID" />
+													<p:message for="nitciID" errorClass="invalid" />
+												</div>
+
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="fechaTransaccionID" value="Puerto" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="fechaTransaccionID"
+															value="#{backUpRestoreController.configuracionDB.puerto}"
+															size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control " required="true"
+															requiredMessage="Fecha Transacción Requerido.">
+														</p:inputText>
+													</div>
+													<p:watermark value="5432" for="fechaTransaccionID" />
+													<p:message for="fechaTransaccionID" errorClass="invalid" />
+												</div>
+
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="binID" value="Direccion Bin" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="binID"
+															value="#{backUpRestoreController.configuracionDB.dirBin}"
+															size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control " required="true"
+															requiredMessage="Monto Bs Requerido.">
+														</p:inputText>
+													</div>
+													<p:watermark
+														value="C:\\Program Files\\PostgreSQL\\9.3\\bin"
+														for="binID" />
+													<p:message for="binID" errorClass="invalid" />
+												</div>
+
+												<div class="form-group ">
+													<div class="col-md-4">
+														<h:outputLabel for="codigoControlID"
+															value="Direccion de BackUp" />
+													</div>
+													<div class="col-md-8">
+														<p:inputText id="codigoControlID"
+															value="#{backUpRestoreController.configuracionDB.path}"
+															readonly="true" size="40"
+															style=" color: #555555; background-image: none; "
+															styleClass="input-sm form-control ">
+														</p:inputText>
+
+													</div>
+													<p:watermark value="Direccion de BackUp"
+														for="codigoControlID" />
+													<p:message for="codigoControlID" errorClass="invalid" />
+												</div>
+												<div class="btn-group">
+													<p:commandLink id="buttonCancelar1" value="&#160; Cancelar"
+														styleClass="btn btn-warning ion-minus-circled"
+														style="height:31px; padding:center"
+														onclick="location.href='javascript:history.go(-1)'">
+													</p:commandLink>
+
+													<p:commandLink id="buttonVerificar"
+														value="&#160; Registrar"
+														styleClass="btn btn-success ion-checkmark"
+														style="height:31px; padding:center"
+														update="@form,formGrowl:msgs1"
+														action="#{backUpRestoreController.registrar()}">
+													</p:commandLink>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</section>
+				</h:form>
+			</section>
+
+		</div>
+
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<p:dialog header="DIALOG TEST" widgetVar="dlgTest" modal="true"
+			height="100%">
+		</p:dialog>
+		<!-- END DIALOG -->
+
+	</ui:define>
+</ui:composition>

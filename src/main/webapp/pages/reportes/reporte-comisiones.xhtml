@@ -1,0 +1,287 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+
+	<ui:define name="head">
+		<title>Libros IVA</title>
+	</ui:define>
+	<ui:define name="content">
+		<div class="content">
+			<section class="content-header">
+				<section class="content">
+					<div class="pull-right">
+						<ol class="breadcrumb">
+							<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+								style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+							<li><a
+								href="#{request.contextPath}/pages/formulario/factura_index.xhtml"
+								style="color: #0090FF; font-size: 12px;">Formulario</a></li>
+							<li class="active" style="font-size: 12px;">Proforma
+								Facturación</li>
+						</ol>
+					</div>
+				</section>
+
+
+				<h:form id="formVentas" styleClass="form-horizontal">
+
+					<div class="panel-body">
+
+						<div class="row">
+							<div class="col-sm-6 col-md-3">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<strong> <i aria-hidden="true"
+											class="glyphicon glyphicon-random"></i> EXPORTAR LIBRO DE
+										COMISIONES
+										</strong>
+									</div>
+									<div class="panel-body">
+
+										<h:panelGrid columns="3">
+
+											<h:outputLabel for="mesID" value="Mes: " />
+											<h:selectOneMenu id="mesID"
+												title="Seleccionar el mes de las Ventas."
+												value="#{comisionesController.mes}"
+												requiredMessage="Mes Requerido.">
+												<f:selectItem itemValue="01" itemLabel="Enero" />
+												<f:selectItem itemValue="02" itemLabel="Febrero" />
+												<f:selectItem itemValue="03" itemLabel="Marzo" />
+												<f:selectItem itemValue="04" itemLabel="Abril" />
+												<f:selectItem itemValue="05" itemLabel="Mayo" />
+												<f:selectItem itemValue="06" itemLabel="Junio" />
+												<f:selectItem itemValue="07" itemLabel="Julio" />
+												<f:selectItem itemValue="08" itemLabel="Agosto" />
+												<f:selectItem itemValue="09" itemLabel="Septiembre" />
+												<f:selectItem itemValue="10" itemLabel="Octubre" />
+												<f:selectItem itemValue="11" itemLabel="Noviembre" />
+												<f:selectItem itemValue="12" itemLabel="Diciembre" />
+												<p:ajax event="change" update=":formVentas" />
+											</h:selectOneMenu>
+											<p:message for="mesID" errorClass="invalid" />
+
+											<h:outputLabel for="gestionID" value="Gestion: " />
+											<h:selectOneMenu id="gestionID"
+												title="Seleccionar la gestion de las Ventas."
+												value="#{comisionesController.gestion}"
+												styleClass="form-control" effect="fade" required="true"
+												requiredMessage="Gestion Requerido.">
+												<f:selectItems
+													value="#{comisionesController.listaGestiones}"
+													var="_gestion" itemLabel="#{_gestion}"
+													itemValue="#{_gestion}" />
+												<p:ajax event="change" update=":formVentas" />
+											</h:selectOneMenu>
+											<p:message for="gestionID" />
+
+											<h:outputLabel for="sucursalID" value="Sucursal: " />
+											<h:selectOneMenu id="sucursalID"
+												title="Por Defecto la Sucursal Matriz '0'."
+												value="#{comisionesController.sucursalID}"
+												styleClass="form-control" effect="fade" required="true"
+												requiredMessage="Sucursal Requerido.">
+												<f:selectItems
+													value="#{comisionesController.listaSucursales}"
+													var="_sucursal" itemLabel="#{_sucursal.nombre}"
+													itemValue="#{_sucursal.id}" />
+												<p:ajax event="change" update=":formVentas" />
+											</h:selectOneMenu>
+											<p:message for="sucursalID" />
+											
+											
+											<h:outputLabel for="empleadoID" value="Empleado: " />
+											<h:selectOneMenu id="empleadoID"
+												title="Por Defecto la Empleado 1 '0'."
+												value="#{comisionesController.empleadoID}"
+												styleClass="form-control" effect="fade" required="true"
+												requiredMessage="Empleado Requerido.">
+												<f:selectItems
+													value="#{comisionesController.listaEmpleados}"
+													var="_empleado" itemLabel="#{_empleado.nombre}"
+													itemValue="#{_empleado.id}" />
+												<p:ajax event="change" update=":formVentas" />
+											</h:selectOneMenu>
+											<p:message for="empleadoID" />										
+
+
+										</h:panelGrid>
+
+									</div>
+
+
+									<p:tooltip id="toolTipMes" for="mesID" showEvent="focus"
+										hideEvent="blur" />
+									<p:tooltip id="toolTipGestion" for="gestionID"
+										showEvent="focus" hideEvent="blur" />
+									<p:tooltip id="toolTipSucursal" for="sucursalID"
+										showEvent="focus" hideEvent="blur" />
+
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-9">
+
+
+
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<strong><span
+												class="glyphicon glyphicon-circle-arrow-down" /> DESCARGAR
+												COMISIONES</strong>
+										</h4>
+									</div>
+									<div class="panel-body">
+
+
+										<div class="row">
+											<div class="col-sm-3 col-md-4">
+												<h4>
+													<span class="label label-default">PRODUCTOS Y SERVICIOS</span>
+												</h4>
+												<div class="thumbnail">
+
+													<h:graphicImage sclass="thumbnail" name="pdf.png"
+														library="gfx" width="100px;" height="150px;" />
+													<div class="caption">
+														<h4>Lista de Comisiones de Productos y Servicios</h4>
+														<p>Todos las listas de Comisiones se generan mensualmente.</p>
+
+														<div class="btn-group-demo">
+															<div class="btn-group">
+																<p:commandLink value="&#160; Vista Previa"
+																	action="#{comisionesController.armarURLVentasNSF}"
+																	update=":formModalVistaPrevia,:formVentas"
+																	onclick="PF('dlgVistaPrevia').show();"
+																	styleClass="btn btn-default">
+																</p:commandLink>
+															
+
+															</div>
+														</div>
+
+
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3 col-md-4">
+												<h4>
+													<span class="label label-default">SERVICIOS</span>
+												</h4>
+												<div class="thumbnail">
+
+													<h:graphicImage sclass="thumbnail" name="pdf.png"
+														library="gfx" width="100px;" height="150px;" />
+													<div class="caption">
+														<h4>Lista de Comisiones de Servicios</h4>
+														<p>Todos las listas de Comisiones se generan mensualmente.</p>
+
+														<div class="btn-group-demo">
+															<div class="btn-group">
+																<p:commandLink value="&#160; Vista Previa"
+																	action="#{comisionesController.armarURLVentasNSFServicios}"
+																	update=":formModalVistaPrevia,:formVentas"
+																	onclick="PF('dlgVistaPrevia').show();"
+																	styleClass="btn btn-default">
+																</p:commandLink>
+															
+
+															</div>
+														</div>
+
+
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3 col-md-4">
+												<h4>
+													<span class="label label-default">PRODUCTOS</span>
+												</h4>
+												<div class="thumbnail">
+
+													<h:graphicImage sclass="thumbnail" name="pdf.png"
+														library="gfx" width="100px;" height="150px;" />
+													<div class="caption">
+														<h4>Lista de Comisiones de Productos</h4>
+														<p>Todos las listas de Comisiones se generan mensualmente.</p>
+
+														<div class="btn-group-demo">
+															<div class="btn-group">
+																<p:commandLink value="&#160; Vista Previa"
+																	action="#{comisionesController.armarURLVentasNSFProductos}"
+																	update=":formModalVistaPrevia,:formVentas"
+																	onclick="PF('dlgVistaPrevia').show();"
+																	styleClass="btn btn-default">
+																</p:commandLink>
+															
+
+															</div>
+														</div>
+
+
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+
+					</div>
+
+
+				</h:form>
+
+			</section>
+		</div>
+
+		<!-- VISTA PREVIA LIBRO DE VENTAS -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgVistaPrevia" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPrevia">
+
+			<h:form id="formModalVistaPrevia">
+
+				<div class="modal-body">
+					<p:media player="pdf" value="#{comisionesController.urlVentasNSF}"
+						width="700px" height="400px" />
+
+				</div>
+			</h:form>
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" styleClass="btn btn-default"
+						update=":formModalVistaPrevia"
+						onclick="PF('dlgVistaPrevia').hide();"/>
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+		
+
+	</ui:define>
+
+	<ui:define name="footer">
+
+	</ui:define>
+
+</ui:composition>

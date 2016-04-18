@@ -1,0 +1,4 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Mon Aug 24 14:29:58 BOT 2015
+rewrite-integration-cdi-2.0.12.Final.pom>maven2=
+rewrite-integration-cdi-2.0.12.Final.jar>maven2=

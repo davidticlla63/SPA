@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Tipo Producto</title>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<div class="form-group">
+									<p:commandLink id="buttonCancelar" value="&#160; Cancelar"
+										styleClass="btn btn-warning ion-minus-circled"
+										rendered="#{grupoProductoController.modificar or grupoProductoController.registrar}"
+										style="height:31px; padding:center"
+										update="formReg,formTableGrupoProducto,formBotonesHeader"
+										action="#{grupoProductoController.loadDefault()}">
+									</p:commandLink>
+									<p:commandLink id="buttonCrear1" value="&#160; Nueva GrupoProducto"
+										styleClass="btn btn-success ion-plus-round"
+										rendered="#{grupoProductoController.crear}" style="height:31px;">
+										<p:ajax
+											update="formTableGrupoProducto,formReg,formBotonesHeader"
+											listener="#{grupoProductoController.cambiarAspecto()}" />
+									</p:commandLink>
+									<p:commandLink id="ajax" value="&#160; Registrar"
+										styleClass="btn btn-success ion-checkmark"
+										rendered="#{ grupoProductoController.registrar}"
+										style="height:31px; padding:center"
+										update="formTableGrupoProducto,formGrowl:msgs1,:formBotonesHeader,formReg"
+										action="#{grupoProductoController.registrarGrupoProducto()}">
+									</p:commandLink>
+									<p:commandLink id="buttonModificar" value="&#160; Modificar"
+										update="formTableGrupoProducto,formGrowl:msgs1,formBotonesHeader,formReg"
+										rendered="#{grupoProductoController.modificar}"
+										styleClass="btn btn-primary ion-edit"
+										style="height:31px; padding:center"
+										action="#{grupoProductoController.modificarGrupoProducto()}">
+									</p:commandLink>
+									<p:commandLink id="buttonEliminar" value="&#160; Eliminar"
+										styleClass="btn btn-danger ion-trash-b"
+										rendered="#{grupoProductoController.modificar}"
+										style="height:31px; padding:center"
+										update="formTableGrupoProducto,formGrowl:msgs1,formBotonesHeader,formReg"
+										action="#{grupoProductoController.eliminarGrupoProducto()}">
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/parametrizacion/grupoProducto.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active">GrupoProducto</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formReg">
+							<ui:fragment
+								rendered="#{grupoProductoController.registrar or grupoProductoController.modificar}">
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Registro de GrupoProducto</h3>
+										</div>
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+												
+												<div class="form-group">
+														<div class="col-md-4">Tipo Linea</div>
+														<div class="col-md-8">
+															<p:autoComplete id="autoCompleteLinea"
+																inputStyleClass="input-sm form-control"
+																style="width:100%; height:100%; color: #555555; background-image: none;"
+																value="#{grupoProductoController.textoAutoCompleteLinea}"
+																completeMethod="#{grupoProductoController.completeTextLinea}"
+																maxResults="10">
+																<p:ajax event="itemSelect"
+																	update="formReg,:formBotonesHeader"
+																	listener="#{grupoProductoController.onItemSelectLinea}" />
+																<p:ajax event="change"
+																	update="formReg,:formBotonesHeader" />
+
+															</p:autoComplete>
+
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Nombre</div>
+														<div class="col-md-8">
+															<h:inputText value="#{grupoProductoController.newGrupoProducto.nombre}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													
+													
+													<div class="form-group ">
+														<div class="col-md-4">Estado</div>
+														<div class="col-md-8">
+															<h:selectOneMenu id="roles"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{grupoProductoController.newGrupoProducto.state =='SUPER'}"
+																immediate="true"
+																value="#{grupoProductoController.nombreEstado}">
+																<f:ajax />
+																<f:selectItems value="#{grupoProductoController.listEstado}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8">
+								<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de GrupoProducto</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableGrupoProducto1"
+												value="#{grupoProductoController.listGrupoProducto}" var="item"
+												selectionMode="single"
+												emptyMessage="No se encotraron grupoProductoes."
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{grupoProductoController.selectedGrupoProducto}"
+												filteredValue="#{grupoProductoController.listFilterGrupoProducto}"
+												rowKey="#{item.id}" reflow="true">
+
+												<p:ajax event="rowSelect"
+													listener="#{grupoProductoController.onRowSelectGrupoProducto}"
+													update="formReg,formBotonesHeader,formTableGrupoProducto" />
+
+												<p:column headerText="Código" width="10%"
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.id}">
+													<h:outputText value="#{item.id}" />
+												</p:column>
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.nombre}">
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{item.nombre}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.state}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.state=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.state=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="8%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{grupoProductoController.listGrupoProducto.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+
+						<h:form id="formTableGrupoProducto">
+							<ui:fragment rendered="#{grupoProductoController.crear}">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de GrupoProducto</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableGrupoProducto"
+												value="#{grupoProductoController.listGrupoProducto}" var="item"
+												selectionMode="single"
+												emptyMessage="No se encotraron grupoProductoes."
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{grupoProductoController.selectedGrupoProducto}"
+												filteredValue="#{grupoProductoController.listFilterGrupoProducto}"
+												rowKey="#{item.id}" reflow="true">
+
+												<p:ajax event="rowSelect"
+													listener="#{grupoProductoController.onRowSelectGrupoProducto}"
+													update="formReg,formBotonesHeader,formTableGrupoProducto" />
+
+												<p:column headerText="Código" width="10%"
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.id}">
+													<h:outputText value="#{item.id}" />
+												</p:column>
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.nombre}">
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{item.nombre}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.state}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.state=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.state=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="8%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{grupoProductoController.listGrupoProducto.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+
+						
+					</div>
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		
+		<!-- END DIALOG -->
+
+	</ui:define>
+</ui:composition>

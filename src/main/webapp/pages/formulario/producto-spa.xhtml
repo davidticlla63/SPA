@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Producto</title>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<div class="form-group">
+									<p:commandLink id="buttonCancelar" value="&#160; Cancelar"
+										styleClass="btn btn-warning ion-minus-circled"
+										rendered="#{productoSpaController.modificar or productoSpaController.registrar}"
+										style="height:31px; padding:center"
+										update="formReg,formTableProducto,formBotonesHeader"
+										action="#{productoSpaController.loadDefault()}">
+									</p:commandLink>
+									<p:commandLink id="buttonCrear1" value="&#160; Nueva Producto"
+										styleClass="btn btn-success ion-plus-round"
+										rendered="#{productoSpaController.crear}" style="height:31px;">
+										<p:ajax update="formTableProducto,formReg,formBotonesHeader"
+											listener="#{productoSpaController.cambiarAspecto()}" />
+									</p:commandLink>
+									<p:commandLink id="ajax" value="&#160; Registrar"
+										styleClass="btn btn-success ion-checkmark"
+										rendered="#{ productoSpaController.registrar}"
+										style="height:31px; padding:center"
+										update="formTableProducto,formGrowl:msgs1,:formBotonesHeader,formReg"
+										action="#{productoSpaController.registrarProducto()}">
+									</p:commandLink>
+									<p:commandLink id="buttonModificar" value="&#160; Modificar"
+										update="formTableProducto,formGrowl:msgs1,formBotonesHeader,formReg"
+										rendered="#{productoSpaController.modificar}"
+										styleClass="btn btn-primary ion-edit"
+										style="height:31px; padding:center"
+										action="#{productoSpaController.modificarProducto()}">
+									</p:commandLink>
+									<p:commandLink id="buttonEliminar" value="&#160; Eliminar"
+										styleClass="btn btn-danger ion-trash-b"
+										rendered="#{productoSpaController.modificar}"
+										style="height:31px; padding:center"
+										update="formTableProducto,formGrowl:msgs1,formBotonesHeader,formReg"
+										action="#{productoSpaController.eliminarProducto()}">
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/parametrizacion/producto.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active">Producto</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formReg">
+							<ui:fragment
+								rendered="#{productoSpaController.registrar or productoSpaController.modificar}">
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Registro de Producto</h3>
+										</div>
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+													<div class="form-group ">
+														<div class="col-md-4">Nombre</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoSpaController.newProducto.nombre}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Descripcion</div>
+														<div class="col-md-8">
+															<h:inputTextarea
+																value="#{productoSpaController.newProducto.descripcion}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputTextarea>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Cont. Neto</div>
+														<div class="col-md-3">
+															<h:inputText
+																value="#{productoSpaController.newProducto.contenidoNeto}"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.calcularPrecioVenta()}" />
+															</h:inputText>
+														</div>
+														<div class="col-md-2">
+														<h:outputText value="U. M." />
+														</div>
+														<div class="col-md-3">
+														<p:autoComplete id="unidadMedidaId"
+																inputStyleClass="form-control"
+																style="width:100%; height:100%; text-align:right;"
+																value="#{productoSpaController.textoAutoCompleteMedida}"
+																completeMethod="#{productoSpaController.completeTextUnidadMedida}"
+																maxResults="10" dropdown="true">
+																<p:ajax event="itemSelect"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.onItemSelectUnidadMedida}" />
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader" />
+															</p:autoComplete>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Precio Compra</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoSpaController.newProducto.precioCompra}"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.calcularPrecioVenta()}" />
+															</h:inputText>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-4">Empresa</label>
+														<div class="col-md-6">
+															<h:selectOneMenu id="empresa"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{newUsuario.state =='SU'}"
+																value="#{productoSpaController.newProducto.proveedor.id}"
+																required="true" requiredMessage="Seleccionar un Tipo">
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.obtenerProveedor()}" />
+																<f:selectItem itemLabel="Seleccione uno" itemValue="" />
+																<f:selectItems var="tipo" itemLabel="#{tipo.nombre}"
+																	itemValue="#{tipo.id}"
+																	value="#{productoSpaController.listProveedor}" />
+
+															</h:selectOneMenu>
+														</div>
+														<div class="col-md-2">
+															<span class="badge alert-success"><p:commandLink
+																	value="Nuevo" id="addID" style="height:31px;">
+																	<p:ajax
+																		update=":formGrowl:msgs1,:formReg,:formBotonesHeader,:formModalCliente"
+																		listener="#{productoSpaController.crearProveedor()}" />
+																</p:commandLink>+ </span>
+														</div>
+													</div>
+
+													<div class="form-group ">
+														<div class="col-md-4">Margen Utilidad(%)</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoSpaController.newProducto.proveedor.margenUtilidad}"
+																style=" color: #555555; background-image: none; text-align:right;"
+																disabled="true" styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+
+													<div class="form-group ">
+														<div class="col-md-4">Comision Producto(%)</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoSpaController.newProducto.comision}"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.calcularPrecioVenta()}" />
+															</h:inputText>
+														</div>
+													</div>
+
+													<div class="form-group ">
+														<div class="col-md-4">Precio Venta</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoSpaController.newProducto.precioVenta}"
+																style=" color: #555555; background-image: none; text-align:right;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+
+
+													<div class="form-group">
+														<label class="col-md-4">Grupo Producto</label>
+														<div class="col-md-8">
+															<p:autoComplete id="tipoProducto"
+																inputStyleClass="form-control"
+																style="width:100%; height:100%; text-align:right;"
+																value="#{productoSpaController.textoAutoCompleteGrupo}"
+																completeMethod="#{productoSpaController.completeTextGrupo}"
+																maxResults="10" dropdown="true">
+																<p:ajax event="itemSelect"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.onItemSelectGrupo}" />
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader" />
+															</p:autoComplete>
+
+														</div>
+													</div>
+
+
+													<div class="form-group">
+														<label class="col-md-4">Linea </label>
+														<div class="col-md-6">
+															<h:selectOneMenu id="lineaProducto"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px; text-align:right;"
+																disabled="#{newUsuario.state =='SU'}"
+																value="#{productoSpaController.linea.id}"
+																required="true" requiredMessage="Seleccionar un Linea">
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.listarGrupoProducto()}" />
+																<f:selectItem itemLabel="Seleccione uno" itemValue="" />
+																<f:selectItems var="linea" itemLabel="#{linea.nombre}"
+																	itemValue="#{linea.id}"
+																	value="#{productoSpaController.listLinea}" />
+															</h:selectOneMenu>
+														</div>
+														<div class="col-md-2">
+															<span class="badge alert-success"><p:commandLink
+																	value="Nuevo" id="addLineaID" style="height:31px;">
+																	<p:ajax
+																		update=":formGrowl:msgs1,:formReg,:formBotonesHeader,:formModalLinea"
+																		listener="#{productoSpaController.crearLinea()}" />
+																</p:commandLink>+ </span>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-4">Clasificacion</label>
+														<div class="col-md-8">
+															<p:autoComplete id="grupoProducto"
+																inputStyleClass="form-control"
+																style="width:100%; height:100%; text-align:right;"
+																value="#{productoSpaController.textoAutoCompleteClasificacion}"
+																completeMethod="#{productoSpaController.completeTextClasificacion}"
+																maxResults="10" dropdown="true">
+																<p:ajax event="itemSelect"
+																	update="formReg, formBotonesHeader"
+																	listener="#{productoSpaController.onItemSelectClasificacion}" />
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader" />
+															</p:autoComplete>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Estado</div>
+														<div class="col-md-8">
+															<h:selectOneMenu id="roles"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{productoSpaController.newProducto.estado =='SUPER'}"
+																immediate="true"
+																value="#{productoSpaController.nombreEstado}">
+																<f:ajax />
+																<f:selectItems
+																	value="#{productoSpaController.listEstado}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de Producto</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableProducto1"
+												value="#{productoSpaController.listProducto}" var="item"
+												selectionMode="single"
+												emptyMessage="No se encotraron productoes."
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{productoSpaController.selectedProducto}"
+												filteredValue="#{productoSpaController.listFilterProducto}"
+												rowKey="#{item.id}" reflow="true">
+
+												<p:ajax event="rowSelect"
+													listener="#{productoSpaController.onRowSelectProducto}"
+													update="formReg,formBotonesHeader,formTableProducto" />
+
+												<p:column headerText="Código" width="8%"
+													filterStyle="width: 100%; height:25px;"
+													filterMatchMode="exact" style="text-align:center;"
+													filterBy="#{item.id}">
+													<h:outputText value="#{item.id}" />
+												</p:column>
+
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.tipoProducto.nombre}"
+													filterMatchMode="contains">
+													<f:facet name="header">Tipo Producto</f:facet>
+													<h:outputText value="#{item.tipoProducto.nombre}" />
+												</p:column>
+
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.nombre}" filterMatchMode="contains">
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{item.nombre}" />
+													#{'    '}
+													<h:outputText value="#{item.contenidoNeto}" />
+													<h:outputText value="#{item.unidadMedida.nombre}" />
+												</p:column>
+
+												
+
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.precioVenta}" filterMatchMode="contains">
+													<f:facet name="header">Precio</f:facet>
+													<h:outputText value="#{item.precioVenta}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.estado}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.estado=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="8%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{productoSpaController.listProducto.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+
+						<h:form id="formTableProducto">
+							<ui:fragment rendered="#{productoSpaController.crear}">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de Producto</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableProducto"
+												value="#{productoSpaController.listProducto}" var="item"
+												selectionMode="single"
+												emptyMessage="No se encotraron productoes."
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{productoSpaController.selectedProducto}"
+												filteredValue="#{productoSpaController.listFilterProducto}"
+												rowKey="#{item.id}" reflow="true">
+
+												<p:ajax event="rowSelect"
+													listener="#{productoSpaController.onRowSelectProducto}"
+													update="formReg,formBotonesHeader,formTableProducto" />
+
+												<p:column headerText="Código" width="8%"
+													filterStyle="width: 100%; height:25px;"
+													filterMatchMode="exact" style="text-align:center;"
+													filterBy="#{item.id}">
+													<h:outputText value="#{item.id}" />
+												</p:column>
+
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.tipoProducto.nombre}"
+													filterMatchMode="contains">
+													<f:facet name="header">Tipo Producto</f:facet>
+													<h:outputText value="#{item.tipoProducto.nombre}" />
+												</p:column>
+
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.nombre}" filterMatchMode="contains">
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{item.nombre}" />
+														#{'    '}
+													<h:outputText value="#{item.contenidoNeto}" />
+													<h:outputText value="#{item.unidadMedida.nombre}" />
+												</p:column>
+
+
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.precioVenta}" filterMatchMode="contains">
+													<f:facet name="header">Precio</f:facet>
+													<h:outputText value="#{item.precioVenta}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.estado}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.estado=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="8%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{productoSpaController.listProducto.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+					</div>
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+		<p:dialog showEffect="explode" header="NUEVO EMPRESA O PROVEEDOR"
+			widgetVar="dlgCliente" resizable="false" modal="true"
+			position="center" width="400" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}" id="modalCliente">
+
+			<h:form id="formModalCliente">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Registro Datos Empresas o Proveedor</h3>
+						</div>
+						<div class="panel-body">
+							<!-- start here register -->
+							<div class="row">
+								<div class="col-md-12 box-content form-horizontal">
+									<div class="form-group ">
+										<div class="col-md-4">Código</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{productoSpaController.proveedor.codigo}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">Nombre</div>
+										<div class="col-md-8">
+											<h:inputText id="email"
+												value="#{productoSpaController.proveedor.nombre}"
+												style=" color: #555555; background-image: none; "
+												styleClass="input-sm form-control ">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+
+										</div>
+										<h:message for="email" style="color:red" />
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">Descripción</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{productoSpaController.proveedor.descripcion}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">Dirección</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{productoSpaController.proveedor.direccion}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">NIT</div>
+										<div class="col-md-8">
+											<h:inputText value="#{productoSpaController.proveedor.nit}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">Nro. Autorización</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{productoSpaController.proveedor.numeroAutorizacion}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+									<div class="form-group ">
+										<div class="col-md-4">Teléfono</div>
+										<div class="col-md-8">
+											<h:inputText
+												value="#{productoSpaController.proveedor.telefono}"
+												style=" color: #555555; background-image: none;"
+												styleClass="input-sm form-control">
+												<p:ajax event="change" update="formModalCliente" />
+											</h:inputText>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<!-- end here register -->
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+
+					<div class="btn-group btn-group-sm">
+						<p:commandButton value="Cancelar" style="width: 100px;"
+							icon="ui-icon-minus" styleClass="btn btn-default"
+							onclick="dlgCliente.hide()" />
+						<p:commandButton value="Aceptar" style="width: 100px;"
+							icon="ui-icon-check" styleClass="btn btn-default"
+							update=":formReg, :formModalCliente,:formBotonesHeader"
+							actionListener="#{productoSpaController.registrarProveedor()}"
+							onclick="dlgCliente.hide()" />
+					</div>
+
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+
+		<!-- END DIALOG -->
+
+
+
+		<p:dialog showEffect="explode" header="NUEVO LINEA PRODUCTO"
+			widgetVar="dlgLinea" resizable="false" position="center" width="400"
+			styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}" id="modalLinea">
+
+			<h:form id="formModalLinea">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Registro Datos Linea Producto</h3>
+						</div>
+						<div class="panel-body">
+							<!-- start here register -->
+							<div class="row">
+								<div class="col-md-12 box-content form-horizontal">
+
+									<div class="form-group ">
+										<div class="col-md-4">Nombre</div>
+										<div class="col-md-8">
+											<h:inputText id="nombre"
+												value="#{productoSpaController.linea.nombre}"
+												style=" color: #555555; background-image: none; "
+												styleClass="input-sm form-control ">
+												<p:ajax event="change" update="formModalLinea" />
+											</h:inputText>
+
+										</div>
+										<h:message for="nombre" style="color:red" />
+									</div>
+
+
+								</div>
+							</div>
+							<!-- end here register -->
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+
+					<div class="btn-group btn-group-sm">
+						<p:commandButton value="Cancelar" style="width: 100px;"
+							icon="ui-icon-minus" styleClass="btn btn-default"
+							onclick="dlgLinea.hide()" />
+						<p:commandButton value="Aceptar" style="width: 100px;"
+							icon="ui-icon-check" styleClass="btn btn-default"
+							update=":formReg, :formModalLinea,:formBotonesHeader"
+							actionListener="#{productoSpaController.registrarLinea()}" />
+					</div>
+
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,12 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Sat Jun 27 17:52:48 BOT 2015
+default-https\://raw.github.com/neo4j-contrib/m2/master/releases/.lastUpdated=1435441968794
+default-http\://repository.primefaces.org/.lastUpdated=1435441968763
+default-http\://primefaces.github.io/repository/.lastUpdated=1435441968778
+http\://repository.primefaces.org/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:${prettytime.version} from/to prime-repo (http\://repository.primefaces.org)\: Illegal character in path at index 68\: http\://repository.primefaces.org/org/ocpsoft/prettytime/prettytime/${prettytime.version}/prettytime-${prettytime.version}.pom
+https\://raw.github.com/neo4j-contrib/m2/master/releases/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:${prettytime.version} from/to neo4j-contrib-releases (https\://raw.github.com/neo4j-contrib/m2/master/releases)\: Illegal character in path at index 91\: https\://raw.github.com/neo4j-contrib/m2/master/releases/org/ocpsoft/prettytime/prettytime/${prettytime.version}/prettytime-${prettytime.version}.pom
+default-http\://repo.maven.apache.org/maven2/.lastUpdated=1435441968825
+http\://primefaces.github.io/repository/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:${prettytime.version} from/to prime-github-repo (http\://primefaces.github.io/repository)\: Illegal character in path at index 74\: http\://primefaces.github.io/repository/org/ocpsoft/prettytime/prettytime/${prettytime.version}/prettytime-${prettytime.version}.pom
+http\://deluan.googlecode.com/svn/releases/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:${prettytime.version} from/to deluan.repo (http\://deluan.googlecode.com/svn/releases)\: Illegal character in path at index 77\: http\://deluan.googlecode.com/svn/releases/org/ocpsoft/prettytime/prettytime/${prettytime.version}/prettytime-${prettytime.version}.pom
+http\://repo.maven.apache.org/maven2/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:${prettytime.version} from/to central (http\://repo.maven.apache.org/maven2)\: Illegal character in path at index 71\: http\://repo.maven.apache.org/maven2/org/ocpsoft/prettytime/prettytime/${prettytime.version}/prettytime-${prettytime.version}.pom
+default-http\://deluan.googlecode.com/svn/releases/.lastUpdated=1435441968810

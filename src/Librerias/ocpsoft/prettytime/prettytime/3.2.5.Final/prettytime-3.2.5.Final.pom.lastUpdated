@@ -1,0 +1,12 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Sat Jun 27 17:49:40 BOT 2015
+default-https\://raw.github.com/neo4j-contrib/m2/master/releases/.lastUpdated=1435441780629
+default-http\://repository.primefaces.org/.lastUpdated=1435441780598
+default-http\://primefaces.github.io/repository/.lastUpdated=1435441780598
+http\://repository.primefaces.org/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:3.2.5.Final from/to prime-repo (http\://repository.primefaces.org)\: The operation was cancelled.
+https\://raw.github.com/neo4j-contrib/m2/master/releases/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:3.2.5.Final from/to neo4j-contrib-releases (https\://raw.github.com/neo4j-contrib/m2/master/releases)\: The operation was cancelled.
+default-http\://repo.maven.apache.org/maven2/.lastUpdated=1435441780644
+http\://primefaces.github.io/repository/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:3.2.5.Final from/to prime-github-repo (http\://primefaces.github.io/repository)\: The operation was cancelled.
+http\://deluan.googlecode.com/svn/releases/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:3.2.5.Final from/to deluan.repo (http\://deluan.googlecode.com/svn/releases)\: The operation was cancelled.
+http\://repo.maven.apache.org/maven2/.error=Could not transfer artifact org.ocpsoft.prettytime\:prettytime\:pom\:3.2.5.Final from/to central (http\://repo.maven.apache.org/maven2)\: The operation was cancelled.
+default-http\://deluan.googlecode.com/svn/releases/.lastUpdated=1435441780644

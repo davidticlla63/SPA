@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Producto</title>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<!--BEGIN CONTENT-->
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left" style="padding-top: 8px;">
+					<h:form id="formBotonesHeader" style="padding-left: 10px;">
+						<div class="btn-group-demo">
+							<div class="btn-group">
+								<div class="form-group">
+									<p:commandLink id="buttonCancelar" value="&#160; Cancelar"
+										styleClass="btn btn-warning ion-minus-circled"
+										rendered="#{productoController.modificar or productoController.registrar}"
+										style="height:31px; padding:center"
+										update="formReg,formTableProducto,formBotonesHeader"
+										action="#{productoController.loadDefault()}">
+									</p:commandLink>
+									<p:commandLink id="buttonCrear1" value="&#160; Nueva Producto"
+										styleClass="btn btn-success ion-plus-round"
+										rendered="#{productoController.crear}" style="height:31px;">
+										<p:ajax update="formTableProducto,formReg,formBotonesHeader"
+											listener="#{productoController.cambiarAspecto()}" />
+									</p:commandLink>
+									<p:commandLink id="ajax" value="&#160; Registrar"
+										styleClass="btn btn-success ion-checkmark"
+										rendered="#{ productoController.registrar}"
+										style="height:31px; padding:center"
+										update="formTableProducto,formGrowl:msgs1,:formBotonesHeader,formReg"
+										action="#{productoController.registrarProducto()}">
+									</p:commandLink>
+									<p:commandLink id="buttonModificar" value="&#160; Modificar"
+										update="formTableProducto,formGrowl:msgs1,formBotonesHeader,formReg"
+										rendered="#{productoController.modificar}"
+										styleClass="btn btn-primary ion-edit"
+										style="height:31px; padding:center"
+										action="#{productoController.modificarProducto()}">
+									</p:commandLink>
+									<p:commandLink id="buttonEliminar" value="&#160; Eliminar"
+										styleClass="btn btn-danger ion-trash-b"
+										rendered="#{productoController.modificar}"
+										style="height:31px; padding:center"
+										update="formTableProducto,formGrowl:msgs1,formBotonesHeader,formReg"
+										action="#{productoController.eliminarProducto()}">
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+
+					</h:form>
+				</div>
+				<div class="pull-right">
+					<ol class="breadcrumb">
+						<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+							style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+						<li><a
+							href="#{request.contextPath}/pages/parametrizacion/producto.xhtml"
+							style="color: #0090FF; font-size: 12px;">Parametrización</a></li>
+						<li class="active">Producto</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">
+						<h:form id="formReg">
+							<ui:fragment
+								rendered="#{productoController.registrar or productoController.modificar}">
+								<div class="col-md-4">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Registro de Producto</h3>
+										</div>
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-12 box-content form-horizontal">
+													<div class="form-group ">
+														<div class="col-md-4">Nombre</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoController.newProducto.nombre}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													<div class="form-group ">
+														<div class="col-md-4">Precio</div>
+														<div class="col-md-8">
+															<h:inputText
+																value="#{productoController.newProducto.precioVenta}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control">
+																<f:ajax />
+															</h:inputText>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="col-md-4 control-label">Seleccione
+															un Tipo Producto</label>
+														<div class="col-md-8">
+															<h:selectOneMenu id="tipoProducto"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{newUsuario.state =='SU'}"
+																value="#{productoController.newProducto.tipoProducto.id}" required="true"
+																requiredMessage="Seleccionar un Ciudad">
+																<p:ajax event="change"
+																	update="formReg, formBotonesHeader" />
+																<f:selectItem itemLabel="Seleccione uno" itemValue="" />
+																<f:selectItems var="tipo" itemLabel="#{tipo.nombre}"
+																	itemValue="#{tipo.id}"
+																	value="#{productoController.listTipoProducto}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+
+													<div class="form-group ">
+														<div class="col-md-4">Estado</div>
+														<div class="col-md-8">
+															<h:selectOneMenu id="roles"
+																styleClass="input-sm form-control"
+																style=" color: #555555; height:25px; font-size:11px;"
+																disabled="#{productoController.newProducto.estado =='SUPER'}"
+																immediate="true"
+																value="#{productoController.nombreEstado}">
+																<f:ajax />
+																<f:selectItems value="#{productoController.listEstado}" />
+															</h:selectOneMenu>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8">
+								<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de Producto</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableProducto1"
+												value="#{productoController.listProducto}" var="item"
+												selectionMode="single"
+												emptyMessage="No se encotraron productoes."
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{productoController.selectedProducto}"
+												filteredValue="#{productoController.listFilterProducto}"
+												rowKey="#{item.id}" reflow="true">
+
+												<p:ajax event="rowSelect"
+													listener="#{productoController.onRowSelectProducto}"
+													update="formReg,formBotonesHeader,formTableProducto" />
+
+												<p:column headerText="Código" width="8%"
+													filterStyle="width: 100%; height:25px;" filterMatchMode="exact"
+													style="text-align:center;" filterBy="#{item.id}">
+													<h:outputText value="#{item.id}" />
+												</p:column>
+												
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.tipoProducto.nombre}" filterMatchMode="contains">
+													<f:facet name="header">Tipo Producto</f:facet>
+													<h:outputText value="#{item.tipoProducto.nombre}" />
+												</p:column>
+												
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.nombre}" filterMatchMode="contains">
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{item.nombre}" />
+												</p:column>
+
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.descripcion}" filterMatchMode="contains">
+													<f:facet name="header">Ingredientes</f:facet>
+													<h:outputText value="#{item.descripcion}" />
+												</p:column>
+
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.precioVenta}" filterMatchMode="contains">
+													<f:facet name="header">Precio</f:facet>
+													<h:outputText value="#{item.precioVenta}" />
+												</p:column>
+												<!-- <p:column width="8%" filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.stockMax}">
+													<f:facet name="header">Stock Max.</f:facet>
+													<h:outputText value="#{item.stockMax}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.stockMin}">
+													<f:facet name="header">Stock Min.</f:facet>
+													<h:outputText value="#{item.stockMin}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.stock}">
+													<f:facet name="header">Stock Actual</f:facet>
+													<h:outputText value="#{item.stock}" />
+												</p:column> -->
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.estado}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.estado=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="8%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{productoController.listProducto.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+
+						<h:form id="formTableProducto">
+							<ui:fragment rendered="#{productoController.crear}">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Lista de Producto</h3>
+										</div>
+										<!-- start here datatable -->
+										<div class="box-content no-padding">
+											<p:dataTable id="dataTableProducto"
+												value="#{productoController.listProducto}" var="item"
+												selectionMode="single"
+												emptyMessage="No se encotraron productoes."
+												style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+												selection="#{productoController.selectedProducto}"
+												filteredValue="#{productoController.listFilterProducto}"
+												rowKey="#{item.id}" reflow="true">
+
+												<p:ajax event="rowSelect"
+													listener="#{productoController.onRowSelectProducto}"
+													update="formReg,formBotonesHeader,formTableProducto" />
+
+												<p:column headerText="Código" width="8%"
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.id}">
+													<h:outputText value="#{item.id}" />
+												</p:column>
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.nombre}">
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{item.nombre}" />
+												</p:column>
+
+												<p:column width="20%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.tipoProducto.nombre}">
+													<f:facet name="header">Tipo Producto</f:facet>
+													<h:outputText value="#{item.tipoProducto.nombre}" />
+												</p:column>
+
+												<p:column width="8%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.precioVenta}">
+													<f:facet name="header">Precio</f:facet>
+													<h:outputText value="#{item.precioVenta}" />
+												</p:column>
+												<p:column width="8%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.stockMax}">
+													<f:facet name="header">Stock Max.</f:facet>
+													<h:outputText value="#{item.stockMax}" />
+												</p:column>
+												<p:column width="8%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.stockMin}">
+													<f:facet name="header">Stock Min.</f:facet>
+													<h:outputText value="#{item.stockMin}" />
+												</p:column>
+												<p:column width="8%"
+													filterStyle="width: 100%; height:25px;"
+													filterBy="#{item.stock}">
+													<f:facet name="header">Stock Actual</f:facet>
+													<h:outputText value="#{item.stock}" />
+												</p:column>
+												<p:column width="8%" filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" headerText="Estado"
+													filterBy="#{item.estado}">
+													<span class="label label-success"><h:outputText
+															rendered="#{item.estado=='AC'}" value="Activo" /></span>
+													<span class="label label-danger"><h:outputText
+															rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+												</p:column>
+												<p:column width="8%" headerText="Usuario Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;"
+													filterBy="#{item.usuarioRegistro}">
+													<h:outputText value="#{item.usuarioRegistro}">
+													</h:outputText>
+												</p:column>
+												<p:column width="8%" headerText="Fecha Reg."
+													filterStyle="width: 100%; height:25px;"
+													style="text-align:center;" filterBy="#{item.fechaRegistro}">
+													<h:outputText value="#{item.fechaRegistro}">
+														<f:convertDateTime pattern="dd/MM/yyyy" />
+													</h:outputText>
+												</p:column>
+												<f:facet name="footer">
+													<h:outputText
+														value="#{productoController.listProducto.size()} Registros en Total" />
+												</f:facet>
+											</p:dataTable>
+										</div>
+										<div class="panel-body"></div>
+									</div>
+								</div>
+							</ui:fragment>
+						</h:form>
+
+
+					</div>
+				</section>
+			</section>
+		</div>
+		<!--END CONTENT-->
+
+		<!-- START GROWL -->
+		<h:form id="formGrowl">
+			<p:growl id="msgs1" showDetail="true" />
+		</h:form>
+		<!-- END GROWL -->
+
+		<!-- START DIALOG -->
+
+		<!-- END DIALOG -->
+
+	</ui:define>
+</ui:composition>

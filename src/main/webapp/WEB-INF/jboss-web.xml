@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss-web PUBLIC
+    "-//JBoss//DTD Web Application 2.4//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-web_4_2.dtd">
+
+<jboss-web>
+
+<!-- 	<security-domain>java:/jaas/taxicorpA</security-domain> -->
+	<security-domain>java:jboss/jaas/webappSPA</security-domain>
+	<!-- <security-domain>other</security-domain> -->
+	<!-- <context-root>/Taxicorp</context-root> -->
+	
+	
+	<!-- configuracion log4j -->
+<!-- 	<class-loading java2ClassLoadingCompliance="false">  -->
+<!-- 		<loader-repository>bo.com.erp360.webapp:loader=MyClassLoader  -->
+<!-- 			<loader-repository-config>java2ParentDelegation=false</loader-repository-config>  -->
+<!-- 		</loader-repository>  -->
+<!-- 	</class-loading> -->
+</jboss-web>

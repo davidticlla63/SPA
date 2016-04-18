@@ -1,0 +1,599 @@
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	template="/WEB-INF/templates/template_main.xhtml">
+
+	<ui:define name="head">
+		<title>Libros IVA</title>
+	</ui:define>
+	<ui:define name="header">
+
+		<div class="row">
+			<div class="col-sm-12 col-md-12" align="left">
+
+				<ol class="breadcrumb">
+					<li class="fuente-link-sidebar">
+						<div class="lsf symbol">sitemap</div>
+					</li>
+
+					<li class="fuente-link-sidebar"><a href="/MediFact/">
+							Inicio </a></li>
+					<li class="fuente-link-sidebar"><a
+						href="/MediFact/pages/ventas/home.xhtml"> Modulo Ventas </a></li>
+					<li class="fuente-link-sidebar"><a
+						href="/MediFact/pages/ventas/libros-iva.xhtml"> Libros IVA </a></li>
+					<li class="active" style="color: orange;"><a
+						style="color: orange;" class="fuente-link-sidebar"
+						href="/MediFact/pages/ventas/facturas.xhtml">Libro de Ventas</a></li>
+				</ol>
+			</div>
+		</div>
+
+	</ui:define>
+
+
+	<ui:define name="content">
+		<h:form id="formFactura" styleClass="form-horizontal">
+
+			<div class="content">
+				<section class="content-header">
+					<div class="pull-right">
+						<ol class="breadcrumb">
+							<li><a href="#{request.contextPath}/pages/dashboard.jsf"
+								style="color: #0090FF; font-size: 12px;">Inicio</a></li>
+							
+							<li class="active" style="font-size: 12px;"><a
+								href="#{request.contextPath}/pages/formulario/facturas-lv.xhtml" >Lista de Facturas</a></li>
+						</ol>
+					</div>
+					<div class="pull-left" style="padding-top: 8px;">
+						<div class="col-sm-6 col-md-12" align="left">
+
+							<p:commandLink styleClass="btn btn-primary"
+								style="height:100%; padding:center"
+								onclick="location.href='#{request.contextPath}/pages/formulario/exportacion-compras.xhtml'">
+								<h2>
+									<span class="icon-book-open" />
+								</h2>
+								<h2>
+									<strong> Exportar</strong>
+								</h2>
+								<strong>PDF</strong>,
+								<strong>TXT</strong>,
+								<strong>EXCEL</strong>
+							</p:commandLink>
+
+						</div>
+						<p:separator/>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<span class="icon"> <i aria-hidden="true"
+									class="icon-list"></i>
+								</span> <strong>DATOS DE BUSQUEDA</strong>
+							</div>
+							<div class="col-sm-6 col-md-3" align="left">
+								<h:panelGrid columns="3" columnClasses="titleCell" width="100%">
+									<h:outputLabel value="Estado_Factura" for="estadoFacturaID" />
+									<h:selectOneMenu id="estadoFacturaID"
+										value="#{facturaLibroVController.estadoFactura}"
+										styleClass="form-control">
+										<f:selectItem itemValue="%" itemLabel="Todos" />
+										<f:selectItem itemValue="V" itemLabel="Factura Valida" />
+										<f:selectItem itemValue="A" itemLabel="Factura Anulada" />
+										<f:selectItem itemValue="E" itemLabel="Factura Extraviada" />
+										<f:selectItem itemValue="N" itemLabel="Factura No Utilizada" />
+										<f:selectItem itemValue="C"
+											itemLabel="Emitida en Contingencia" />
+										<p:ajax event="change" />
+									</h:selectOneMenu>
+									<p:message for="estadoFacturaID" />
+								</h:panelGrid>
+							</div>
+
+							<div class="col-sm-6 col-md-3" align="left">
+								<h:panelGrid columns="3" columnClasses="titleCell" width="100%">
+									<h:outputLabel value="Sucursal" for="sucursalID" />
+									<h:selectOneMenu id="sucursalID"
+										value="#{facturaLibroVController.sucursalID}"
+										styleClass="form-control" effect="fade"
+										requiredMessage="Sucursal es Requerido.">
+										<f:selectItems
+											value="#{facturaLibroVController.listaSucursales}"
+											var="_sucursales" itemLabel="#{_sucursales.nombre}"
+											itemValue="#{_sucursales.id}" />
+									</h:selectOneMenu>
+									<p:message for="sucursalID" />
+								</h:panelGrid>
+							</div>
+
+							<div class="col-sm-6 col-md-3" align="left">
+
+								<p:commandLink id="buttonCrear1" value="&#160; Buscar Venta"
+									action="#{facturaLibroVController.buscarFacturas}"
+									update=":formFactura"
+									styleClass="btn btn-success ion-plus-round"
+									style="height:31px;">
+
+								</p:commandLink>
+
+							</div>
+							<div class="col-sm-6 col-md-12" align="left">
+								<h:panelGrid columns="6" columnClasses="titleCell" width="100%">
+
+									<h:outputLabel value="Fecha_Inicial" for="fechaInicialID" />
+									<p:calendar id="fechaInicialID"
+										value="#{facturaLibroVController.fechaInicial}"
+										pattern="dd/MM/yyyy" showOn="button">
+										<p:ajax event="change" />
+									</p:calendar>
+									<p:message for="fechaInicialID" />
+
+									<h:outputLabel value="Fecha_Final" for="fechaFinalID" />
+									<p:calendar id="fechaFinalID"
+										value="#{facturaLibroVController.fechaFinal}"
+										pattern="dd/MM/yyyy" showOn="button">
+										<p:ajax event="change" />
+									</p:calendar>
+									<p:message for="fechaFinalID" />
+
+								</h:panelGrid>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<br />
+				<section class="main-content">
+					<section class="main-content">
+						<div class="row">
+
+							<h:panelGroup rendered="#{empty listaFacturasEmitidas}">
+								<em>No se encontraron registros de Facturas.</em>
+							</h:panelGroup>
+
+							<div class="panel panel-default">
+								<!-- Default panel contents -->
+								<div class="panel-heading">
+									<span class="icon"> <i aria-hidden="true"
+										class="icon-list"></i>
+									</span> <strong>LIBRO IVA - VENTAS</strong>
+								</div>
+
+								<!-- Table -->
+								<div class="table-responsive">
+									<p:dataTable
+										style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+										selection="#{facturaLibroVController.selectedFactura}"
+										selectionMode="single" rowKey="#{_factura.id}"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="10 20 30 40 50" first="0"
+										paginator="true" rows="10" rowIndexVar="item"
+										emptyMessage="No se encontraron facturas." id="facturasTable"
+										var="_factura" value="#{listaFacturasEmitidas}"
+										rendered="#{not empty listaFacturasEmitidas}" reflow="true">
+
+										<p:ajax event="rowDblselect"
+											oncomplete="dlgDatosFactura.show()"
+											update=":formModalFactura"
+											listener="#{facturaLibroVController.onRowSelectFacturaDblClic}" />
+
+										<p:ajax event="rowSelect"
+											listener="#{facturaLibroVController.onRowSelectFacturaClic}" />
+
+
+										<p:column headerText="Nº" width="4%"
+											style="text-align:center;">
+											<h:outputText value="#{item+1}" />
+										</p:column>
+
+										<p:column headerText="Nº Factura"
+											filterBy="#{_factura.numeroFactura}" filterMatchMode="exact"
+											filterStyle="width: 100%; height:25px;" width="4%"
+											style="text-align:center;">
+											<center>
+												<span class="label label-warning"> <h:outputText
+														value="#{_factura.numeroFactura}" />
+												</span>
+											</center>
+										</p:column>
+										<p:column headerText="Fecha" width="10%"
+											style="text-align:center;">
+											<h:outputText value="#{_factura.fechaFactura}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Autorizacion"
+											filterBy="#{_factura.numeroAutorizacion}" width="10%"
+											filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.numeroAutorizacion}" />
+										</p:column>
+
+										<p:column headerText="Estado" filterBy="#{_factura.estado}"
+											width="5%" filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;">
+											<center>
+												<h:outputText value="#{_factura.estado}" />
+											</center>
+										</p:column>
+
+										<p:column headerText="NIT Comprador" width="10%"
+											filterBy="#{_factura.nitCi}" filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.nitCi}" />
+										</p:column>
+										<p:column headerText="Razon Social"
+											filterBy="#{_factura.nombreFactura}" width="20%"
+											filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.nombreFactura}" />
+										</p:column>
+
+										<p:column headerText="Total Venta" width="5%"
+											filterBy="#{_factura.totalFacturado}"
+											filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.totalFacturado}"
+												style="text-align: right;">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Importe ICE" width="5%"
+											filterBy="#{_factura.importeICE}" filterMatchMode="contains">
+											<h:outputText value="#{_factura.importeICE}"
+												style="text-align: right;"
+												filterStyle="width: 100%; height:25px;">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Exportaciones" width="5%"
+											filterBy="#{_factura.importeExportaciones}"
+											filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.importeExportaciones}"
+												style="text-align: right;">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="SubTotal"
+											filterBy="#{_factura.importeSubTotal}"
+											filterMatchMode="contains" width="5%"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.importeSubTotal}"
+												style="text-align: right;">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+										<p:column headerText="Debito Fiscal"
+											filterBy="#{_factura.debitoFiscal}"
+											filterMatchMode="contains" width="5%"
+											filterStyle="width: 100%; height:25px;">
+											<h:outputText value="#{_factura.debitoFiscal}"
+												style="text-align: right;">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+										<p:column headerText="Codigo Control"
+											filterBy="#{_factura.codigoControl}"
+											filterMatchMode="contains"
+											filterStyle="width: 100%; height:25px;" width="20%">
+											<h:outputText value="#{_factura.codigoControl}" />
+										</p:column>
+
+									</p:dataTable>
+
+								</div>
+							</div>
+
+						</div>
+					</section>
+				</section>
+			</div>
+		</h:form>
+
+
+		<!-- DATOS FACTURA -->
+		<p:dialog showEffect="explode" header="Datos Factura"
+			widgetVar="dlgDatosFactura" resizable="false" modal="true"
+			position="center" width="1100" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalDatosFactura">
+
+			<div class="modal-body">
+				<h:form id="formModalFactura">
+
+					<p:growl id="growlModal" showDetail="true" />
+
+					<center>
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<strong>#{facturaLibroVController.selectedFactura.totalLiteral}</strong>
+								</h3>
+							</div>
+						</div>
+
+					</center>
+					<div class="row" style="padding: 0px 0px 0px 0px;">
+						<div class="col-sm-4 col-md-4" align="left">
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="basic-addon1">Nº
+									Factura</span> <input type="text" class="form-control"
+									placeholder="Numero Factrura"
+									value="#{facturaLibroVController.selectedFactura.numeroFactura}"
+									aria-describedby="basic-addon1" size="60" />
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="NITID">NIT/CI</span>
+								<input type="text" class="form-control" placeholder="NIT o CI"
+									value="#{facturaLibroVController.selectedFactura.nitCi}"
+									aria-describedby="NITID" size="60" />
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="razonSocialID">Razon
+									Social</span> <input type="text" class="form-control"
+									placeholder="Razon Social"
+									value="#{facturaLibroVController.selectedFactura.nombreFactura}"
+									aria-describedby="razonSocialID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="totalFacturaID">Total
+									Pagar Bs</span> <input type="text" class="form-control"
+									placeholder="Importe Total"
+									value="#{facturaLibroVController.selectedFactura.totalFacturado}"
+									aria-describedby="totalFacturaID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="cambioID">Cambio
+									Entregado</span> <input type="text" class="form-control"
+									placeholder="Cambio Entregado"
+									value="#{facturaLibroVController.selectedFactura.cambio}"
+									aria-describedby="cambioID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="efectivoID">Total
+									Efectivo</span> <input type="text" class="form-control"
+									placeholder="Total Efectivo"
+									value="#{facturaLibroVController.selectedFactura.totalEfectivo}"
+									aria-describedby="efectivoID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="tipoCambioID">Tipo
+									Cambio</span> <input type="text" class="form-control"
+									placeholder="Tipo Cambio"
+									value="#{facturaLibroVController.selectedFactura.tipoCambio}"
+									aria-describedby="tipoCambioID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;"
+									id="totalEfectivoDolaresID">Total Dolares</span> <input
+									type="text" class="form-control" placeholder="Total Dolares"
+									value="#{facturaLibroVController.selectedFactura.totalEfectivo*6.96}"
+									aria-describedby="totalEfectivoDolaresID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="codigoControlID">Código
+									Control</span> <input type="text" class="form-control"
+									placeholder="Código Control"
+									value="#{facturaLibroVController.selectedFactura.codigoControl}"
+									aria-describedby="codigoControlID" size="60" />
+							</div>
+
+						</div>
+						<div class="col-sm-4 col-md-4" align="left">
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="fechaID">Fecha
+									Factura</span> <input type="text" class="form-control"
+									placeholder="Fecha Factura"
+									value="#{facturaLibroVController.selectedFactura.fechaFactura}"
+									aria-describedby="fechaID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="autorizacionID">Nº
+									Autorizacion</span> <input type="text" class="form-control"
+									placeholder="Numero Autorizacion"
+									value="#{facturaLibroVController.selectedFactura.numeroAutorizacion}"
+									aria-describedby="autorizacionID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="limiteEmisionID">Limite
+									Emision</span> <input type="text" class="form-control"
+									placeholder="Limite Emision"
+									value="#{facturaLibroVController.selectedFactura.fechaLimiteEmision}"
+									aria-describedby="limiteEmisionID" size="60"> </input>
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="sucursalID">Sucursal</span>
+								<input type="text" class="form-control" placeholder="Sucursal"
+									value="#{facturaLibroVController.selectedFactura.sucursal.id}-#{facturaLibroVController.sucursalSelected.nombre}"
+									aria-describedby="sucursalID" size="60"> </input>
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="usuarioRegistroID">Registro</span>
+								<input type="text" class="form-control"
+									placeholder="Usuario Registro"
+									value="#{facturaLibroVController.selectedFactura.usuarioRegistro}"
+									aria-describedby="usuarioRegistroID" size="60"> </input>
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;"
+									id="totalTarjetaDebitoID">Total Debito</span> <input
+									type="text" class="form-control" placeholder="Total Debito"
+									value="#{facturaLibroVController.selectedFactura.totalFacturado}"
+									aria-describedby="totalTarjetaDebitoID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="comprobanteID">Nº
+									Comprobante</span> <input type="text" class="form-control"
+									placeholder="Nº Comprobante Debito"
+									value="#{facturaLibroVController.selectedFactura.debitoFiscal}"
+									aria-describedby="comprobanteID" size="60" />
+							</div>
+
+							<div class="input-group">
+								<span class="input-group-addon"
+									style="width: 150px; text-align: right;" id="fechaRegistroID">Fecha
+									Registro</span> <input type="text" class="form-control"
+									placeholder="Fecha Registro"
+									value="#{facturaLibroVController.selectedFactura.fechaRegistro}"
+									aria-describedby="fechaRegistroID" size="60" />
+							</div>
+
+							<div class="input">
+								<h:panelGrid columns="2" border="0">
+
+									<span class="input-group-addon form-control"
+										style="width: 150px; text-align: right;" id="estadoID">Estado</span>
+
+									<h:selectOneMenu id="estadoID"
+										disabled="#{facturaLibroVController.selectedFactura.estado=='A'}"
+										style="width: 175px;" class="form-control"
+										value="#{facturaLibroVController.selectedFactura.estado}"
+										required="true" requiredMessage="Estado Requerido.">
+										<f:selectItem itemValue="V" itemLabel="Valida" />
+										<f:selectItem itemValue="A" itemLabel="Anulada" />
+										<f:selectItem itemValue="E" itemLabel="Extraviada" />
+										<f:selectItem itemValue="C"
+											itemLabel="Emitida en Contingencia" />
+										<f:selectItem itemValue="N" itemLabel="No Utilizada" />
+										<p:ajax event="change" update="estadoID" />
+									</h:selectOneMenu>
+
+								</h:panelGrid>
+							</div>
+
+						</div>
+
+						<div class="col-sm-4 col-md-4" align="left">
+
+							<center>
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<h3 class="panel-title">
+											<strong> Código QR </strong>
+										</h3>
+									</div>
+									<div class="panel-body">
+										<!-- <p:graphicImage value="#{facturaLibroVController.urlCodeQR}" -->
+										<!-- width="235px;" height="235px;" /> -->
+										<pe:qrCode id="qrCodeElem" renderMethod="img" renderMode="0"
+											text="#{facturaLibroVController.urlCodeQR}" size="200"
+											fillColor="##000000" fontName="Ubuntu" fontColor="#01A9DB"
+											ecLevel="H" radius="0.5" />
+
+									</div>
+								</div>
+
+							</center>
+						</div>
+					</div>
+				</h:form>
+			</div>
+
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" action="#" styleClass="btn btn-default"
+						onclick="dlgDatosFactura.hide()" update=":formModalFactura" />
+
+					<p:commandButton icon="ui-icon-search" style="width: 150px;"
+						onclick="dlgVistaPrevia.show()" styleClass="btn btn-default"
+						value="Vista Previa" />
+
+					<p:commandButton value="Modificar" icon="ui-icon-disk"
+						style="width: 150px;"
+						action="#{facturaLibroVController.modificarFactura()}"
+						styleClass="btn btn-default"
+						update=":formFactura, :formModalFactura, :formModalFactura:growlModal" />
+
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+
+
+
+		<!-- VISTA PREVIA FACTURA -->
+		<p:dialog showEffect="explode" header="Vista Previa"
+			widgetVar="dlgVistaPrevia" resizable="false" modal="true"
+			position="center" width="750" styleClass="customDialog"
+			visible="#{not empty facesContext.maximumSeverity}"
+			id="modalVistaPrevia">
+
+			<div class="modal-body">
+
+				<p:outputPanel autoUpdate="true">
+					<p:media id="idReporteFactura" player="pdf"
+						value="#{facturaLibroVController.urlFactura}" width="700px"
+						height="500px" />
+				</p:outputPanel>
+
+			</div>
+
+			<div class="modal-footer">
+
+				<div class="btn-group btn-group-sm">
+
+					<p:commandButton value="Cerrar" style="width: 150px;"
+						icon="ui-icon-minus" action="#" styleClass="btn btn-default"
+						onclick="dlgVistaPrevia.hide()" />
+
+				</div>
+
+			</div>
+
+		</p:dialog>
+
+	</ui:define>
+
+	<ui:define name="footer">
+
+	</ui:define>
+
+</ui:composition>

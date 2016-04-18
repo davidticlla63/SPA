@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/templates/template_main.xhtml">
+	<ui:define name="head">
+		<title>Inicio</title>
+		<script language="javascript">
+			window.onload = function() {
+				#{tipoCambioController.verificarRegisterTipoCambioDiario()}
+			}
+	</script>
+	</ui:define>
+
+	<ui:define name="security">
+
+	</ui:define>
+
+	<ui:define name="page_active_inicio">
+		<li class="active"><a href="#{request.contextPath}/pages/dashboard.xhtml"><i
+				class="icon-home"></i><span class="sidebar-text">Inicio</span></a></li>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<div class="content">
+			<section class="content-header">
+				<div class="pull-left">
+					<ol class="breadcrumb">
+						<li class="active">Inicio</li>
+					</ol>
+				</div>
+			</section>
+			<section class="main-content">
+				<section class="main-content">
+					<div class="row">#{sessionMain.datosEmpresa.nombreProducto} -
+						Empresa: #{sessionMain.empresaLoggin.razonSocial} - Gestión:
+						#{sessionMain.gestionLoggin.gestion}</div>
+					<br /> <br />
+					<div style="background: white;">
+						<div class="row">
+
+							<div class="col-lg-12 text-center v-center">
+								<h:graphicImage styleClass="pulse" name="logoERP.PNG"
+									library="gfx" width="220px;" />
+								<h1  style="color: #F77B16; font-family: sans-serif;">Bienvenido
+									al Sistema</h1>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+		</div>
+
+		<!-- START DIALOG -->
+		<p:dialog widgetVar="dlgTipoCambio" header="Agregar Tipo de Cambio"
+			width="35%" showEffect="clip" hideEffect="clip" modal="true"
+			closable="false">
+			<h:form id="formDlgTipoCambio">
+				<div class="row">
+					<div class="col-md-12 box-content form-horizontal">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<p:dataTable id="dataTableTipoCambio" scrollable="true"
+											scrollHeight="115"
+											value="#{tipoCambioController.listEDFechaTipoCambio}"
+											var="item"
+											style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+											rowKey="#{item.fecha}" reflow="true" editable="true"
+											editMode="cell">
+											<p:ajax event="cellEdit"
+												listener="#{tipoCambioController.onCellEdit}" />
+											<p:column headerText="Fecha" width="20%"
+												style="text-align:center;">
+												<h:outputText value="#{item.fecha}">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column width="40%" headerText="Tipo Cambio"
+												style="text-align:center;">
+												<p:cellEditor>
+													<f:facet name="output">
+														<h:outputText value="#{item.tipoCambio}" />
+													</f:facet>
+													<f:facet name="input">
+														<h:inputText value="#{item.tipoCambio}" style="width:100%" />
+													</f:facet>
+												</p:cellEditor>
+											</p:column>
+											<p:column width="40%" headerText="Ufv"
+												style="text-align:center;">
+												<p:cellEditor>
+													<f:facet name="output">
+														<h:outputText value="#{item.tipoCambioUFV}" />
+													</f:facet>
+													<f:facet name="input">
+														<h:inputText value="#{item.tipoCambioUFV}"
+															style="width:100%" />
+													</f:facet>
+												</p:cellEditor>
+											</p:column>
+										</p:dataTable>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<div class="col-md-4"></div>
+									<div class="col-md-4"></div>
+									<div class="col-md-4">
+										<p:commandLink value="Aceptar" ajax="false"
+											styleClass="btn btn-primary btn-block"
+											onclick="PF('dlgTipoCambio').hide();"
+											action="#{tipoCambioController.registrar()}">
+
+										</p:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- END DIALOG -->
+	</ui:define>
+</ui:composition>
