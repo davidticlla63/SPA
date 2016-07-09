@@ -363,12 +363,26 @@
 			<scope>test</scope>
 		</dependency>
 
+	<!-- ############################## Now we declare any tools needed ############################## -->
 		<!-- Generate QR Code -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>net.glxn</groupId>
+			<artifactId>qrgen</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
 
 		<!-- Google GSON -->
 		<dependency>

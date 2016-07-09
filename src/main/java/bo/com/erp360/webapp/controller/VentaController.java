@@ -20,13 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CloseEvent;
-import org.primefaces.event.MoveEvent;
-import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.richfaces.cdi.push.Push;
-
-import com.ibm.icu.impl.duration.impl.Utils;
 
 import bo.com.erp360.webapp.data.ClienteRepository;
 import bo.com.erp360.webapp.data.DetalleNotaVentaRepository;
@@ -65,7 +60,6 @@ import bo.com.erp360.webapp.model.Usuario;
 import bo.com.erp360.webapp.service.ClienteRegistration;
 import bo.com.erp360.webapp.service.DetalleFacturaRegistration;
 import bo.com.erp360.webapp.service.DetalleNotaVentaRegistration;
-import bo.com.erp360.webapp.service.DetalleOrdenServicioRegistration;
 import bo.com.erp360.webapp.service.DosificacionRegistration;
 import bo.com.erp360.webapp.service.EstadoUsuarioLogin;
 import bo.com.erp360.webapp.service.FacturaRegistration;

@@ -25,9 +25,10 @@
 
 
 
-		<connection-url>jdbc:postgresql://localhost:5432/spaDB</connection-url>
-		<driver-class>org.postgresql.Driver</driver-class>
-		<driver>postgresql-9.3-1102.jdbc3.jar</driver>
+
+		<connection-url>jdbc:edb://localhost:5432/facturacion_db</connection-url>
+		<driver-class>com.edb.Driver</driver-class>
+		<driver>edb-jdbc14.jar</driver>
 
 		<connection-property name="char.encoding">UTF-8
 		</connection-property>
@@ -38,8 +39,8 @@
 		</pool>
 
 		<security>
-			<user-name>spa</user-name>
-			<password>spa</password>
+			<user-name>facturacion</user-name>
+			<password>facturacion</password>
 		</security>
 		<validation>
 			<validate-on-match>false</validate-on-match>

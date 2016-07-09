@@ -3,9 +3,6 @@ package bo.com.erp360.webapp.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.impl.duration.impl.DataRecord.EDecimalHandling;
-
-import bo.com.erp360.webapp.model.Producto;
 import bo.com.erp360.webapp.model.TipoProducto;
 
 public class EDProductoProducto {
