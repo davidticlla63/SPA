@@ -88,9 +88,9 @@
 														<div class="col-md-12">
 															<p:calendar id="popup" pattern="dd/MM/yyyy"
 																value="#{newFactura.fechaFactura}"
-																style=" width:100%; color: #555555; background-image: none !important;"
-																readonly="true">
-																<p:ajax />
+																style=" width:100%; color: #555555; background-image: none !important;">
+																<p:ajax event="dateSelect"
+																	update=":formRegisterFacturacion,:formBotonesHeader" />
 															</p:calendar>
 
 														</div>
@@ -225,8 +225,9 @@
 																		value="#{facturaController.busquedaProducto.precioVenta}"
 																		style=" color: #555555; background-image: none;"
 																		styleClass="input-sm form-control" disabled="false">
-																		<f:convertNumber pattern="#,##0.00" locale="en"/>
-																		<p:ajax update=":formGrowl:msgs1,formTableFacturacion,:formTotales,:formBotonesHeader,:formRegisterFacturacion"
+																		<f:convertNumber pattern="#,##0.00" locale="en" />
+																		<p:ajax
+																			update=":formGrowl:msgs1,formTableFacturacion,:formTotales,:formBotonesHeader,:formRegisterFacturacion"
 																			listener="#{facturaController.modificarDetalleProducto()}" />
 																	</h:inputText>
 																</div>
@@ -235,7 +236,7 @@
 																	<h:inputText value="#{facturaController.cantidad}"
 																		style=" color: #555555; background-image: none;"
 																		styleClass="input-sm form-control">
-																		<f:convertNumber pattern="#,##0.00"  locale="en"/>
+																		<f:convertNumber pattern="#,##0.00" locale="en" />
 																		<p:ajax
 																			update=":formGrowl:msgs1,formTableFacturacion,:formTotales,:formBotonesHeader,:formRegisterFacturacion"
 																			listener="#{facturaController.modificarDetalleProducto()}" />
@@ -355,7 +356,7 @@
 													binding="#{facturaController.usersDataTable}"
 													emptyMessage="Agregue productos" reflow="true"
 													style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
-													editable="true" >
+													editable="true">
 													<f:facet name="header">
            												Productos
        												</f:facet>
@@ -438,7 +439,7 @@
 																<ui:fragment rendered="#{var.precioTotal != 0}">
 																	<h:outputText value="#{var.precioTotal}">
 																		<f:convertNumber type="number" groupingUsed="true"
-																			minFractionDigits="2" pattern="#0.00"  locale="en"/>
+																			minFractionDigits="2" pattern="#0.00" locale="en" />
 																	</h:outputText>
 																</ui:fragment>
 															</f:facet>
@@ -543,7 +544,7 @@
 					</h:form>
 				</p:dialog>
 
-				
+
 
 				<p:dialog header="PRODUCTO" widgetVar="dlgProducto" modal="true"
 					width="45%">

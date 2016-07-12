@@ -434,13 +434,12 @@ public class FacturaController implements Serializable {
 
 			log.info("Ingreso a registrarFactura...");
 			// ----datos para la factrua
-			Date fechaFactura = new Date();
 			dosificacion = dosificacionRepository
 					.findActivaBySucursal(newFactura.getSucursal());
 			numeroFactura = dosificacion.getNumeroSecuencia();
 			// ---------------------------registro de
 			CodigoControl7 control = new CodigoControl7();
-			String CC = control.obtenerCodigoControl(fechaFactura,
+			String CC = control.obtenerCodigoControl(newFactura.getFechaFactura(),
 					dosificacion, newFactura.getTotalPagar(),
 					nitCliente.getNit());
 			System.out.println("Codigo de Control : " + CC);

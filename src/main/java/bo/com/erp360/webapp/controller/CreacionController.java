@@ -88,12 +88,12 @@ public class CreacionController implements Serializable {
 	private @Inject FormatoHojaRegistration formatoHojaRegistration;
 
 	private @Inject FormatoHojaRepository formatoHojaRepository;
-	
+
 	private List<FormatoHoja> listFormatoHoja = new ArrayList<FormatoHoja>();
 	// formato de Factura
-		private @Inject FormatoFacturaRegistration formatoFacturaRegistration;
+	private @Inject FormatoFacturaRegistration formatoFacturaRegistration;
 
-		private @Inject FormatoFacturaRepository formatoFacturaRepository;
+	private @Inject FormatoFacturaRepository formatoFacturaRepository;
 
 	private List<FormatoFactura> listFormatoFactura = new ArrayList<FormatoFactura>();
 
@@ -310,55 +310,59 @@ public class CreacionController implements Serializable {
 		cargarTreeNiveles();
 		definirListCuenta();
 	}
-	
-	
-	private void elegirEmpresaSucursal(){
-			System.out.println("Ingreso a elegirEmpresaSucursal....");
-		if (listaEmpresa.size()==1) {
-			seleccionadaFormEmpresa=false;
-			selectedEmpresa=listaEmpresa.get(0);
-			newEmpresa=selectedEmpresa;
+
+	private void elegirEmpresaSucursal() {
+		System.out.println("Ingreso a elegirEmpresaSucursal....");
+		if (listaEmpresa.size() == 1) {
+			seleccionadaFormEmpresa = false;
+			selectedEmpresa = listaEmpresa.get(0);
+			newEmpresa = selectedEmpresa;
 			listaGestion = gesionRepository.findAllByEmpresa(selectedEmpresa);
 			listaSucursalesActivas = sucursalRepository
 					.findAllByEmpresa(selectedEmpresa);
 			// resetearFitrosTabla("form1:dataTableGestion");
-			
+
 			verificarGestion();
-			if (listaSucursalesActivas.size()==1) {
-				seleccionadaFormAgregarSucursal=false;
-				selectSucursal=listaSucursalesActivas.get(0);
+			if (listaSucursalesActivas.size() == 1) {
+				seleccionadaFormAgregarSucursal = false;
+				selectSucursal = listaSucursalesActivas.get(0);
+				newSucursal=selectSucursal;
 				seleccionadaFormGestion = true;
+				System.out.println("sucursal: "+selectSucursal.getNombre());
 				definirFormatoFactura();
 				definirFormatoTipoFactura();
-				if (listaGestion.size()==1) {
-					seleccionadaFormGestion=false;
-					selectedGestion= listaGestion.get(0);
+				if (listaGestion.size() == 1) {
+					seleccionadaFormGestion = false;
+					selectedGestion = listaGestion.get(0);
 					try {
 						HttpSession session = (HttpSession) FacesContext
 								.getCurrentInstance().getExternalContext()
 								.getSession(false);
-						session.setAttribute("empresa", selectedEmpresa.getRazonSocial());
-						session.setAttribute("sucursal", selectSucursal.getNombre());
-						session.setAttribute("gestion", selectedGestion.getGestion());
+						session.setAttribute("empresa",
+								selectedEmpresa.getRazonSocial());
+						session.setAttribute("sucursal",
+								selectSucursal.getNombre());
+						session.setAttribute("gestion",
+								selectedGestion.getGestion());
 
 						FacesContext
 								.getCurrentInstance()
 								.getExternalContext()
 								.redirect(
 										((HttpServletRequest) facesContext
-												.getExternalContext().getRequest())
-												.getContextPath()
+												.getExternalContext()
+												.getRequest()).getContextPath()
 												+ "pages/dashboard.xhtml");
 					} catch (Exception e) {
 					}
-				}else{
-					seleccionadaFormGestion=true;
+				} else {
+					seleccionadaFormGestion = true;
 				}
-			}else{
-				seleccionadaFormAgregarSucursal=true;
+			} else {
+				seleccionadaFormAgregarSucursal = true;
 			}
-		}else{
-			seleccionadaFormEmpresa=true;
+		} else {
+			seleccionadaFormEmpresa = true;
 		}
 	}
 
@@ -938,7 +942,7 @@ public class CreacionController implements Serializable {
 		listaSucursalesActivas = sucursalRepository
 				.findAllByEmpresa(newEmpresa);
 		// resetearFitrosTabla("form1:dataTableGestion");
-		
+
 		verificarGestion();
 	}
 
@@ -976,20 +980,21 @@ public class CreacionController implements Serializable {
 		}
 
 	}
-	
+
 	private void definirFormatoTipoFactura() {
 
 		listFormatoFactura = formatoFacturaRepository.findActivosByEmpresa(
 				newEmpresa, newSucursal);
-		if (listFormatoHoja.size() == 0) {
-			formatoFacturaRegistration.create(new FormatoFactura("CUATRO COLUMNAS",
-					usuarioSession.getNombre(), newEmpresa, newSucursal, "AC"));
-			formatoFacturaRegistration.create(new FormatoFactura("DOS COLUMNAS",
-					usuarioSession.getNombre(), newEmpresa, newSucursal, "IN"));
+		if (listFormatoFactura.size() == 0) {
+			formatoFacturaRegistration.create(new FormatoFactura(
+					"CUATRO COLUMNAS", usuarioSession.getNombre(), newEmpresa,
+					newSucursal, "AC"));
+			formatoFacturaRegistration.create(new FormatoFactura(
+					"DOS COLUMNAS", usuarioSession.getNombre(), newEmpresa,
+					newSucursal, "IN"));
 		}
 
 	}
-	
 
 	public void onRowSelectSucursal(SelectEvent event) {
 		selectSucursal = (Sucursal) event.getObject();

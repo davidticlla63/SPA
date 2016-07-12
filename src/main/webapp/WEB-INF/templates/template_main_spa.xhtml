@@ -82,7 +82,7 @@
 					<p:inputText
 						placeholder=" TC: #{tipoCambioController.obtenerTipoCambioActual().unidad} - UFV:2.34  - #{sessionMain.empresaLoggin.razonSocial} - GESTIÓN #{sessionMain.gestionLoggin.gestion}"
 						disabled="true"
-						style=" color: #555555; background-image: none; height:35px; width:315px;"
+						style=" color: #555555; background-image: none; height:35px; width:500px;"
 						styleClass="form-control input-sm input-dark" />
 				</div>
 			</form>
@@ -132,10 +132,12 @@
 								class="#{(view.viewId.equals('/pages/seguridad/permiso2.xhtml')) ? 'active' : 'inactive'}"><a
 								href="#{request.contextPath}/pages/seguridad/permiso2.xhtml"><i
 									class="icon-shield"></i><span class="sidebar-text">Permiso</span></a></li>
+
+
 						</ul></li>
 					<ui:insert name="page_active_paremetrizacion">
 						<li
-							class="#{(view.viewId.equals('/pages/parametrizacion/tipo-producto.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/linea.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/ciudad.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/pais.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/tipo_comprobante.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/grupo_impuesto.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/cuenta_bancaria.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/parametrizacion.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/empresa.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/sucursal.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/tipo_cambio.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/tipo_ufv.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/centro-costo.xhtml')) ? 'active' : 'inactive'}"><a
+							class="#{(view.viewId.equals('/pages/parametrizacion/parametro.xhtml')) ? 'active' : (view.viewId.equals('/pages/formulario/empleado.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/tipo-servicio.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/grupo-producto.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/tipo-producto.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/linea.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/ciudad.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/pais.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/tipo_comprobante.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/grupo_impuesto.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/cuenta_bancaria.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/parametrizacion.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/empresa.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/sucursal.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/tipo_cambio.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/tipo_ufv.xhtml')) ? 'active' : (view.viewId.equals('/pages/parametrizacion/centro-costo.xhtml')) ? 'active' : 'inactive'}"><a
 							href="#"><i class="icon-equalizer"></i><span
 								class="sidebar-text">Parametrización</span></a>
 							<ul class="nav nav-second-level">
@@ -165,22 +167,27 @@
 									class="#{(view.viewId.equals('/pages/parametrizacion/cuenta_bancaria.xhtml')) ? 'active' : 'inactive'}"><a
 									href="#{request.contextPath}/pages/parametrizacion/cuenta_bancaria.xhtml">Cuenta
 										Bancaria</a></li>
-								<li
-									class="#{(view.viewId.equals('/pages/parametrizacion/grupo_impuesto.xhtml')) ? 'active' : 'inactive'}"><a
-									href="#{request.contextPath}/pages/parametrizacion/grupo_impuesto.xhtml"
-									name="Grupo Impuesto">Grupo Impuesto</a></li>
+
 								<li
 									class="#{(view.viewId.equals('/pages/parametrizacion/parametrizacion.xhtml')) ? 'active' : 'inactive'}"><a
 									href="#{request.contextPath}/pages/parametrizacion/parametrizacion.xhtml">Parámetros</a></li>
+
 								<li
-									class="#{(view.viewId.equals('/pages/parametrizacion/pais.xhtml')) ? 'active' : 'inactive'}"><a
-									href="#{request.contextPath}/pages/parametrizacion/pais.xhtml">Pais</a></li>
+									class="#{(view.viewId.equals('/pages/formulario/empleado.xhtml')) ? 'active' : 'inactive'}"><a
+									href="#{request.contextPath}/pages/formulario/empleado.xhtml">Empleado</a></li>
+
 								<li
-									class="#{(view.viewId.equals('/pages/parametrizacion/ciudad.xhtml')) ? 'active' : 'inactive'}"><a
-									href="#{request.contextPath}/pages/parametrizacion/ciudad.xhtml">Ciudad</a></li>
+									class="#{(view.viewId.equals('/pages/parametrizacion/tipo-servicio.xhtml')) ? 'active' : 'inactive'}"><a
+									href="#{request.contextPath}/pages/parametrizacion/tipo-servicio.xhtml">Tipo
+										Servicio</a></li>
 								<li
 									class="#{(view.viewId.equals('/pages/parametrizacion/linea.xhtml')) ? 'active' : 'inactive'}"><a
-									href="#{request.contextPath}/pages/parametrizacion/linea.xhtml">Linea</a></li>
+									href="#{request.contextPath}/pages/parametrizacion/linea.xhtml">Linea
+										Producto</a></li>
+								<li
+									class="#{(view.viewId.equals('/pages/parametrizacion/grupo-producto.xhtml')) ? 'active' : 'inactive'}"><a
+									href="#{request.contextPath}/pages/parametrizacion/grupo-producto.xhtml">Clasificacion
+										Producto</a></li>
 								<li
 									class="#{(view.viewId.equals('/pages/parametrizacion/tipo-producto.xhtml')) ? 'active' : 'inactive'}"><a
 									href="#{request.contextPath}/pages/parametrizacion/tipo-producto.xhtml">Tipo
@@ -189,6 +196,9 @@
 									class="#{(view.viewId.equals('/pages/parametrizacion/tipo-hoja.xhtml')) ? 'active' : 'inactive'}"><a
 									href="#{request.contextPath}/pages/parametrizacion/tipo-hoja.xhtml">Hoja
 										Factura</a></li>
+								<li
+									class="#{(view.viewId.equals('/pages/parametrizacion/parametro.xhtml')) ? 'active' : 'inactive'}"><a
+									href="#{request.contextPath}/pages/parametrizacion/parametro.xhtml">Pametros</a></li>
 
 							</ul></li>
 					</ui:insert>
@@ -196,92 +206,106 @@
 
 
 					<li
-						class="#{(view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/exportacion-compras.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturas-lv.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/generar-tickets.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/producto.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/clientes.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/servicios.xhtml')) ? 'active' : 'inactive'}"><a
+						class="#{(view.viewId.equals('/pages/formulario/nota-venta-list.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/orden-asignacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturacion2.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/exportacion-compras.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturas-lv.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturacion_list.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/generar-tickets.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/producto-spa.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/clientes-spa.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/servicios-spa.xhtml')) ? 'active' : 'inactive'}"><a
 						href="#"><i class="icon-basket-loaded"></i> <span
 							class="sidebar-text">Venta</span> </a>
 						<ul class="nav nav-second-level">
 							<li
-								class="#{(view.viewId.equals('/pages/formulario/clientes.xhtml')) ? 'active' :'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/clientes.xhtml">
+								class="#{(view.viewId.equals('/pages/formulario/clientes-spa.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/clientes-spa.xhtml">
 									<i class="icon-emoticon-smile"></i><span class="sidebar-text">Clientes</span>
 							</a></li>
-
 							<li
-								class="#{(view.viewId.equals('/pages/parametrizacion/servicios.xhtml')) ? 'active' : 'inactive'}"><a
-								href="#{request.contextPath}/pages/parametrizacion/servicios.xhtml"><i
+								class="#{(view.viewId.equals('/pages/parametrizacion/servicios-spa.xhtml')) ? 'active' : 'inactive'}"><a
+								href="#{request.contextPath}/pages/parametrizacion/servicios-spa.xhtml"><i
 									class="icon-globe-alt"></i><span class="sidebar-text">Servicios</span></a></li>
-
-
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/producto.xhtml')) ? 'active' : 'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/producto.xhtml"><i
+								href="#{request.contextPath}/pages/formulario/producto-spa.xhtml"><i
 									class="icon-globe-alt"></i><span class="sidebar-text">Producto</span></a></li>
-<li
-								class="#{(view.viewId.equals('/pages/formulario/facturacion_index.xhtml')) ? 'active' : (view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/facturacion.xhtml">
+							<li
+								class="#{(view.viewId.equals('/pages/formulario/generar-tickets.xhtml')) ? 'active' : 'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/generar-tickets.xhtml"><i
+									class="icon-tag"></i><span class="sidebar-text">Orden
+										Sevicio/Producto</span></a></li>
+							<li
+								class="#{(view.viewId.equals('/pages/formulario/orden-asignacion.xhtml')) ? 'active' : 'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/orden-asignacion.xhtml"><i
+									class="icon-tag"></i><span class="sidebar-text">Ordenes
+										Servico/Producto</span></a></li>
+							<li
+								class="#{(view.viewId.equals('/pages/formulario/facturacion2.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/facturacion2.xhtml">
 									<i class="icon-briefcase"></i><span class="sidebar-text">Facturacion</span>
 							</a></li>
 
 							<li
-								class="#{(view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/facturacion_index.xhtml">
-									<i class="icon-briefcase"></i><span class="sidebar-text">Lista Facturacion</span>
+								class="#{(view.viewId.equals('/pages/formulario/facturacion_list.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/facturacion_list.xhtml">
+									<i class="icon-briefcase"></i><span class="sidebar-text">Facturas</span>
+							</a></li>
+							<li
+								class="#{(view.viewId.equals('/pages/formulario/nota-venta-list.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/nota-venta-list.xhtml">
+									<i class="icon-briefcase"></i><span class="sidebar-text">Nota
+										Ventas</span>
 							</a></li>
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/exportacion-compras.xhtml')) ? 'active' : (view.viewId.equals('/pages/formulario/facturas-lv.xhtml')) ? 'active' : 'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/exportacion-compras.xhtml">
+								href="#{request.contextPath}/pages/formulario/facturas-lv.xhtml">
 									<i class="icon-briefcase"></i><span class="sidebar-text">Libro
 										Venta</span>
 							</a></li>
 						</ul></li>
 
-					<ui:insert name="page_active_reporte">
+					<li
+						class="#{(view.viewId.equals('/pages/reportes/movimiento-diario.xhtml')) ? 'active' : (view.viewId.equals('/pages/reportes/ventas-diarias.xhtml')) ? 'active' : (view.viewId.equals('/pages/reportes/reporte-diarios.xhtml')) ? 'active' :(view.viewId.equals('/pages/reportes/reporte-comisiones.xhtml')) ? 'active' : 'inactive'}"><a
+						href="#"><i class="icon-bar-chart"></i> <span
+							class="sidebar-text">Reporte</span> </a>
+						<ul class="nav nav-second-level">
+							<li
+								class="#{(view.viewId.equals('/pages/reportes/reporte-comisiones.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/reportes/reporte-comisiones.xhtml">
+									<i class="icon-notebook"></i><span class="sidebar-text">Comisiones</span>
+							</a></li>
+
+							<li
+								class="#{(view.viewId.equals('/pages/reportes/reporte-diarios.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/reportes/reporte-diarios.xhtml">
+									<i class="icon-notebook"></i><span class="sidebar-text">Comisiones
+										Diarias</span>
+							</a></li>
+
+							<li
+								class="#{(view.viewId.equals('/pages/reportes/ventas-diarias.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/reportes/ventas-diarias.xhtml">
+									<i class="icon-notebook"></i><span class="sidebar-text">Ventas
+										Diarias</span>
+							</a></li>
+
+							<li
+								class="#{(view.viewId.equals('/pages/reportes/movimiento-diario.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/reportes/movimiento-diario.xhtml">
+									<i class="icon-notebook"></i><span class="sidebar-text">Movimiento
+										Diario</span>
+							</a></li>
+
+
+						</ul></li>
 						<li
-							class="#{(view.viewId.equals('/pages/reportes/libro_diario.xhtml')) ? 'active' : (view.viewId.equals('/pages/reportes/libro_mayor.xhtml')) ? 'active':(view.viewId.equals('/pages/reportes/sumas_saldos.xhtml')) ? 'active': (view.viewId.equals('/pages/reportes/balance_general.xhtml')) ? 'active': (view.viewId.equals('/pages/reportes/estado_resultado.xhtml')) ? 'active': 'inactive'}"><a
-							href="#"><i class="icon-bar-chart"></i><span
-								class="sidebar-text">Reporte</span></a>
-							<ul class="nav nav-second-level">
-								<li
-									class="#{(view.viewId.equals('/pages/reportes/libro_diario.xhtml')) ? 'active': (view.viewId.equals('/pages/reportes/libro_mayor.xhtml')) ? 'active': (view.viewId.equals('/pages/reportes/sumas_saldos.xhtml')) ? 'active': 'inactive'}"><a
-									href="#"><i class="icon-book-open"></i><span
-										class="sidebar-text">Libros</span></a>
-									<ul class="nav nav-third-level">
-										<li
-											class="#{(view.viewId.equals('/pages/reportes/libro_diario.xhtml')) ? 'active': 'inactive'}"><a
-											href="#{request.contextPath}/pages/reportes/libro_diario.xhtml"><i
-												class="icon-notebook"></i><span class="sidebar-text">Libro
-													Diario</span></a></li>
-										<li
-											class="#{(view.viewId.equals('/pages/reportes/libro_mayor.xhtml')) ? 'active': 'inactive'}"><a
-											href="#{request.contextPath}/pages/reportes/libro_mayor.xhtml"><i
-												class="icon-notebook"></i><span class="sidebar-text">Libro
-													Mayor</span></a></li>
-										<li
-											class="#{(view.viewId.equals('/pages/reportes/sumas_saldos.xhtml')) ? 'active': 'inactive'}"><a
-											href="#{request.contextPath}/pages/reportes/sumas_saldos.xhtml"><i
-												class="icon-notebook"></i><span class="sidebar-text">Sumas
-													y Saldos</span></a></li>
-									</ul></li>
-								<li
-									class="#{(view.viewId.equals('/pages/reportes/balance_general.xhtml')) ? 'active': (view.viewId.equals('/pages/reportes/estado_resultado.xhtml')) ? 'active': 'inactive'}"><a
-									href="#"><i class="icon-graph"></i><span
-										class="sidebar-text">Estado Financiero</span></a>
-									<ul class="nav nav-third-level">
-										<li
-											class="#{(view.viewId.equals('/pages/reportes/balance_general.xhtml')) ? 'active': 'inactive'}"><a
-											href="#{request.contextPath}/pages/reportes/balance_general.xhtml"><i
-												class="icon-notebook"></i><span class="sidebar-text">Balance
-													General</span></a></li>
-										<li
-											class="#{(view.viewId.equals('/pages/reportes/estado_resultado.xhtml')) ? 'active': 'inactive'}"><a
-											href="#{request.contextPath}/pages/reportes/estado_resultado.xhtml"><i
-												class="icon-notebook"></i><span class="sidebar-text">Estado
-													Resultado</span></a></li>
-									</ul></li>
-								<li><a href="#"><i class="icon-grid"></i><span
-										class="sidebar-text">Cuadro Activo Fijo</span></a></li>
-							</ul></li>
-					</ui:insert>
+						class="#{(view.viewId.equals('/pages/administradorDB.xhtml')) ? 'active' : 'inactive'}"><a
+						href="#"><i class="icon-lock"></i><span class="sidebar-text">Copias de Seguridad</span></a>
+						<ul class="nav nav-second-level">
+							<li
+								class="#{(view.viewId.equals('/pages/administradorDB.xhtml')) ? 'active' : 'inactive'}"><a
+								href="#{request.contextPath}/pages/administradorDB.xhtml"><i
+									class="icon-user"></i><span class="sidebar-text">Back Up , Restore</span></a></li>
+							
+
+
+						</ul></li>
+
+
 				</ul>
 				</section> </aside>
 				<!--END SIDERBAR-->

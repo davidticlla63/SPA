@@ -415,7 +415,7 @@
 										<h:selectOneMenu id="tipoDialog"
 											value="#{sucursal2Controller.newDosificacion.tipoDosificacion}"
 											styleClass="form-control">
-											<p:ajax event="change" immediate="true" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 											<f:selectItem itemValue="CANTIDAD" itemLabel="CANTIDAD" />
 											<f:selectItem itemValue="TIEMPO" itemLabel="TIEMPO" />
 										</h:selectOneMenu>
@@ -432,7 +432,7 @@
 											styleClass="form-control" autocomplete="off"
 											value="#{sucursal2Controller.newDosificacion.numeroTramite}"
 											required="true" requiredMessage="N° Tramite Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -447,7 +447,7 @@
 											styleClass="form-control" autocomplete="off"
 											value="#{sucursal2Controller.newDosificacion.numeroInicial}"
 											required="true" requiredMessage="N° Inicial Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -461,7 +461,7 @@
 										<h:selectOneMenu id="resolucionNormativaDialog"
 											value="#{sucursal2Controller.newDosificacion.normaAplicada}"
 											styleClass="form-control">
-											<p:ajax event="change" immediate="true" update=":formModalDosificacion" />
+											<p:ajax event="change" immediate="true" />
 											<f:selectItem itemValue="NSF-07" itemLabel="NSF-07" />
 											<f:selectItem itemValue="SFV-14" itemLabel="SFV-14" />
 										</h:selectOneMenu>
@@ -483,7 +483,7 @@
 											autocomplete="off"
 											value="#{sucursal2Controller.newDosificacion.cantidadDosificacion}"
 											required="true" requiredMessage="Cantidad Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -499,7 +499,7 @@
 											value="#{sucursal2Controller.newDosificacion.numeroAutorizacion}"
 											required="true"
 											requiredMessage="Nro. Autorizacion Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -514,7 +514,7 @@
 											styleClass="form-control" autocomplete="off"
 											value="#{sucursal2Controller.newDosificacion.numeroSecuencia}"
 											required="true" requiredMessage="Nro. Secuencial Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -525,11 +525,12 @@
 										<h:outputLabel value="Fecha Limite Emision" />
 									</div>
 									<div class="col-md-6">
-										<p:calendar id="fechaLimiteEmisionnDialog" immediate="true"											
+										<p:calendar id="fechaLimiteEmisionnDialog" immediate="true"
+											
 											value="#{sucursal2Controller.newDosificacion.fechaLimiteEmision}"
 											mindate="#{sucursalController.fechaMinima}"
 											pattern="dd/MM/yyyy" locale="en">
-											<p:ajax event="dateSelect"  update=":formModalDosificacion"  />
+											<p:ajax event="dateSelect" />
 										</p:calendar>
 									</div>
 								</div>
@@ -550,7 +551,7 @@
 								autocomplete="off"
 								value="#{sucursal2Controller.newDosificacion.llaveControl}"
 								required="true" requiredMessage="Llave de Control es requerido">
-								<p:ajax event="change" update=":formModalDosificacion" />
+								<p:ajax event="change" />
 							</p:inputTextarea>
 						</div>
 					</div>
@@ -587,7 +588,7 @@
 											value="#{sucursal2Controller.newDosificacion.actividadEconomica}"
 											required="true"
 											requiredMessage="Actividad Economica Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -602,7 +603,7 @@
 											styleClass="form-control" autocomplete="off"
 											value="#{sucursal2Controller.newDosificacion.leyendaInferior1}"
 											required="true" requiredMessage="Leyenda Generica Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>
@@ -618,7 +619,7 @@
 											value="#{sucursal2Controller.newDosificacion.leyendaInferior2}"
 											required="true"
 											requiredMessage="Leyenda Ley N° 453 Requerido.">
-											<p:ajax event="change" update=":formModalDosificacion" />
+											<p:ajax event="change" />
 										</p:inputText>
 									</div>
 								</div>

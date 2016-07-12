@@ -798,7 +798,7 @@
 					widgetVar="dlgFacturaVistaPrevia" resizable="false" modal="true"
 					position="center" width="750" styleClass="customDialog"
 					visible="#{not empty facesContext.maximumSeverity}"
-					id="modalVistaPrevia" closable="false">
+					id="modalVistaPrevia">
 					<h:form id="formModalVistaPrevia">
 						<div class="row">
 							<div class="form-group ">
@@ -815,7 +815,7 @@
 									<div class="col-md-4"></div>
 									<div class="col-md-4"></div>
 									<div class="col-md-4">
-										<p:commandLink value="Cerrar"
+										<p:commandLink value="Aceptar"
 											styleClass="btn btn-primary btn-block"
 											action="#{facturaConsultoraController.dialogClose()}" />
 									</div>
