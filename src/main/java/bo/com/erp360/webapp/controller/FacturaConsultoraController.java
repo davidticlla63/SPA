@@ -78,11 +78,11 @@ import bo.com.erp360.webapp.service.SubDetalleFacturaRegistration;
 import bo.com.erp360.webapp.util.CodigoControl7;
 import bo.com.erp360.webapp.util.NumerosToLetras;
 import bo.com.erp360.webapp.util.Time;
+import bo.com.erp360.webapp.util.UtilidadesFacturacion;
 
 @Named(value = "facturaConsultoraController")
 @ConversationScoped
 public class FacturaConsultoraController implements Serializable {
-
 
 	/**
 	 * 
@@ -487,8 +487,7 @@ public class FacturaConsultoraController implements Serializable {
 
 	public void dialogClose() {
 		System.out.println("Ingreso a dialogClose ");
-		if (newFactura.isImpresion()
-				&& !newFactura.getEstado().equals("A")) {
+		if (newFactura.isImpresion() && !newFactura.getEstado().equals("A")) {
 			newFactura.setImpresion(false);
 			facturaRegistration.update(newFactura);
 		}
@@ -526,9 +525,9 @@ public class FacturaConsultoraController implements Serializable {
 					.findActivaBySucursal(newFactura.getSucursal());
 			numeroFactura = dosificacion.getNumeroSecuencia();
 			// ---------------------------registro de
-			CodigoControl7 control=new CodigoControl7();
-			String CC = control.obtenerCodigoControl(fechaFactura, dosificacion,
-					newFactura.getTotalPagar(), "0");
+			CodigoControl7 control = new CodigoControl7();
+			String CC = control.obtenerCodigoControl(fechaFactura,
+					dosificacion, newFactura.getTotalPagar(), "0");
 			System.out.println("Codigo de Control : " + CC);
 			if (CC.length() == 14 || CC.length() == 11) {
 				// factura------------------------------------
@@ -643,9 +642,10 @@ public class FacturaConsultoraController implements Serializable {
 					.findActivaBySucursal(newFactura.getSucursal());
 			numeroFactura = dosificacion.getNumeroSecuencia();
 			// ---------------------------registro de
-			CodigoControl7 control=new CodigoControl7();
-			String CC = control.obtenerCodigoControl(fechaFactura, dosificacion,
-					newFactura.getTotalPagar(), nitCliente.getNit());
+			CodigoControl7 control = new CodigoControl7();
+			String CC = control.obtenerCodigoControl(fechaFactura,
+					dosificacion, newFactura.getTotalPagar(),
+					nitCliente.getNit());
 			System.out.println("Codigo de Control : " + CC);
 			if (CC.length() == 14 || CC.length() == 11) {
 				// factura------------------------------------
@@ -770,8 +770,6 @@ public class FacturaConsultoraController implements Serializable {
 			facesContext.addMessage(null, m);
 		}
 	}
-
-	
 
 	// Calcula el cambio al cliente por el pago realizado
 	public void calcularCambioDePago() {
@@ -1358,94 +1356,28 @@ public class FacturaConsultoraController implements Serializable {
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
 					empresaLogin, sucursalLogin).get(0);
 			if (formatoHoja.getNombre().equals("COMPLETO")) {
-				if (formatoFactura.getNombre().equals("DOS COLUMNAS")) {
-					url = urlPath
-							+ "ReportFacturaConsultora?pIdFactura="
-							+ newFactura.getId()
-							+ "&pEmpresa="
-							+ empresaLogin.getRazonSocial()
-							+ "&pCiudad="
-							+ empresaLogin.getCiudad()
-							+ "&pPais=BOLIVIA&pLogo="
-							+ urlLogo
-							+ "&pNit="
-							+ empresaLogin.getNit()
-							+ "&pQr="
-							+ newFactura.getCodigoRespuestaRapida()
-							+ "&pLeyenda="
-							+ URLEncoder.encode(
-									dosificacion.getLeyendaInferior2(),
-									"ISO-8859-1") + "&pInpresion="
-							+ newFactura.isImpresion() + "&pTamano=" + tamano;
-				}
-
-				if (formatoFactura.getNombre().equals("CUATRO COLUMNAS")) {
-					url = urlPath
-							+ "ReportFactura4ColConsultora?pIdFactura="
-							+ newFactura.getId()
-							+ "&pEmpresa="
-							+ empresaLogin.getRazonSocial()
-							+ "&pCiudad="
-							+ empresaLogin.getCiudad()
-							+ "&pPais=BOLIVIA&pLogo="
-							+ urlLogo
-							+ "&pNit="
-							+ empresaLogin.getNit()
-							+ "&pQr="
-							+ newFactura.getCodigoRespuestaRapida()
-							+ "&pLeyenda="
-							+ URLEncoder.encode(
-									dosificacion.getLeyendaInferior2(),
-									"ISO-8859-1") + "&pInpresion="
-							+ newFactura.isImpresion() + "&pTamano=" + tamano;
-				}
-
+				url = urlPath
+						+ "ReportFactura?"
+						+ UtilidadesFacturacion.urlFacturaServlet(newFactura,
+								dosificacion, urlLogo, tamano);
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO")) {
 				url = urlPath
-						+ "ReportFacturaSCF?pIdFactura="
-						+ newFactura.getId()
-						+ "&pEmpresa="
-						+ empresaLogin.getRazonSocial()
-						+ "&pCiudad="
-						+ empresaLogin.getCiudad()
-						+ "&pPais=BOLIVIA&pLogo="
-						+ urlLogo
-						+ "&pNit="
-						+ empresaLogin.getNit()
-						+ "&pQr="
-						+ newFactura.getCodigoRespuestaRapida()
-						+ "&pLeyenda="
-						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
-								"ISO-8859-1") + "&pInpresion="
-						+ newFactura.isImpresion() + "&pTamano=" + tamano;
+						+ "ReportFacturaSinCredFiscal?"
+						+ UtilidadesFacturacion.urlFacturaServlet(newFactura,
+								dosificacion, urlLogo, tamano);
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO, SIN BORDE")) {
 				url = urlPath
-						+ "ReportFacturaConsultora?pIdFactura="
-						+ newFactura.getId()
-						+ "&pEmpresa="
-						+ empresaLogin.getRazonSocial()
-						+ "&pCiudad="
-						+ empresaLogin.getCiudad()
-						+ "&pPais=BOLIVIA&pLogo="
-						+ urlLogo
-						+ "&pNit="
-						+ empresaLogin.getNit()
-						+ "&pQr="
-						+ newFactura.getCodigoRespuestaRapida()
-						+ "&pLeyenda="
-						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
-								"ISO-8859-1") + "&pInpresion="
-						+ newFactura.isImpresion() + "&pTamano=" + tamano;
+						+ "ReportFacturaSinCredFiscal?"
+						+ UtilidadesFacturacion.urlFacturaServlet(newFactura,
+								dosificacion, urlLogo, tamano);
 			}
 
-			
 			log.info("getURL() -> " + url);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
 	}
 
 	public void agregarSubdetalle() {

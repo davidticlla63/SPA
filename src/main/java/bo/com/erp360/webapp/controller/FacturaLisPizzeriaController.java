@@ -33,6 +33,7 @@ import bo.com.erp360.webapp.data.GestionRepository;
 import bo.com.erp360.webapp.data.NotaVentaRepository;
 import bo.com.erp360.webapp.data.SucursalRepository;
 import bo.com.erp360.webapp.data.TamanoHojaRepository;
+import bo.com.erp360.webapp.data.UsuarioRepository;
 import bo.com.erp360.webapp.model.Dosificacion;
 import bo.com.erp360.webapp.model.Empresa;
 import bo.com.erp360.webapp.model.Factura;
@@ -126,6 +127,8 @@ public class FacturaLisPizzeriaController implements Serializable {
 
 	private String selectedVista = "factura";// FACTURA, SERVICIO
 	
+	private @Inject UsuarioRepository usuarioRepository;
+	
 
 	@PostConstruct
 	public void initNewReporteFactura() {
@@ -139,6 +142,7 @@ public class FacturaLisPizzeriaController implements Serializable {
 				gestionRepository);
 		sucursalLogin = estadoUsuarioLogin.getSucursalSession(
 				empresaRepository, sucursalRepository);
+		usuarioSession=estadoUsuarioLogin.getUsuarioSession(usuarioRepository);
 
 		loadValuesDefaul();
 	}
@@ -157,11 +161,18 @@ public class FacturaLisPizzeriaController implements Serializable {
 	}
 
 	public void consultar() {
-		listFactura = facturaRepository.traerFacturasEntreFechasActivas(
-				nombreUsuario, empresaLogin, sucursalLogin, fechaInicio,
-				fechaFin);
+		if (usuarioSession.getState().equals("SU")) {
+			listFactura = facturaRepository.traerFacturasEntreFechasActivas(
+					empresaLogin, sucursalLogin, fechaInicio, fechaFin);
+		} else {
+			listFactura = facturaRepository.traerFacturasEntreFechasActivas(
+					nombreUsuario, empresaLogin, sucursalLogin, fechaInicio,
+					fechaFin);
+		}
+
 		log.info("consultar : " + listFactura.size());
 	}
+
 	
 	
 	

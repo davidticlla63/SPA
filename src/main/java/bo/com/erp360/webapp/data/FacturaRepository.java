@@ -100,6 +100,15 @@ public class FacturaRepository {
   	    	log.info("Query Factura: "+query);
   	    	return em.createQuery(query).getResultList();
   	    }
+	    
+	    @SuppressWarnings("unchecked")
+  		public List<Factura> traerFacturasEntreFechasActivas(Empresa empresa,Sucursal sucursal,Date fechaini,Date fechafin) {
+  	    	String query = "select em from Factura em  where   em.empresa.id="+empresa.getId()+" and em.sucursal.id="+sucursal.getId()+" and to_number(to_char(em.fechaRegistro ,'YYYYMMDD'), '99999999')>="
+			+ Time.obtenerFormatoYYYYMMDD(fechaini)+" and  to_number(to_char(em.fechaRegistro ,'YYYYMMDD'), '99999999')<="
+			+ Time.obtenerFormatoYYYYMMDD(fechafin)+"   order by em.id desc";
+  	    	log.info("Query Factura: "+query);
+  	    	return em.createQuery(query).getResultList();
+  	    }
 	  	    
 	    
 	  /*  and Date between '2011/02/25' and '2011/02/27'*/
