@@ -55,9 +55,12 @@
 						<div class="col-md-12">
 							<div class="panel panel-default">
 								<strong> <span class="alert-warning"><h:outputText
-											lang="es" rendered="#{facturaController.diasrestantes lt 30}"
+											lang="es" rendered="#{facturaController.diasrestantes lt 30 and facturaController.puedofacturar=='true'}"
 											value="Faltan #{facturaController.diasrestantes} dias">
 											<f:convertNumber pattern="0######" />
+										</h:outputText></span> <span class="alert-danger"><h:outputText lang="es"
+											rendered="#{facturaController.puedofacturar=='false'}"
+											value="Por favor tiene que hacer una nueva dosificacion para poder facturar">
 										</h:outputText></span>
 								</strong>
 								<div class="panel-heading">

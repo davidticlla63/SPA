@@ -112,10 +112,9 @@ public class FacturaIndexController implements Serializable {
 	private String urlCodeQR;
 
 	private String url;
-	
+
 	private @Inject FormatoHojaRepository formatoHojaRepository;
 	private FormatoHoja formatoHoja;
-
 
 	private Sucursal sucursalLogin;
 
@@ -229,7 +228,7 @@ public class FacturaIndexController implements Serializable {
 
 	public void armarUrl() {
 		try {
-			
+
 			// TODO: handle exception
 			HttpServletRequest request = (HttpServletRequest) facesContext
 					.getExternalContext().getRequest();
@@ -237,49 +236,73 @@ public class FacturaIndexController implements Serializable {
 			urlPath = urlPath.substring(0, urlPath.length()
 					- request.getRequestURI().length())
 					+ request.getContextPath() + "/";
-			
+
 			TamanoHoja tamanoHoja = tamanoHojaRepository.traerHojaActiva();
 			String tamano = tamanoHoja.getTamano();
-			
+
 			String urlLogo = urlPath + "resources/gfx/"
 					+ sucursalLogin.getPathLogo();
-			
-			formatoHoja = formatoHojaRepository.findActivosByEmpresa(empresaLogin,sucursalLogin)
-					.get(0);
+
+			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
+					empresaLogin, sucursalLogin).get(0);
 			if (formatoHoja.getNombre().equals("COMPLETO")) {
-				url = urlPath + "ReportFactura?pIdFactura="
-						+ selectedFactura.getId() + "&pEmpresa="
-						+ empresaLogin.getRazonSocial() + "&pCiudad="
-						+ empresaLogin.getCiudad() + "&pPais=BOLIVIA&pLogo=" + urlLogo
-						+ "&pNit=" + empresaLogin.getNit() + "&pQr="
-						+ selectedFactura.getCodigoRespuestaRapida() + "&pLeyenda="
-						+ URLEncoder.encode( dosificacion.getLeyendaInferior2(),"ISO-8859-1")  + "&pInpresion="
+				url = urlPath
+						+ "ReportFactura?pIdFactura="
+						+ selectedFactura.getId()
+						+ "&pEmpresa="
+						+ empresaLogin.getRazonSocial()
+						+ "&pCiudad="
+						+ empresaLogin.getCiudad()
+						+ "&pPais=BOLIVIA&pLogo="
+						+ urlLogo
+						+ "&pNit="
+						+ empresaLogin.getNit()
+						+ "&pQr="
+						+ selectedFactura.getCodigoRespuestaRapida()
+						+ "&pLeyenda="
+						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
+								"ISO-8859-1") + "&pInpresion="
 						+ selectedFactura.isImpresion() + "&pTamano=" + tamano;
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO")) {
-				url = urlPath + "ReportFacturaSinCredFiscal?pIdFactura="
-						+ selectedFactura.getId() + "&pEmpresa="
-						+ empresaLogin.getRazonSocial() + "&pCiudad="
-						+ empresaLogin.getCiudad() + "&pPais=BOLIVIA&pLogo=" + urlLogo
-						+ "&pNit=" + empresaLogin.getNit() + "&pQr="
-						+ selectedFactura.getCodigoRespuestaRapida() + "&pLeyenda="
-						+ URLEncoder.encode( dosificacion.getLeyendaInferior2(),"ISO-8859-1") + "&pInpresion="
+				url = urlPath
+						+ "ReportFacturaSinCredFiscal?pIdFactura="
+						+ selectedFactura.getId()
+						+ "&pEmpresa="
+						+ empresaLogin.getRazonSocial()
+						+ "&pCiudad="
+						+ empresaLogin.getCiudad()
+						+ "&pPais=BOLIVIA&pLogo="
+						+ urlLogo
+						+ "&pNit="
+						+ empresaLogin.getNit()
+						+ "&pQr="
+						+ selectedFactura.getCodigoRespuestaRapida()
+						+ "&pLeyenda="
+						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
+								"ISO-8859-1") + "&pInpresion="
 						+ selectedFactura.isImpresion() + "&pTamano=" + tamano;
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO, SIN BORDE")) {
-				url = urlPath + "ReportFacturaSinCredFiscal?pIdFactura="
-						+ selectedFactura.getId() + "&pEmpresa="
-						+ empresaLogin.getRazonSocial() + "&pCiudad="
-						+ empresaLogin.getCiudad() + "&pPais=BOLIVIA&pLogo=" + urlLogo
-						+ "&pNit=" + empresaLogin.getNit() + "&pQr="
-						+ selectedFactura.getCodigoRespuestaRapida() + "&pLeyenda="
-						+ URLEncoder.encode( dosificacion.getLeyendaInferior2(),"ISO-8859-1")  + "&pInpresion="
+				url = urlPath
+						+ "ReportFacturaSinCredFiscal?pIdFactura="
+						+ selectedFactura.getId()
+						+ "&pEmpresa="
+						+ empresaLogin.getRazonSocial()
+						+ "&pCiudad="
+						+ empresaLogin.getCiudad()
+						+ "&pPais=BOLIVIA&pLogo="
+						+ urlLogo
+						+ "&pNit="
+						+ empresaLogin.getNit()
+						+ "&pQr="
+						+ selectedFactura.getCodigoRespuestaRapida()
+						+ "&pLeyenda="
+						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
+								"ISO-8859-1") + "&pInpresion="
 						+ selectedFactura.isImpresion() + "&pTamano=" + tamano;
 			}
-			
-			
-			
-			
+
 			log.info("getURL() -> " + url);
 		} catch (Exception e) {
 		}
@@ -417,16 +440,14 @@ public class FacturaIndexController implements Serializable {
 		}
 	}
 
-
-
 	public void anularFactura() {
 		try {
 			log.info("Ingreso a anularFactura");
-			
+
 			selectedFactura.setEstado("A");
 			selectedFactura.setImpresion(true);
 			facturaRegistration.update(selectedFactura);
-			/*facturaRegistration.anularFactura(selectedFactura);*/
+			/* facturaRegistration.anularFactura(selectedFactura); */
 			FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Factura Anulada !!!! ", selectedFactura.getNumeroFactura());
 			facesContext.addMessage(null, m);
@@ -436,11 +457,10 @@ public class FacturaIndexController implements Serializable {
 		}
 	}
 
-	
-	
 	public void dialogClose() {
 		System.out.println("Ingreso a dialogClose ");
-		if (selectedFactura.isImpresion() && !selectedFactura.getEstado().equals("A")) {
+		if (selectedFactura.isImpresion()
+				&& !selectedFactura.getEstado().equals("A")) {
 			selectedFactura.setImpresion(false);
 			facturaRegistration.update(selectedFactura);
 		}
@@ -449,7 +469,7 @@ public class FacturaIndexController implements Serializable {
 		loadValuesDefaul();
 
 	}
-	
+
 	// ---- get and set ---
 
 	public Usuario getUsuario() {

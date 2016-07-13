@@ -1,8 +1,8 @@
 package bo.com.erp360.webapp.model;
 
-import java.util.ArrayList;
+import groovy.sql.Sql;
+
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,7 +46,7 @@ public class DetalleFactura implements java.io.Serializable {
 	@Column(name = "unidad_medida", length = 30, nullable = true)
 	private String unidadMedida;
 
-	@Column(name = "concepto", nullable = false, length = 200)
+	@Column(name = "concepto", nullable = false, length = 2000)
 	private String concepto;
 
 	@Column(name = "cantidad", nullable = false)

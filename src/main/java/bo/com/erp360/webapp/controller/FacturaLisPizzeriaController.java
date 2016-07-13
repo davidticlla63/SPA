@@ -518,24 +518,16 @@ public class FacturaLisPizzeriaController implements Serializable {
 
 	
 	public void dialogClose() {
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgFacturaVistaPrevia').hide();");
-		if (selectedFactura.isImpresion()&& !selectedFactura.getEstado().equals("A")) {
+		System.out.println("Ingreso a dialogClose ");
+		if (selectedFactura.isImpresion()
+				&& !selectedFactura.getEstado().equals("A")) {
 			selectedFactura.setImpresion(false);
 			facturaRegistration.update(selectedFactura);
 		}
-		HttpServletRequest request = (HttpServletRequest) facesContext
-				.getExternalContext().getRequest();
-		String navigateString = request.getContextPath()
-				+ "/pages/formulario/factura_list_pizza.xhtml";
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgFacturaVistaPrevia').hide();");
+		loadValuesDefaul();
 
-		System.out.println(navigateString);
-		try {
-			facesContext.getExternalContext().redirect(navigateString);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	// ---- get and set ---
 

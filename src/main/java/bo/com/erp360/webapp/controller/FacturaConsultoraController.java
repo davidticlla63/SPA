@@ -486,24 +486,16 @@ public class FacturaConsultoraController implements Serializable {
 	}
 
 	public void dialogClose() {
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgFacturaVistaPrevia').hide();");
-		if (newFactura.isImpresion()&& !newFactura.getEstado().equals("A")) {
+		System.out.println("Ingreso a dialogClose ");
+		if (newFactura.isImpresion()
+				&& !newFactura.getEstado().equals("A")) {
 			newFactura.setImpresion(false);
 			facturaRegistration.update(newFactura);
 		}
-		HttpServletRequest request = (HttpServletRequest) facesContext
-				.getExternalContext().getRequest();
-		String navigateString = request.getContextPath()
-				+ "/pages/formulario/facturacion-cons.xhtml";
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgFacturaVistaPrevia').hide();");
+		loadValuesDefaul();
 
-		System.out.println(navigateString);
-		try {
-			facesContext.getExternalContext().redirect(navigateString);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void dialogSubdetalleClose() {

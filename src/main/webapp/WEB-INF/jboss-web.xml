@@ -8,7 +8,7 @@
 <!-- 	<security-domain>java:/jaas/taxicorpA</security-domain> -->
 	<security-domain>java:jboss/jaas/webappSPA</security-domain>
 	<!-- <security-domain>other</security-domain> -->
-	<!-- <context-root>/Taxicorp</context-root> -->
+	 <context-root>Facturacion</context-root> 
 	
 	
 	<!-- configuracion log4j -->

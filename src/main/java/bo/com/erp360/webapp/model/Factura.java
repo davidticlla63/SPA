@@ -27,6 +27,7 @@ public class Factura implements Serializable {
 	@Column(name = "nombre_factura", nullable = false)
 	private String nombreFactura;
 
+	@Column(name = "concepto", nullable = false, length = 2000)
 	private String concepto;
 
 	@Column(name = "credito_fiscal", nullable = false)

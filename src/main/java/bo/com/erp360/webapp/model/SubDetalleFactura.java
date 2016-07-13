@@ -40,7 +40,7 @@ public class SubDetalleFactura implements java.io.Serializable {
 	@JoinColumn(name = "id_detalle_factura", nullable = false)
 	private DetalleFactura detalleFactura;
 
-	@Column(name = "concepto", nullable = false, length = 200)
+	@Column(name = "concepto", nullable = false, length = 2000)
 	private String concepto;
 
 	@Column(name = "cantidad", nullable = false)

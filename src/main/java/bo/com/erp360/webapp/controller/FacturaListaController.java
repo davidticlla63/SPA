@@ -490,6 +490,19 @@ public class FacturaListaController implements Serializable {
 			log.error("Error en anularFactura : " + e.getStackTrace());
 		}
 	}
+	
+	public void dialogClose() {
+		System.out.println("Ingreso a dialogClose ");
+		if (selectedFactura.isImpresion()
+				&& !selectedFactura.getEstado().equals("A")) {
+			selectedFactura.setImpresion(false);
+			facturaRegistration.update(selectedFactura);
+		}
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgFacturaVistaPrevia').hide();");
+		loadValuesDefaul();
+
+	}
 
 	// ---- get and set ---
 
