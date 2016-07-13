@@ -200,17 +200,8 @@
 																	value="#{facturaController.productoServicio}"
 																	for="event" />
 															</div>
-															<div class="col-md-1">
-																<p:commandLink id="buttonAgregarProducto"
-																	style="height:100%;" styleClass="btn btn-success"
-																	update=",:formDialogProducto"
-																	onclick="PF('dlgProducto').show();"
-																	action="#{facturaController.buttonAgregarProducto()}">
-																	<span class="btn-label"><i class="icon-plus"></i></span>
-																</p:commandLink>
-
-															</div>
-															<div class="col-sm-2">
+															
+															<div class="col-sm-3">
 																<p:commandLink id="buttonAceptarDialog1wsdf"
 																	value="Agregar" styleClass="btn btn-success btn-block">
 																	<p:ajax
@@ -283,16 +274,7 @@
 																	value="#{facturaController.productoServicio}"
 																	for="eventServicio" />
 															</div>
-															<div class="col-md-1">
-																<p:commandLink id="buttonAgregarServicio"
-																	style="height:100%;" styleClass="btn btn-success"
-																	update=":formDialogProducto"
-																	onclick="PF('dlgProducto').show();"
-																	action="#{facturaController.buttonAgregarServicio()}">
-																	<span class="btn-label"><i class="icon-plus"></i></span>
-																</p:commandLink>
-															</div>
-															<div class="col-sm-2">
+															<div class="col-sm-3">
 																<p:commandLink id="buttonAceptarDialog12"
 																	value="Agregar" styleClass="btn btn-success btn-block">
 																	<p:ajax
@@ -343,7 +325,6 @@
 												</div>
 
 											</p:fragment>
-											<p:separator />
 
 										</div>
 									</h:form>
