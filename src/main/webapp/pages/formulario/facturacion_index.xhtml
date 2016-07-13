@@ -402,7 +402,7 @@
 			widgetVar="dlgFacturaVistaPrevia" resizable="false" modal="true"
 			position="center" width="750" styleClass="customDialog"
 			visible="#{not empty facesContext.maximumSeverity}"
-			id="modalVistaPrevia">
+			id="modalVistaPrevia" closable="true">
 			<h:form id="formModalVistaPrevia">
 				<div class="row">
 					<div class="form-group ">
@@ -421,7 +421,8 @@
 							<div class="col-md-4">
 								<p:commandLink value="Aceptar"
 									styleClass="btn btn-primary btn-block"
-									onclick="PF('dlgFacturaVistaPrevia').hide();" />
+									update="formBotonesHeader,formTableFactura,:formDatosFactura,:formModalVistaPrevia"
+									action="#{facturaIndexController.dialogClose()}" />
 							</div>
 						</div>
 					</div>

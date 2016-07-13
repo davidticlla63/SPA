@@ -482,7 +482,7 @@
 		<p:dialog showEffect="explode" header="Vista Previa"
 			widgetVar="dlgFacturaVistaPrevia" resizable="false" modal="true"
 			position="center" width="750" styleClass="customDialog"
-			visible="#{not empty facesContext.maximumSeverity}" closable="false"
+			visible="#{not empty facesContext.maximumSeverity}"
 			id="modalVistaPrevia">
 			<h:form id="formModalVistaPrevia">
 				<div class="row">
@@ -499,7 +499,7 @@
 							<div class="col-md-4"></div>
 							<div class="col-md-4"></div>
 							<div class="col-md-4">
-								<p:commandLink value="Cerrar"
+								<p:commandLink value="Aceptar"
 									styleClass="btn btn-primary btn-block"
 									action="#{ventaController.dialogClose()}" />
 							</div>
@@ -517,9 +517,8 @@
 			widgetVar="dlgNotaVistaPrevia" resizable="false" modal="true"
 			position="center" width="750" styleClass="customDialog"
 			visible="#{not empty facesContext.maximumSeverity}"
-			id="modalNotaVistaPrevia" closable="false">
+			id="modalNotaVistaPrevia">
 			<h:form id="formModalNotaVistaPrevia">
-			
 				<div class="row">
 					<div class="form-group ">
 						<div class="col-md-12">
@@ -535,7 +534,7 @@
 							<div class="col-md-4"></div>
 							<div class="col-md-4"></div>
 							<div class="col-md-4">
-								<p:commandLink value="Cerrar"
+								<p:commandLink value="Aceptar"
 									styleClass="btn btn-primary btn-block"
 									action="#{ventaController.dialogClose()}" />
 							</div>
@@ -554,7 +553,7 @@
 			widgetVar="dlgProcesar" resizable="false" modal="true"
 			position="center" width="600" styleClass="customDialog"
 			visible="#{not empty facesContext.maximumSeverity}"
-			id="modalProcesar" closable="false">
+			id="modalProcesar">
 			<h:form id="formModalProcesar">
 				<div class="row">
 					<div class="form-group ">

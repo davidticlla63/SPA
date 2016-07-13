@@ -51,7 +51,8 @@
 								</p:commandLink>
 
 								<p:commandLink id="buttonRevisar" value="&#160; Revisar"
-									styleClass="btn btn-info ion-printer" style="height:31px;"
+									styleClass="btn btn-info ion-printer"
+									style="height:31px;" 
 									action="#{facturaLisPizzeriaController.revisarFacturas()}">
 								</p:commandLink>
 							</div>
@@ -196,10 +197,18 @@
 										<label for="facturaFechaEmisionID"
 											class="col-lg-6 control-label">FECHA</label>
 										<div class="col-lg-4">
-											<p:calendar
+											<p:inputText id="facturaFechaEmisionID"
+												styleClass="form-control"
 												value="#{facturaLisPizzeriaController.selectedFactura.fechaFactura}"
-												style="text-align:right;" pattern="dd/MM/yyyy"  disabled="true" />
-
+												size="40" required="true"
+												requiredMessage="Fecha Emision es Requerido."
+												disabled="true">
+												<f:convertDateTime pattern="dd/MM/yyyy H:mm" />
+												<p:ajax event="change" />
+											</p:inputText>
+											<p:watermark value="Fecha Emision"
+												for="facturaFechaEmisionID" />
+											<p:message for="facturaFechaEmisionID" />
 										</div>
 									</div>
 
@@ -217,8 +226,7 @@
 										<h3 class="panel-title">Lista de Facturas</h3>
 										<h:panelGrid columns="5">
 											<h:outputText value="Desde:" />
-											<p:calendar
-												value="#{facturaLisPizzeriaController.fechaInicio}"
+											<p:calendar value="#{facturaLisPizzeriaController.fechaInicio}"
 												pattern="dd/MM/yyyy"></p:calendar>
 											<h:outputText value="Hasta:" />
 											<p:calendar value="#{facturaLisPizzeriaController.fechaFin}"
@@ -265,11 +273,11 @@
 													</span>
 												</center>
 											</p:column>
-											<p:column headerText="Fecha" width="15%"
+											<p:column headerText="Fecha" width="7%"
 												style="text-align:center;">
-												<p:calendar value="#{item.fechaRegistro}"
-													style="text-align:right;" pattern="dd/MM/yyyy"  />
-
+												<h:outputText value="#{item.fechaFactura}">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</h:outputText>
 											</p:column>
 
 											<p:column headerText="Autorizacion"
@@ -303,7 +311,7 @@
 											</p:column>
 											<p:column headerText="Codigo Control"
 												filterBy="#{item.codigoControl}" filterMatchMode="contains"
-												filterStyle="width: 100%; height:25px;" width="10%">
+												filterStyle="width: 100%; height:25px;" width="20%">
 												<h:outputText value="#{item.codigoControl}" />
 											</p:column>
 											<p:column headerText="Estado" filterBy="#{item.estado}"
@@ -360,10 +368,9 @@
 							<div class="col-md-4"></div>
 							<div class="col-md-4"></div>
 							<div class="col-md-4">
-							<p:commandLink value="Cerrar"
-											styleClass="btn btn-primary btn-block"
-											action="#{facturaLisPizzeriaController.dialogClose()}" />
-							
+								<p:commandLink value="Aceptar"
+									styleClass="btn btn-primary btn-block"
+									onclick="PF('dlgFacturaVistaPrevia').hide();" />
 							</div>
 						</div>
 					</div>
