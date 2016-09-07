@@ -282,8 +282,9 @@ public class FacturaController implements Serializable {
 				.getTime() - (new Date()).getTime()) / (3600 * 24 * 1000));
 		System.out.println("DIAS : " + diasrestantes);
 
-		setPuedofacturar(dosificacion.getFechaLimiteEmision().getTime() >= (new Date())
-				.getTime());
+//		setPuedofacturar(dosificacion.getFechaLimiteEmision().getTime() >= (new Date())
+//				.getTime());
+		setPuedofacturar(diasrestantes>=-1);
 
 		newFactura.setNumeroAutorizacion(dosificacion.getNumeroAutorizacion());
 

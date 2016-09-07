@@ -196,7 +196,7 @@
 
 
 					<li
-						class="#{(view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/exportacion-compras.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturas-lv.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/generar-tickets.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/producto.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/clientes.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/servicios.xhtml')) ? 'active' : 'inactive'}"><a
+						class="#{(view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturacion-cons.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/exportacion-compras.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturas-lv.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/facturacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/generar-tickets.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/producto.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/clientes.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion_index.xhtml')) ? 'active' :(view.viewId.equals('/pages/formulario/cotizacion.xhtml')) ? 'active' :(view.viewId.equals('/pages/parametrizacion/servicios.xhtml')) ? 'active' : 'inactive'}"><a
 						href="#"><i class="icon-basket-loaded"></i> <span
 							class="sidebar-text">Venta</span> </a>
 						<ul class="nav nav-second-level">
@@ -216,16 +216,23 @@
 								class="#{(view.viewId.equals('/pages/formulario/producto.xhtml')) ? 'active' : 'inactive'}"><a
 								href="#{request.contextPath}/pages/formulario/producto.xhtml"><i
 									class="icon-globe-alt"></i><span class="sidebar-text">Producto</span></a></li>
-<li
+							<li
 								class="#{(view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :'inactive'}"><a
 								href="#{request.contextPath}/pages/formulario/facturacion.xhtml">
 									<i class="icon-briefcase"></i><span class="sidebar-text">Facturacion</span>
 							</a></li>
+							
+							<li
+								class="#{(view.viewId.equals('/pages/formulario/facturacion-cons.xhtml')) ? 'active' :'inactive'}"><a
+								href="#{request.contextPath}/pages/formulario/facturacion-cons.xhtml">
+									<i class="icon-briefcase"></i><span class="sidebar-text">Facturacion 2 Columna</span>
+							</a></li>  
 
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/facturacion_index.xhtml')) ? 'active' :'inactive'}"><a
 								href="#{request.contextPath}/pages/formulario/facturacion_index.xhtml">
-									<i class="icon-briefcase"></i><span class="sidebar-text">Lista Facturacion</span>
+									<i class="icon-briefcase"></i><span class="sidebar-text">Lista
+										Facturacion</span>
 							</a></li>
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/exportacion-compras.xhtml')) ? 'active' : (view.viewId.equals('/pages/formulario/facturas-lv.xhtml')) ? 'active' : 'inactive'}"><a

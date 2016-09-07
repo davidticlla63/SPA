@@ -1,9 +1,6 @@
 package bo.com.erp360.webapp.controller;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,12 +9,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -76,8 +71,6 @@ import bo.com.erp360.webapp.service.NitClienteRegistration;
 import bo.com.erp360.webapp.service.ProductoRegistration;
 import bo.com.erp360.webapp.service.SubDetalleFacturaRegistration;
 import bo.com.erp360.webapp.util.CodigoControl7;
-import bo.com.erp360.webapp.util.NumerosToLetras;
-import bo.com.erp360.webapp.util.Time;
 import bo.com.erp360.webapp.util.UtilidadesFacturacion;
 
 @Named(value = "facturaConsultoraController")
@@ -279,6 +272,8 @@ public class FacturaConsultoraController implements Serializable {
 	private FormatoFactura formatoFactura;
 
 	private @Inject FormatoFacturaRepository FormatoFacturaRepository;
+	
+	private @Inject TipoCambioController tipoCambioController;
 
 	@PostConstruct
 	public void initNewFactura() {
@@ -329,8 +324,9 @@ public class FacturaConsultoraController implements Serializable {
 				.getTime() - (new Date()).getTime()) / (3600 * 24 * 1000));
 		System.out.println("DIAS : " + diasrestantes);
 
-		setPuedofacturar(dosificacion.getFechaLimiteEmision().getTime() >= (new Date())
-				.getTime());
+//		setPuedofacturar(dosificacion.getFechaLimiteEmision().getTime() > (new Date())
+//				.getTime());
+		setPuedofacturar(diasrestantes>=-1);
 
 		newFactura.setNumeroAutorizacion(dosificacion.getNumeroAutorizacion());
 
@@ -530,68 +526,24 @@ public class FacturaConsultoraController implements Serializable {
 					dosificacion, newFactura.getTotalPagar(), "0");
 			System.out.println("Codigo de Control : " + CC);
 			if (CC.length() == 14 || CC.length() == 11) {
-				// factura------------------------------------
-				newFactura.setCambio(6.93);
-				// Numero
-				// de
-				// Factura
-
+				newFactura.setTipoCambio(tipoCambioController.obtenerTipoCambioActual().getUnidad());
 				newFactura.setTotalEfectivo(0);
 				newFactura.setCambio(0);
 				newFactura.setEstado("V");
-				newFactura.setDireccion(busquedaCliente.getDireccion());
-				newFactura.setFechaLimiteEmision(dosificacion
-						.getFechaLimiteEmision()); // Fecha de Emision
+				
+				newFactura.setCodigoControl(CC);// Codigo de Control
+				newFactura.setCliente(busquedaCliente);
+				newFactura.setUsuarioRegistro(nombreUsuario);
 				newFactura.setTotalFacturado(newFactura.getTotalPagar()); // Total
 																			// Bs
-				newFactura.setTotalLiteral(obtenerMontoLiteral(newFactura
-						.getTotalFacturado()));
-				newFactura.setCodigoControl(CC);// Codigo de Control
-				// tipo de cliente
-
-				newFactura.setNitCi(busquedaCliente.getNit());// NIT del
-																// Comprador
-				newFactura.setCliente(busquedaCliente);
-				newFactura.setConcepto("Venta: " + numeroFactura);
 				newFactura.setEmpresa(empresaLogin);
-				newFactura.setFechaRegistro(new Date());
 				newFactura.setTipoPago("EFECTIVO");
-				newFactura.setUsuarioRegistro(nombreUsuario);
-				newFactura.setNumeroFactura(""
-						+ dosificacion.getNumeroSecuencia());
-				newFactura.setNitCi("0");
-				newFactura.setNombreFactura(busquedaCliente.getNombre());
-				newFactura.setCodigoRespuestaRapida(armarCadenaQR(newFactura));
-				newFactura.setId(null);
 
-				newFactura.setTipoCambio(tipocambio);// cambiar
-
-				// LIBRO DE VENTA
-				newFactura.setImporteICE(0);
-				newFactura.setImporteExportaciones(0);
-				newFactura.setImporteVentasGrabadasTasaCero(0);
-				newFactura.setImporteSubTotal(newFactura.getTotalFacturado()
-						- newFactura.getImporteICE()
-						- newFactura.getImporteExportaciones()
-						- newFactura.getImporteVentasGrabadasTasaCero());
-				newFactura.setImporteDescuentosBonificaciones(0);
-				newFactura.setImporteBaseDebitoFiscal(newFactura
-						.getImporteSubTotal()
-						- newFactura.getImporteDescuentosBonificaciones());
-				if (sucursalLogin.isCreditoFiscal()) {
-					newFactura.setDebitoFiscal(newFactura
-							.getImporteBaseDebitoFiscal() * 0.13);
-					newFactura.setCreditoFiscal("");
-				} else {
-					newFactura.setImporteBaseDebitoFiscal(0);
-					newFactura.setDebitoFiscal(0);
-					newFactura.setCreditoFiscal("Sin Derecho a Credito Fiscal");
-				}
-				newFactura.setGestion(Time.obtenerFormatoYYYY(new Date()));
-				newFactura.setMes(Time.obtenerFormatoMM(newFactura
-						.getFechaRegistro()));
-				facturaRegistration.create(newFactura);
-				armarUrl();
+				newFactura = UtilidadesFacturacion.calcularDatosFacturacion(
+						newFactura, dosificacion, nitCliente);
+				System.out.println("calculado datos ");
+				newFactura=facturaRegistration.create(newFactura);
+				System.out.println("registrado..");
 				dosificacion.setNumeroSecuencia(dosificacion
 						.getNumeroSecuencia() + 1);
 
@@ -616,12 +568,13 @@ public class FacturaConsultoraController implements Serializable {
 					}
 
 				}
+				armarUrl();
 
 				FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Factura Guardada!", listFactura.size() + " productos");
+						"Factura Guardada!", listDetalleFactura.size() + " productos");
 				facesContext.addMessage(null, m);
 
-				loadValuesDefaul();
+				//loadValuesDefaul();
 			}
 		} catch (Exception e) {
 			String errorMessage = getRootErrorMessage(e);
@@ -648,80 +601,28 @@ public class FacturaConsultoraController implements Serializable {
 					nitCliente.getNit());
 			System.out.println("Codigo de Control : " + CC);
 			if (CC.length() == 14 || CC.length() == 11) {
-				// factura------------------------------------
-				newFactura.setCambio(6.93);
-				// Numero
-				// de
-				// Factura
-
+				newFactura.setTipoCambio(tipoCambioController.obtenerTipoCambioActual().getUnidad());
 				newFactura.setTotalEfectivo(0);
 				newFactura.setCambio(0);
 				newFactura.setEstado("V");
-				newFactura.setFechaLimiteEmision(dosificacion
-						.getFechaLimiteEmision()); // Fecha de Emision
+				
+				newFactura.setCodigoControl(CC);// Codigo de Control
+				newFactura.setCliente(busquedaCliente);
+				newFactura.setUsuarioRegistro(nombreUsuario);
 				newFactura.setTotalFacturado(newFactura.getTotalPagar()); // Total
 																			// Bs
-				newFactura.setTotalLiteral(obtenerMontoLiteral(newFactura
-						.getTotalFacturado()));
-				newFactura.setCodigoControl(CC);// Codigo de Control
-				// tipo de cliente
-				if (nitCliente.getCliente().getTipo().equals("NATURAL")) { // NAURAL
-																			// o
-																			// JURIDICO
-					newFactura.setNitCi(nitCliente.getCliente().getCi());// CI
-																			// del
-																			// Comprador
-				} else {
-					newFactura.setNitCi(nitCliente.getNit());// NIT del
-																// Comprador
-				}
-				newFactura.setCliente(busquedaCliente);
-				newFactura.setConcepto("Venta: " + numeroFactura);
 				newFactura.setEmpresa(empresaLogin);
-				newFactura.setFechaRegistro(new Date());
 				newFactura.setTipoPago("EFECTIVO");
-				newFactura.setUsuarioRegistro(nombreUsuario);
-				newFactura.setNumeroFactura(""
-						+ dosificacion.getNumeroSecuencia());
-				newFactura.setNitCi(nitCliente.getNit());
-				newFactura
-						.setNombreFactura(nitCliente.getCliente().getNombre());
-				newFactura.setCodigoRespuestaRapida(armarCadenaQR(newFactura));
-				newFactura.setId(null);
 
-				newFactura.setTipoCambio(tipocambio);// cambiar
-
-				// LIBRO DE VENTA
-				newFactura.setImporteICE(0);
-				newFactura.setImporteExportaciones(0);
-				newFactura.setImporteVentasGrabadasTasaCero(0);
-				newFactura.setImporteSubTotal(newFactura.getTotalFacturado()
-						- newFactura.getImporteICE()
-						- newFactura.getImporteExportaciones()
-						- newFactura.getImporteVentasGrabadasTasaCero());
-				newFactura.setImporteDescuentosBonificaciones(0);
-				newFactura.setImporteBaseDebitoFiscal(newFactura
-						.getImporteSubTotal()
-						- newFactura.getImporteDescuentosBonificaciones());
-				if (sucursalLogin.isCreditoFiscal()) {
-					newFactura.setDebitoFiscal(newFactura
-							.getImporteBaseDebitoFiscal() * 0.13);
-					newFactura.setCreditoFiscal("");
-				} else {
-					newFactura.setImporteBaseDebitoFiscal(0);
-					newFactura.setDebitoFiscal(0);
-					newFactura.setCreditoFiscal("Sin Derecho a Credito Fiscal");
-				}
-				newFactura.setGestion(Time.obtenerFormatoYYYY(new Date()));
-				newFactura.setMes(Time.obtenerFormatoMM(newFactura
-						.getFechaRegistro()));
-				facturaRegistration.create(newFactura);
-				armarUrl();
+				newFactura = UtilidadesFacturacion.calcularDatosFacturacion(
+						newFactura, dosificacion, nitCliente);
+				System.out.println("calculado datos ");
+				newFactura=facturaRegistration.create(newFactura);
+				System.out.println("registrado..");
 				dosificacion.setNumeroSecuencia(dosificacion
 						.getNumeroSecuencia() + 1);
 
 				dosificacionRegistration.update(dosificacion);
-
 				for (DetalleFactura detalleFactura : listDetalleFactura) {
 					detalleFactura.setFactura(newFactura);
 					detalleFactura.setFechaRegistro(new Date());
@@ -741,12 +642,13 @@ public class FacturaConsultoraController implements Serializable {
 					}
 
 				}
+				armarUrl();
 
 				FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Factura Guardada!", listFactura.size() + " productos");
 				facesContext.addMessage(null, m);
 
-				loadValuesDefaul();
+				//loadValuesDefaul();
 			}
 		} catch (Exception e) {
 			String errorMessage = getRootErrorMessage(e);
@@ -778,96 +680,10 @@ public class FacturaConsultoraController implements Serializable {
 
 	}
 
-	public String obtenerMontoLiteral(double totalFactura) {
-		log.info("Total Entero Factura >>>>> " + totalFactura);
-		NumerosToLetras convert = new NumerosToLetras();
-		String totalLiteral;
-		try {
-			totalLiteral = convert.convertNumberToLetter(totalFactura);
-			return totalLiteral;
-		} catch (Exception e) {
-			log.info("Error en obtenerMontoLiteral: " + e.getMessage());
-			return "Error Literal";
-		}
-	}
+	
 
-	public String armarCadenaQR(Factura factura) {
-		String cadenaQR = "";
-		try {
-			cadenaQR = new String();
+	
 
-			// NIT emisor
-			cadenaQR = cadenaQR.concat(empresaLogin.getNit());
-			cadenaQR = cadenaQR.concat("|");
-
-			// Numero de Factura
-			cadenaQR = cadenaQR.concat(factura.getNumeroFactura());
-			cadenaQR = cadenaQR.concat("|");
-
-			// Numero de Autorizacion
-			cadenaQR = cadenaQR.concat(factura.getNumeroAutorizacion());
-			cadenaQR = cadenaQR.concat("|");
-
-			// Fecha de Emision
-			cadenaQR = cadenaQR.concat(obtenerFechaEmision(factura
-					.getFechaFactura()));
-			cadenaQR = cadenaQR.concat("|");
-
-			// Total Bs
-			cadenaQR = cadenaQR.concat(String.valueOf(factura
-					.getTotalFacturado()));
-			cadenaQR = cadenaQR.concat("|");
-
-			// Importe Base para el Credito Fiscal
-			cadenaQR = cadenaQR.concat(String.valueOf(factura
-					.getTotalFacturado()));
-			cadenaQR = cadenaQR.concat("|");
-
-			// Codigo de Control
-			cadenaQR = cadenaQR.concat(factura.getCodigoControl());
-			cadenaQR = cadenaQR.concat("|");
-
-			// NIT / CI del Comprador
-			cadenaQR = cadenaQR.concat(factura.getNitCi());
-			cadenaQR = cadenaQR.concat("|");
-
-			// Importe ICE/IEHD/TASAS [cuando corresponda]
-			cadenaQR = cadenaQR.concat("0");
-			cadenaQR = cadenaQR.concat("|");
-
-			// Importe por ventas no Gravadas o Gravadas a Tasa Cero [cuando
-			// corresponda]
-			cadenaQR = cadenaQR.concat("0");
-			cadenaQR = cadenaQR.concat("|");
-
-			// Importe no Sujeto a Credito Fiscal [cuando corresponda]
-			cadenaQR = cadenaQR.concat("0");
-			cadenaQR = cadenaQR.concat("|");
-
-			// Descuentos Bonificaciones y Rebajas Obtenidas [cuando
-			// corresponda]
-			cadenaQR = cadenaQR.concat("0");
-
-			return cadenaQR;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("Error en armarCadenaQR: " + e.getMessage());
-			return cadenaQR;
-		}
-	}
-
-	private String obtenerFechaEmision(Date fechaEmision) {
-		try {
-			String DATE_FORMAT = "dd/MM/yyyy";
-			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-			return sdf.format(fechaEmision);
-
-		} catch (Exception e) {
-			log.error("Error en obtenerFechaEmision: " + e.getMessage());
-			return "Error Fecha Emision";
-		}
-	}
 
 	public void onRowEdit() {
 		log.info("Ingreso a onRowEdit");
@@ -1339,6 +1155,8 @@ public class FacturaConsultoraController implements Serializable {
 		return false;
 	}
 
+	
+
 	private void armarUrl() {
 		try {
 			HttpServletRequest request = (HttpServletRequest) facesContext
@@ -1356,10 +1174,14 @@ public class FacturaConsultoraController implements Serializable {
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
 					empresaLogin, sucursalLogin).get(0);
 			if (formatoHoja.getNombre().equals("COMPLETO")) {
-				url = urlPath
-						+ "ReportFactura?"
-						+ UtilidadesFacturacion.urlFacturaServlet(newFactura,
-								dosificacion, urlLogo, tamano);
+				if (this.formatoFactura.getNombre().equals("DOS COLUMNAS")) {
+					this.url =urlPath	+ "ReportFacturaConsultora?"
+							+ UtilidadesFacturacion.urlFacturaServlet(newFactura, dosificacion, urlLogo, tamano);
+				}
+				if (this.formatoFactura.getNombre().equals("CUATRO COLUMNAS")) {
+					url = urlPath + "ReportFactura?"+ UtilidadesFacturacion.urlFacturaServlet(newFactura, dosificacion, urlLogo, tamano);
+				}
+
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO")) {
 				url = urlPath

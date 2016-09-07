@@ -56,23 +56,16 @@ public class CodigoControl7 {
 			Date date;
 			date = sdf.parse(Time.convertSimpleDateToString(fechaFactura));
 			int montoFactura = (int) Math.rint(totalBolivianos);
-			log.info("Monto Factura : "+montoFactura);
 			int numeroFactura = dosificacion.getNumeroSecuencia();
-			log.info("Nro Factura : "+montoFactura);
 			setNumeroAutorizacion(dosificacion.getNumeroAutorizacion());
-			log.info("Autorizacion : "+dosificacion.getNumeroAutorizacion());
 			setNumeroFactura(numeroFactura);
 			setNitci(nitCi);
-			log.info("Nit Ci : "+nitCi);
 			setFechaTransaccion(date);
-			log.info("fecha : "+date);
 			setMonto(montoFactura);
 			setLlaveDosificacion(dosificacion.getLlaveControl());
-			log.info("Llave  : "+dosificacion.getLlaveControl());
 
 			// Obtener Codigo Control V7
 			String codigoControlV7 = obtener();
-			log.info("Codigo Control V7: " + codigoControlV7);
 			return codigoControlV7;
 
 		} catch (Exception e) {

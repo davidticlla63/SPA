@@ -26,7 +26,7 @@
 
 
 
-		<connection-url>jdbc:edb://localhost:5432/facturacion_db</connection-url>
+		<connection-url>jdbc:edb://localhost:5432/consulting_db</connection-url>
 		<driver-class>com.edb.Driver</driver-class>
 		<driver>edb-jdbc14.jar</driver>
 
@@ -39,8 +39,8 @@
 		</pool>
 
 		<security>
-			<user-name>facturacion</user-name>
-			<password>facturacion</password>
+			<user-name>consultora</user-name>
+			<password>consultora</password>
 		</security>
 		<validation>
 			<validate-on-match>false</validate-on-match>

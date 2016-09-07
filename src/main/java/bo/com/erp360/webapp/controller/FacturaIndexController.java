@@ -28,6 +28,7 @@ import org.richfaces.cdi.push.Push;
 import bo.com.erp360.webapp.data.DosificacionRepository;
 import bo.com.erp360.webapp.data.EmpresaRepository;
 import bo.com.erp360.webapp.data.FacturaRepository;
+import bo.com.erp360.webapp.data.FormatoFacturaRepository;
 import bo.com.erp360.webapp.data.FormatoHojaRepository;
 import bo.com.erp360.webapp.data.GestionRepository;
 import bo.com.erp360.webapp.data.SucursalRepository;
@@ -36,6 +37,7 @@ import bo.com.erp360.webapp.data.UsuarioRepository;
 import bo.com.erp360.webapp.model.Dosificacion;
 import bo.com.erp360.webapp.model.Empresa;
 import bo.com.erp360.webapp.model.Factura;
+import bo.com.erp360.webapp.model.FormatoFactura;
 import bo.com.erp360.webapp.model.FormatoHoja;
 import bo.com.erp360.webapp.model.Gestion;
 import bo.com.erp360.webapp.model.Sucursal;
@@ -45,6 +47,7 @@ import bo.com.erp360.webapp.service.EstadoUsuarioLogin;
 import bo.com.erp360.webapp.service.FacturaRegistration;
 import bo.com.erp360.webapp.util.CodigoControl7;
 import bo.com.erp360.webapp.util.Time;
+import bo.com.erp360.webapp.util.UtilidadesFacturacion;
 
 @Named(value = "facturaIndexController")
 @SuppressWarnings("serial")
@@ -116,6 +119,11 @@ public class FacturaIndexController implements Serializable {
 
 	private @Inject FormatoHojaRepository formatoHojaRepository;
 	private FormatoHoja formatoHoja;
+	
+	// formato de la Factura
+	private FormatoFactura formatoFactura;
+	
+	private @Inject FormatoFacturaRepository FormatoFacturaRepository;
 
 	private Sucursal sucursalLogin;
 
@@ -150,6 +158,8 @@ public class FacturaIndexController implements Serializable {
 		selectedFactura = new Factura();
 		dosificacion = dosificacionRepository
 				.findActivaBySucursal(sucursalLogin);
+		formatoFactura = FormatoFacturaRepository.findActivosByEmpresa(
+				empresaLogin, sucursalLogin).get(0);
 	}
 
 	public void consultar() {
@@ -255,63 +265,27 @@ public class FacturaIndexController implements Serializable {
 
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
 					empresaLogin, sucursalLogin).get(0);
+			
 			if (formatoHoja.getNombre().equals("COMPLETO")) {
-				url = urlPath
-						+ "ReportFactura?pIdFactura="
-						+ selectedFactura.getId()
-						+ "&pEmpresa="
-						+ empresaLogin.getRazonSocial()
-						+ "&pCiudad="
-						+ empresaLogin.getCiudad()
-						+ "&pPais=BOLIVIA&pLogo="
-						+ urlLogo
-						+ "&pNit="
-						+ empresaLogin.getNit()
-						+ "&pQr="
-						+ selectedFactura.getCodigoRespuestaRapida()
-						+ "&pLeyenda="
-						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
-								"ISO-8859-1") + "&pInpresion="
-						+ selectedFactura.isImpresion() + "&pTamano=" + tamano;
+				if (this.formatoFactura.getNombre().equals("DOS COLUMNAS")) {
+					this.url =urlPath	+ "ReportFacturaConsultora?"
+							+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+				}
+				if (this.formatoFactura.getNombre().equals("CUATRO COLUMNAS")) {
+					url = urlPath + "ReportFactura?"+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+				}
+				
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO")) {
 				url = urlPath
-						+ "ReportFacturaSinCredFiscal?pIdFactura="
-						+ selectedFactura.getId()
-						+ "&pEmpresa="
-						+ empresaLogin.getRazonSocial()
-						+ "&pCiudad="
-						+ empresaLogin.getCiudad()
-						+ "&pPais=BOLIVIA&pLogo="
-						+ urlLogo
-						+ "&pNit="
-						+ empresaLogin.getNit()
-						+ "&pQr="
-						+ selectedFactura.getCodigoRespuestaRapida()
-						+ "&pLeyenda="
-						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
-								"ISO-8859-1") + "&pInpresion="
-						+ selectedFactura.isImpresion() + "&pTamano=" + tamano;
+						+ "ReportFacturaSinCredFiscal?"
+						+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO, SIN BORDE")) {
 				url = urlPath
-						+ "ReportFacturaSinCredFiscal?pIdFactura="
-						+ selectedFactura.getId()
-						+ "&pEmpresa="
-						+ empresaLogin.getRazonSocial()
-						+ "&pCiudad="
-						+ empresaLogin.getCiudad()
-						+ "&pPais=BOLIVIA&pLogo="
-						+ urlLogo
-						+ "&pNit="
-						+ empresaLogin.getNit()
-						+ "&pQr="
-						+ selectedFactura.getCodigoRespuestaRapida()
-						+ "&pLeyenda="
-						+ URLEncoder.encode(dosificacion.getLeyendaInferior2(),
-								"ISO-8859-1") + "&pInpresion="
-						+ selectedFactura.isImpresion() + "&pTamano=" + tamano;
-			}
+						+ "ReportFacturaSinCredFiscal?"
+						+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+				}
 
 			log.info("getURL() -> " + url);
 		} catch (Exception e) {

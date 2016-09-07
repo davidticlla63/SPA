@@ -91,8 +91,9 @@
 															<p:calendar id="popup" pattern="dd/MM/yyyy"
 																value="#{facturaConsultoraController.newFactura.fechaFactura}"
 																style=" width:100%; color: #555555; background-image: none !important;"
-																readonly="true">
-																<p:ajax />
+																>
+																<p:ajax event="dateSelect"
+																	update=":formRegisterFacturacion,:formBotonesHeader" />
 															</p:calendar>
 
 														</div>
@@ -237,7 +238,6 @@
 													<p:ajax event="change" update=":formRegisterFacturacion" />
 												</p:selectOneButton>
 											</div>
-											<p:separator />
 											<p:fragment
 												rendered="#{facturaConsultoraController.productoServicio=='producto'}">
 												<div class="row">
@@ -247,10 +247,10 @@
 															<div class="col-md-6">
 																<p:autoComplete id="event"
 																	inputStyleClass="form-control"
-																	style="width:100%; height:100%;"
+																	style="width:100%; height:100%; text-align:right;"
 																	value="#{facturaConsultoraController.texto}"
 																	completeMethod="#{facturaConsultoraController.completeText}"
-																	maxResults="10">
+																	maxResults="10" dropdown="true">
 																	<p:ajax event="itemSelect"
 																		listener="#{facturaConsultoraController.onItemSelect}"
 																		update=":formGrowl:msgs1,formTableFacturacion,:formTotales,:formBotonesHeader,:formRegisterFacturacion" />
@@ -331,10 +331,10 @@
 															<div class="col-md-6">
 																<p:autoComplete id="eventServicio"
 																	inputStyleClass="form-control"
-																	style="width:100%; height:100%;"
+																	style="width:100%; height:100%; text-align:right;"
 																	value="#{facturaConsultoraController.textoServicio}"
 																	completeMethod="#{facturaConsultoraController.completeTextServicio}"
-																	maxResults="10">
+																	maxResults="10" dropdown="true">
 																	<p:ajax event="itemSelect"
 																		listener="#{facturaConsultoraController.onItemSelectServicio}"
 																		update=":formGrowl:msgs1,formTableFacturacion,:formTotales,:formBotonesHeader,:formRegisterFacturacion" />
@@ -428,11 +428,9 @@
 												</div>
 
 											</p:fragment>
-											<p:separator />
 
 										</div>
 									</h:form>
-									<br />
 
 									<div class="row">
 										<div class="col-md-12">
@@ -817,6 +815,7 @@
 									<div class="col-md-4">
 										<p:commandLink value="Aceptar"
 											styleClass="btn btn-primary btn-block"
+											update=":formGrowl:msgs1,:formRegisterFacturacion,:formTableFacturacion,:formTotales,:formModalVistaPrevia"
 											action="#{facturaConsultoraController.dialogClose()}" />
 									</div>
 								</div>
