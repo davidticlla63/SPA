@@ -19,7 +19,9 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import bo.com.erp360.webapp.data.EmpresaRepository;
+import bo.com.erp360.webapp.data.SucursalRepository;
 import bo.com.erp360.webapp.model.Empresa;
+import bo.com.erp360.webapp.model.Sucursal;
 
 /**
  * 
@@ -27,15 +29,15 @@ import bo.com.erp360.webapp.model.Empresa;
  *
  */
 
-@Named(value = "dynamicResourceController")
+@Named(value = "dynamicBackgroundController")
 @RequestScoped
-public class DynamicResourceController extends AbstractDynamicResourceHandler
+public class DynamicBackgroundController extends AbstractDynamicResourceHandler
 		implements Serializable {
 
 	private static final long serialVersionUID = -3756873687377670050L;
 
 	// REPOSITORY
-	private @Inject EmpresaRepository empresaRepository;
+	private @Inject SucursalRepository sucursalRepository;
 	// OBJECT
 	public static StreamedContent streamedContentimageProducto;
 
@@ -75,7 +77,7 @@ public class DynamicResourceController extends AbstractDynamicResourceHandler
 		try {
 			InputStream molde = event.getFile().getInputstream();
 			byte[] image = toByteArrayUsingJava(molde);
-			FacesUtil.setSessionAttribute("imagePersonal", image);
+			FacesUtil.setSessionAttribute("imageBackground", image);
 		} catch (Exception e) {
 			FacesUtil.errorMessage("No se pudo subir la imagen.");
 		}
@@ -86,7 +88,7 @@ public class DynamicResourceController extends AbstractDynamicResourceHandler
 		InputStream is = null;
 		try {
 			byte[] image = (byte[]) FacesUtil
-					.getSessionAttribute("imagePersonal");
+					.getSessionAttribute("imageBackground");
 			is = new ByteArrayInputStream(image);
 			return new DefaultStreamedContent(new ByteArrayInputStream(
 					toByteArrayUsingJava(is)), mimeType);
@@ -100,7 +102,7 @@ public class DynamicResourceController extends AbstractDynamicResourceHandler
 			Integer idObject) throws Exception {
 		InputStream is = null;
 		streamedContentimageProducto = null;
-		Empresa entity = empresaRepository.findById(idObject);
+		Sucursal entity = sucursalRepository.findById(idObject);
 		try {
 			streamedContentimageProducto = getImageimageProducto();
 			if (streamedContentimageProducto != null) {
@@ -108,7 +110,7 @@ public class DynamicResourceController extends AbstractDynamicResourceHandler
 			} else {
 				if (entity != null) {
 					if (idObject != 0 && entity.getLogo() != null) {
-						FacesUtil.setSessionAttribute("imagePersonal",entity.getLogo());
+						FacesUtil.setSessionAttribute("imageBackground",entity.getLogo());
 						is = new ByteArrayInputStream(entity.getLogo());
 						streamedContentimageProducto = new DefaultStreamedContent(
 								new ByteArrayInputStream(
@@ -137,7 +139,6 @@ public class DynamicResourceController extends AbstractDynamicResourceHandler
 										inputStream, "image/png");
 							}
 						}
-
 					}
 
 				} else if (idObject == 0) {
@@ -155,7 +156,7 @@ public class DynamicResourceController extends AbstractDynamicResourceHandler
 
 	public void setStreamedContentimageProducto(
 			StreamedContent streamedContentimageProducto) {
-		DynamicResourceController.streamedContentimageProducto = streamedContentimageProducto;
+		DynamicBackgroundController.streamedContentimageProducto = streamedContentimageProducto;
 	}
 
 }

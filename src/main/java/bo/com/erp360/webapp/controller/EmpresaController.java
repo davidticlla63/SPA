@@ -214,6 +214,7 @@ public class EmpresaController implements Serializable {
 		listaEmpresa = empresaRepository.findAllByUsuario(usuarioSession);
 		listaEmpresaActivas = empresaRepository
 				.findAllActivasByUsuario(usuarioSession);
+		FacesUtil.removeSessionAttribute("imagePersonal");
 		if (listaEmpresaActivas.isEmpty()) {
 			seleccionadaFormEmpresa = false;
 		}
@@ -283,6 +284,10 @@ public class EmpresaController implements Serializable {
 			if (!newEmpresa.validate(facesContext, empresaLogin, gestionLogin)) {
 				resetearFitrosTabla("formTableEmpresa:dataTableEmpresa");
 				return;
+			}
+			if (newEmpresa.getPropietario().length() == 0
+					|| newEmpresa.getPropietario() == null) {
+				newEmpresa.setPropietario(null);
 			}
 
 			byte[] image = (byte[]) FacesUtil
@@ -453,7 +458,10 @@ public class EmpresaController implements Serializable {
 			} else
 				newEmpresa.setPesoLogo(0);
 			FacesUtil.removeSessionAttribute("imagePersonal");
-
+			if (newEmpresa.getPropietario().length() == 0
+					|| newEmpresa.getPropietario() == null) {
+				newEmpresa.setPropietario(null);
+			}
 			empresaRegistration.update(newEmpresa);
 
 			// modificacion de Fomrato empresa
@@ -581,6 +589,7 @@ public class EmpresaController implements Serializable {
 		newEmpresa = new Empresa();
 		resetearFitrosTabla("formTableEmpresa:dataTableEmpresa");
 		selectedEmpresa = new Empresa();
+		FacesUtil.removeSessionAttribute("imagePersonal");
 	}
 
 	public void onRowUnSelect(UnselectEvent event) {

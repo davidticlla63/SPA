@@ -189,6 +189,8 @@
 										</div>
 									</div>
 								</div>
+
+
 							</ui:fragment>
 						</h:form>
 
@@ -375,6 +377,27 @@
 										</div>
 									</div>
 								</div>
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Imagen de Fondo Factura</h3>
+										</div>
+										<div class="box-content no-padding">
+											<p:fileUpload uploadLabel="Subir" cancelLabel="Cancelar"
+												fileUploadListener="#{dynamicBackgroundController.handleFileUpload}"
+												label="Subir" mode="advanced" skinSimple="true"
+												update="messages,fImageId" sizeLimit="10000000000"
+												auto="true" allowTypes="/(\.|\/)(gif|jpe?g|zip|png)$/" />
+											<p:graphicImage id="fImageId"
+												value="#{dynamicBackgroundController.streamedContentImage}"
+												cache="false" width="100%" height="100%">
+												<f:param name="param"
+													value="#{sucursal2Controller.newSucursal.id}" />
+											</p:graphicImage>
+											<p:growl id="messages" showDetail="true" />
+										</div>
+									</div>
+								</div>
 							</ui:fragment>
 						</h:form>
 					</div>
@@ -526,7 +549,6 @@
 									</div>
 									<div class="col-md-6">
 										<p:calendar id="fechaLimiteEmisionnDialog" immediate="true"
-											
 											value="#{sucursal2Controller.newDosificacion.fechaLimiteEmision}"
 											mindate="#{sucursalController.fechaMinima}"
 											pattern="dd/MM/yyyy" locale="en">

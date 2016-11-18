@@ -122,6 +122,8 @@ public class ReportFactura5ColServlet extends HttpServlet {
 
 						URL_SERVLET_IMAGE_ANULADA = urlPath
 								+ "resources/gfx/anulada.png";
+					}else{
+						logo = urlPath + "ServletBackgroundFactura?idSucursal=" + factura.getSucursal().getId();
 					}
 					logo = urlPath + "ServletLogoCompania?idEmpresa=" + factura.getEmpresa().getId();
 					

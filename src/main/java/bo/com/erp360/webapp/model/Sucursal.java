@@ -36,6 +36,9 @@ public class Sucursal implements Serializable {
 	@Column(name = "logo", nullable = true)
 	private byte[] logo;
 	
+	@Column(name = "peso_logo", nullable = true)
+	private Integer pesoLogo;
+	
 	private String pathLogo;
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
@@ -61,12 +64,14 @@ public class Sucursal implements Serializable {
 		super();
 		this.id = 0;
 		this.actividad="COMERCIO";
+		this.pesoLogo=0;
 	}
 	
 	public Sucursal(Integer id,Empresa empresa) {
 		super();
 		this.id = id;
 		this.empresa=empresa;
+		this.pesoLogo=0;
 	}
 
 	@Override
@@ -208,6 +213,14 @@ public class Sucursal implements Serializable {
 
 	public void setCreditoFiscal(boolean creditoFiscal) {
 		this.creditoFiscal = creditoFiscal;
+	}
+
+	public Integer getPesoLogo() {
+		return pesoLogo;
+	}
+
+	public void setPesoLogo(Integer pesoLogo) {
+		this.pesoLogo = pesoLogo;
 	}
 
 }

@@ -2,6 +2,8 @@ package bo.com.erp360.webapp.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -13,10 +15,12 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.event.Event;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.ImageIcon;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -62,6 +66,8 @@ public class SucursalController implements Serializable {
 	@Inject
 	@Push(topic = PUSH_CDI_TOPIC)
 	Event<String> pushEventSucursal;
+	
+	private StreamedContent content;
 
 	// estados
 	private boolean crear;
@@ -123,6 +129,7 @@ public class SucursalController implements Serializable {
 		cambiarLogo = true;
 		// traer todos las sucursales
 		listSucursal = sucursalRepository.findAllByEmpresa(empresaLogin);
+		FacesUtil.removeSessionAttribute("imageBackground");
 	}
 
 	public void beginConversation() {
@@ -139,6 +146,28 @@ public class SucursalController implements Serializable {
 		}
 	}
 
+	
+	private StreamedContent imageDefault(Sucursal empresa) {
+		String url = FacesContext.getCurrentInstance().getExternalContext()
+				.getRealPath("/");
+		System.out.println("url = " + url);
+		String path = "";
+		// if
+		// (empresa.getSexo().toString().trim().equalsIgnoreCase("Masculino")) {
+		path = url + "resources/paciente_default.png";
+		// } else {
+		// path = url + "resources/usuaria_default.png";
+		// }
+		try {
+			content = new DefaultStreamedContent(new FileInputStream(path),
+					"image/png");
+			return content;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return new DefaultStreamedContent();
+		}
+	}
+
 	// ----- metodos sucursal ---------------
 
 	public void registrarSucursal() {
@@ -148,6 +177,18 @@ public class SucursalController implements Serializable {
 			newSucursal.setEmpresa(empresaLogin);
 			newSucursal.setUsuarioRegistro(nombreUsuario);
 			newSucursal.setFechaRegistro(new Date());
+			byte[] image = (byte[]) FacesUtil
+					.getSessionAttribute("imageBackground");
+			if (image != null) {
+				newSucursal.setLogo(image);
+				newSucursal.setPesoLogo(image.length);
+			} else {
+				StreamedContent streamedContent = imageDefault(newSucursal);
+				InputStream inputStream = streamedContent.getStream();
+				byte[] bs = IOUtils.toByteArray(inputStream);
+				newSucursal.setLogo(bs);
+				newSucursal.setPesoLogo(bs.length);
+			}
 			newSucursal = sucursalRegistration.create(newSucursal);
 
 			for (Dosificacion d : listDosificacion) {
@@ -166,6 +207,15 @@ public class SucursalController implements Serializable {
 		try {
 			String estado = nombreEstado.equals("ACTIVO") ? "AC" : "IN";
 			newSucursal.setEstado(estado);
+			byte[] image = (byte[]) FacesUtil
+					.getSessionAttribute("imageBackground");
+			if (image != null) {
+				newSucursal.setLogo(image);
+				newSucursal.setPesoLogo(image.length);
+
+			} else
+				newSucursal.setPesoLogo(0);
+			FacesUtil.removeSessionAttribute("imageBackground");
 			sucursalRegistration.update(newSucursal);
 			for (Dosificacion d : listDosificacion) {
 				log.info("id dosificacion " + d.getId());
@@ -637,5 +687,13 @@ public class SucursalController implements Serializable {
 
 	public void cambiarModificar() {
 		setCambiarLogo(false);
+	}
+
+	public StreamedContent getContent() {
+		return content;
+	}
+
+	public void setContent(StreamedContent content) {
+		this.content = content;
 	}
 }
