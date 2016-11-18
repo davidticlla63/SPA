@@ -127,6 +127,8 @@ public class ReportFacturaConsultoraServlet extends HttpServlet {
 								+ "resources/gfx/anulada.png";
 					}
 
+					logo = urlPath + "ServletLogoCompania?idEmpresa=" + factura.getEmpresa().getId();
+					
 					String urlQR = urlPath + "codeQR?qrtext=" + qr;
 
 					System.out.println("qrURL: " + urlQR);

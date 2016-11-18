@@ -147,6 +147,28 @@
 																				</h:inputText>
 																			</div>
 																		</div>
+																		<div class="form-group">
+																			<div class="col-md-4">
+																				<p:outputLabel value="Logo de empresa" />
+																			</div>
+																			<div class="col-md-8">
+																				<p:graphicImage id="fImageId"
+																					value="#{dynamicResourceController.streamedContentImage}"
+																					cache="false" width="100%" height="150">
+																					<f:param name="param" value="#{newEmpresa.id}" />
+																				</p:graphicImage>
+																				<p:fileUpload uploadLabel="Subir"
+																					cancelLabel="Cancelar"
+																					fileUploadListener="#{dynamicResourceController.handleFileUpload}"
+																					label="Subir" mode="advanced" skinSimple="true"
+																					update="messages,fImageId" sizeLimit="10000000000"
+																					auto="true"
+																					allowTypes="/(\.|\/)(gif|jpe?g|zip|png)$/" />
+
+																				<p:growl id="messages" showDetail="true" />
+
+																			</div>
+																		</div>
 																		<div class="form-group ">
 																			<div class="col-md-4">Estado</div>
 																			<div class="col-md-8">

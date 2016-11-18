@@ -833,6 +833,8 @@ public class FacturaController implements Serializable {
 
 			String urlLogo = urlPath + "resources/gfx/"
 					+ sucursalLogin.getPathLogo();
+			 
+			
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
 					empresaLogin, sucursalLogin).get(0);
 			if (formatoHoja.getNombre().equals("COMPLETO")) {

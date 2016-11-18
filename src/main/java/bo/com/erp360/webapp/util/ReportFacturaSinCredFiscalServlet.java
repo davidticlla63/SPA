@@ -127,6 +127,8 @@ public class ReportFacturaSinCredFiscalServlet extends HttpServlet {
 						
 						URL_SERVLET_IMAGE_ANULADA =  urlPath + "resources/gfx/anulada.png";
 					}
+					
+					logo = urlPath + "ServletLogoCompania?idEmpresa=" + factura.getEmpresa().getId();
 
 					String urlQR = urlPath + "codeQR?qrtext=" + qr;
 

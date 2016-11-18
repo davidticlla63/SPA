@@ -1,5 +1,8 @@
 package bo.com.erp360.webapp.controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.richfaces.cdi.push.Push;
 
 import bo.com.erp360.webapp.data.EmpresaRepository;
@@ -65,6 +71,8 @@ public class EmpresaController implements Serializable {
 	@Inject
 	Conversation conversation;
 
+	private StreamedContent content;
+
 	@Inject
 	private EmpresaRegistration empresaRegistration;
 
@@ -99,7 +107,7 @@ public class EmpresaController implements Serializable {
 	private FormatoEmpresaRepository formatoEmpresaRepository;
 
 	@Inject
-	private  FormatoEmpresaRegistration formatoEmpresaRegistration;
+	private FormatoEmpresaRegistration formatoEmpresaRegistration;
 
 	private Logger log = Logger.getLogger(this.getClass());
 
@@ -116,18 +124,18 @@ public class EmpresaController implements Serializable {
 	private boolean seleccionadaFormGestion = false;
 
 	private String tituloPanel = "Registrar Empresa";
-	private String nombreEmpresa="";
-	private String nombreEstado="ACTIVO";
+	private String nombreEmpresa = "";
+	private String nombreEstado = "ACTIVO";
 	private String periodo = "enero-diciembre";
 	private String formTitulo = "EMPRESA";
 	private String nombreMonedaNacional;
 	private String nombreMonedaExtranjera;
 	private String simboloMonedaNacional;
 	private String simboloMonedaExtranjera;
-	private int year; //anio de la gestion actual
+	private int year; // anio de la gestion actual
 
-	//login
-	private @Inject SessionMain sessionMain; //variable del login
+	// login
+	private @Inject SessionMain sessionMain; // variable del login
 	private String nombreUsuario;
 	private Empresa empresaLogin;
 	private Gestion gestionLogin;
@@ -143,7 +151,8 @@ public class EmpresaController implements Serializable {
 	private Moneda selectedMonedaExtranjera;
 	private FormatoEmpresa formatoEmpresa;
 
-	private String[] arrayPeriodo ={"enero-diciembre","abril-marzo","julio-junio","octubre-septiembre"};
+	private String[] arrayPeriodo = { "enero-diciembre", "abril-marzo",
+			"julio-junio", "octubre-septiembre" };
 	private List<Usuario> listUsuario = new ArrayList<Usuario>();
 	private List<Empresa> listaEmpresa;
 	private List<Empresa> listaEmpresaActivas;
@@ -152,7 +161,7 @@ public class EmpresaController implements Serializable {
 	private List<Moneda> listaMoneda;
 	private List<Moneda> listaMonedaNacional;
 	private List<Moneda> listaMonedaExtranjera;
-	private String[] listEstado = {"ACTIVO","INACTIVO"};
+	private String[] listEstado = { "ACTIVO", "INACTIVO" };
 
 	@Produces
 	@Named
@@ -178,20 +187,21 @@ public class EmpresaController implements Serializable {
 
 		listaMoneda = monedaRepository.findAll();
 
-		Date fecha = new Date(); 
+		Date fecha = new Date();
 		year = Integer.parseInt(new SimpleDateFormat("yyyy").format(fecha));
 
 		loadValuesDefault();
 	}
 
-	private void loadValuesDefault(){
+	private void loadValuesDefault() {
 		formatoEmpresa = new FormatoEmpresa();
 		nombreMonedaNacional = listaMoneda.get(0).getNombre();
 		selectedMonedaNacional = listaMoneda.get(0);
 		simboloMonedaNacional = selectedMonedaNacional.getSimboloReferencial();
 		nombreMonedaExtranjera = listaMoneda.get(1).getNombre();
 		selectedMonedaExtranjera = listaMoneda.get(1);
-		simboloMonedaExtranjera = selectedMonedaExtranjera.getSimboloReferencial();
+		simboloMonedaExtranjera = selectedMonedaExtranjera
+				.getSimboloReferencial();
 
 		monedaEmpresa = new MonedaEmpresa();
 		newGestion = new Gestion();
@@ -202,16 +212,17 @@ public class EmpresaController implements Serializable {
 		tituloPanel = "Registrar Empresa";
 		// traer todos las Empresa ordenados por ID Desc
 		listaEmpresa = empresaRepository.findAllByUsuario(usuarioSession);
-		listaEmpresaActivas = empresaRepository.findAllActivasByUsuario(usuarioSession);
-		if(listaEmpresaActivas.isEmpty()){
+		listaEmpresaActivas = empresaRepository
+				.findAllActivasByUsuario(usuarioSession);
+		if (listaEmpresaActivas.isEmpty()) {
 			seleccionadaFormEmpresa = false;
 		}
 		modificar = false;
 	}
 
-	private Moneda buscarMonedaByLocal(String moneda){
-		for(Moneda m : listaMoneda){
-			if(m.getNombre().equals(moneda)){
+	private Moneda buscarMonedaByLocal(String moneda) {
+		for (Moneda m : listaMoneda) {
+			if (m.getNombre().equals(moneda)) {
 				return m;
 			}
 		}
@@ -233,37 +244,74 @@ public class EmpresaController implements Serializable {
 	}
 
 	public void resetearFitrosTabla(String id) {
-		DataTable table = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(id);
+		DataTable table = (DataTable) FacesContext.getCurrentInstance()
+				.getViewRoot().findComponent(id);
 		table.setSelection(null);
 		table.reset();
+	}
+
+	private StreamedContent imageDefault(Empresa empresa) {
+		String url = FacesContext.getCurrentInstance().getExternalContext()
+				.getRealPath("/");
+		System.out.println("url = " + url);
+		String path = "";
+		// if
+		// (empresa.getSexo().toString().trim().equalsIgnoreCase("Masculino")) {
+		path = url + "resources/paciente_default.png";
+		// } else {
+		// path = url + "resources/usuaria_default.png";
+		// }
+		try {
+			content = new DefaultStreamedContent(new FileInputStream(path),
+					"image/png");
+			return content;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return new DefaultStreamedContent();
+		}
 	}
 
 	public void registrarEmpresa() {
 		try {
 			Date fechaActual = new Date();
-			String estado = nombreEstado.equals("ACTIVO")?"AC":"IN";
-			newEmpresa.setRazonSocial(newEmpresa.getRazonSocial().toUpperCase());
+			String estado = nombreEstado.equals("ACTIVO") ? "AC" : "IN";
+			newEmpresa
+					.setRazonSocial(newEmpresa.getRazonSocial().toUpperCase());
 			newEmpresa.setEstado(estado);
 			newEmpresa.setUsuarioRegistro(usuarioSession.getLogin());
 			newEmpresa.setFecha_registro(fechaActual);
-			if( ! newEmpresa.validate(facesContext, empresaLogin, gestionLogin)){
+			if (!newEmpresa.validate(facesContext, empresaLogin, gestionLogin)) {
 				resetearFitrosTabla("formTableEmpresa:dataTableEmpresa");
 				return;
 			}
+
+			byte[] image = (byte[]) FacesUtil
+					.getSessionAttribute("imagePersonal");
+			if (image != null) {
+				newEmpresa.setLogo(image);
+				newEmpresa.setPesoLogo(image.length);
+			} else {
+				StreamedContent streamedContent = imageDefault(newEmpresa);
+				InputStream inputStream = streamedContent.getStream();
+				byte[] bs = IOUtils.toByteArray(inputStream);
+				newEmpresa.setLogo(bs);
+				newEmpresa.setPesoLogo(bs.length);
+			}
+
 			Empresa empresa = empresaRegistration.create(newEmpresa);
 
-			//UsuarioEmpresa
-			UsuarioEmpresa ue= new UsuarioEmpresa();
+			// UsuarioEmpresa
+			UsuarioEmpresa ue = new UsuarioEmpresa();
 			ue.setEmpresa(empresa);
 			ue.setUsuario(usuarioSession);
 			usuarioEmpresaRegistration.create(ue);
 
-			//Gestion
+			// Gestion
 			newGestion.setPeriodo(periodo);
 			newGestion.setEmpresa(empresa);
 			gestionRegistration.create(newGestion);
 
-			//Moneda nacional
+			// Moneda nacional
 			MonedaEmpresa monedaEmpresaNacional = new MonedaEmpresa();
 			monedaEmpresaNacional.setEmpresa(empresa);
 			monedaEmpresaNacional.setMoneda(selectedMonedaNacional);
@@ -272,7 +320,7 @@ public class EmpresaController implements Serializable {
 			monedaEmpresaNacional.setEstado("AC");
 			monedaEmpresaRegistration.create(monedaEmpresaNacional);
 
-			//Moneda extranjera
+			// Moneda extranjera
 			MonedaEmpresa monedaEmpresaExtranjera = new MonedaEmpresa();
 			monedaEmpresaExtranjera.setEmpresa(empresa);
 			monedaEmpresaExtranjera.setMoneda(selectedMonedaExtranjera);
@@ -281,27 +329,30 @@ public class EmpresaController implements Serializable {
 			monedaEmpresaExtranjera.setEstado("AC");
 			monedaEmpresaRegistration.create(monedaEmpresaExtranjera);
 
-			//no se agrega plan de cuenta
-			//empresaRegistration.cargarPlanCuentaDesdeArchivo(empresa, usuarioSession,monedaEmpresaNacional,monedaEmpresaExtranjera,5);
+			// no se agrega plan de cuenta
+			// empresaRegistration.cargarPlanCuentaDesdeArchivo(empresa,
+			// usuarioSession,monedaEmpresaNacional,monedaEmpresaExtranjera,5);
 
-			//tipo de cambio
-			cargarTipoCambio(empresa,fechaActual);
+			// tipo de cambio
+			cargarTipoCambio(empresa, fechaActual);
 
-			//tipo de cambio ufv
-			cargarTipoCambioUfv(empresa,fechaActual);
+			// tipo de cambio ufv
+			cargarTipoCambioUfv(empresa, fechaActual);
 
 			cargarTipoComprobante(empresa);
 
-			//registro de formato
+			// registro de formato
 			formatoEmpresa.setEmpresa(empresa);
 			formatoEmpresa.setLogo(null);
 			formatoEmpresa.setPesoFoto(0);
 			formatoEmpresa.setEstado("AC");
 			formatoEmpresa.setUsuarioRegistro(nombreUsuario);
 			formatoEmpresa.setFechaRegistro(fechaActual);
+
 			formatoEmpresaRegistration.create(formatoEmpresa);
 
-			FacesUtil.infoMessage("Empresa Registrada!", "Empresa "+empresa.getRazonSocial());
+			FacesUtil.infoMessage("Empresa Registrada!",
+					"Empresa " + empresa.getRazonSocial());
 			crear = false;
 			registrar = true;
 			modificar = false;
@@ -312,7 +363,7 @@ public class EmpresaController implements Serializable {
 		}
 	}
 
-	private void cargarTipoCambio(Empresa empresaUx,Date fechaActual ){
+	private void cargarTipoCambio(Empresa empresaUx, Date fechaActual) {
 		TipoCambio tc = new TipoCambio();
 		tc.setUnidad(6.92);
 		tc.setFecha(fechaActual);
@@ -322,16 +373,17 @@ public class EmpresaController implements Serializable {
 		tipoCambioRegistration.create(tc);
 	}
 
-	private String obtenerLiteralFecha(Date fechaActual){
+	private String obtenerLiteralFecha(Date fechaActual) {
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(fechaActual);     
+		calendar.setTime(fechaActual);
 		String year = new SimpleDateFormat("yyyy").format(new Date());
-		Integer month = Integer.parseInt(new SimpleDateFormat("MM").format(new Date()).toString());
+		Integer month = Integer.parseInt(new SimpleDateFormat("MM").format(
+				new Date()).toString());
 		String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-		return year+"-"+month+"-"+day;
+		return year + "-" + month + "-" + day;
 	}
 
-	private void cargarTipoCambioUfv(Empresa empresaUx,Date fechaActual ){
+	private void cargarTipoCambioUfv(Empresa empresaUx, Date fechaActual) {
 		TipoCambioUfv tcUfv = new TipoCambioUfv();
 		tcUfv.setUnidad(2.06795);
 		tcUfv.setFecha(fechaActual);
@@ -339,10 +391,10 @@ public class EmpresaController implements Serializable {
 		tcUfv.setEstado("AC");
 		tcUfv.setEmpresa(empresaUx);
 		tipoCambioUfvRegistration.create(tcUfv);
-	}	
+	}
 
-	private void cargarTipoComprobante(Empresa empresa){
-		//tipo de comprobante
+	private void cargarTipoComprobante(Empresa empresa) {
+		// tipo de comprobante
 		TipoComprobante tipoComp = new TipoComprobante();
 		tipoComp.setEstado("AC");
 		tipoComp.setFechaRegistro(new Date());
@@ -370,32 +422,43 @@ public class EmpresaController implements Serializable {
 		tipoComp.setUsuarioRegistro(nombreUsuario);
 		tipoComp.setEmpresa(empresa);
 		tipoComp.setNombre("AJUSTE");
-		tipoComprobanteRegistration.registrarTipoComprobanteEmpresa(tipoComp);		
+		tipoComprobanteRegistration.registrarTipoComprobanteEmpresa(tipoComp);
 	}
 
-	public void registrarGestion(){
-		try{
+	public void registrarGestion() {
+		try {
 			newGestion.setPeriodo(periodo);
 			newGestion.setEmpresa(selectedEmpresa);
 			gestionRegistration.create(newGestion);
-			listaGestion = gesionRepository.findAllByEmpresa(selectedEmpresa); 
+			listaGestion = gesionRepository.findAllByEmpresa(selectedEmpresa);
 			seleccionadaFormEmpresa = false;
-			formTitulo = "GESTIÓN - "+selectedEmpresa.getRazonSocial().toUpperCase();
-		}catch(Exception e){
-			log.info("registrarGestion() -> error :"+e.getMessage());
+			formTitulo = "GESTIÓN - "
+					+ selectedEmpresa.getRazonSocial().toUpperCase();
+		} catch (Exception e) {
+			log.info("registrarGestion() -> error :" + e.getMessage());
 		}
 	}
 
 	public void modificarEmpresa() {
 		try {
 			Date fechaActual = new Date();
-			newEmpresa.setEstado(nombreEstado.equals("ACTIVO")?"AC":"IN");
+			newEmpresa.setEstado(nombreEstado.equals("ACTIVO") ? "AC" : "IN");
 			newEmpresa.setFecha_registro(fechaActual);
+			byte[] image = (byte[]) FacesUtil
+					.getSessionAttribute("imagePersonal");
+			if (image != null) {
+				newEmpresa.setLogo(image);
+				newEmpresa.setPesoLogo(image.length);
+
+			} else
+				newEmpresa.setPesoLogo(0);
+			FacesUtil.removeSessionAttribute("imagePersonal");
+
 			empresaRegistration.update(newEmpresa);
 
-			//modificacion de Fomrato empresa
-			if(formatoEmpresa.getId() == 0 ){
-				//registro de formato
+			// modificacion de Fomrato empresa
+			if (formatoEmpresa.getId() == 0) {
+				// registro de formato
 				formatoEmpresa.setEmpresa(newEmpresa);
 				formatoEmpresa.setLogo(null);
 				formatoEmpresa.setPesoFoto(0);
@@ -403,17 +466,20 @@ public class EmpresaController implements Serializable {
 				formatoEmpresa.setUsuarioRegistro(nombreUsuario);
 				formatoEmpresa.setFechaRegistro(fechaActual);
 				formatoEmpresaRegistration.create(formatoEmpresa);
-			}else{
-				formatoEmpresa.setEstado(nombreEstado.equals("ACTIVO")?"AC":"IN");
+			} else {
+				formatoEmpresa.setEstado(nombreEstado.equals("ACTIVO") ? "AC"
+						: "IN");
 				formatoEmpresa.setFechaModificacion(fechaActual);
 				formatoEmpresaRegistration.update(formatoEmpresa);
 			}
-			FacesUtil.infoMessage("Empresa Modificada", "Empresa "+newEmpresa.getRazonSocial());
+			FacesUtil.infoMessage("Empresa Modificada",
+					"Empresa " + newEmpresa.getRazonSocial());
 			crear = false;
 			registrar = true;
 			modificar = false;
 			resetearFitrosTabla("formTableEmpresa:dataTableEmpresa");
 			loadValuesDefault();
+			FacesUtil.removeSessionAttribute("imagePersonal");
 		} catch (Exception e) {
 			String errorMessage = getRootErrorMessage(e);
 			FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -424,11 +490,11 @@ public class EmpresaController implements Serializable {
 
 	public void eliminarEmpresa() {
 		try {
-			if(newEmpresa.getRazonSocial().equals(empresaLogin)){
+			if (newEmpresa.getRazonSocial().equals(empresaLogin)) {
 				FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"No se puede Eliminar", "Empresa logeada actualmente");
 				facesContext.addMessage(null, m);
-				return ;
+				return;
 			}
 			newEmpresa.setEstado("RM");
 			empresaRegistration.update(newEmpresa);
@@ -463,45 +529,52 @@ public class EmpresaController implements Serializable {
 
 	public void onRowSelectEmpresa(SelectEvent event) {
 		newEmpresa = selectedEmpresa;
-		listaGestion = gesionRepository.findAllByEmpresa(selectedEmpresa);		
-		nombreEstado = newEmpresa.getEstado().equals("AC")?"ACTIVO":"INACTIVO";
-		formatoEmpresa = formatoEmpresaRepository.findByEmpresa(selectedEmpresa);
+		listaGestion = gesionRepository.findAllByEmpresa(selectedEmpresa);
+		nombreEstado = newEmpresa.getEstado().equals("AC") ? "ACTIVO"
+				: "INACTIVO";
+		formatoEmpresa = formatoEmpresaRepository
+				.findByEmpresa(selectedEmpresa);
 		modificar = true;
 		crear = false;
 		registrar = false;
 
-		//moneda
-		selectedMonedaNacional = monedaRepository.findMonedaByEmpresaAndTipo(newEmpresa,"NACIONAL");
+		// moneda
+		selectedMonedaNacional = monedaRepository.findMonedaByEmpresaAndTipo(
+				newEmpresa, "NACIONAL");
 		nombreMonedaNacional = selectedMonedaNacional.getNombre();
 		simboloMonedaNacional = selectedMonedaNacional.getSimboloReferencial();
 
-		selectedMonedaExtranjera = monedaRepository.findMonedaByEmpresaAndTipo(newEmpresa,"EXTRANJERA");
+		selectedMonedaExtranjera = monedaRepository.findMonedaByEmpresaAndTipo(
+				newEmpresa, "EXTRANJERA");
 		nombreMonedaExtranjera = selectedMonedaExtranjera.getNombre();
-		simboloMonedaExtranjera = selectedMonedaExtranjera.getSimboloReferencial();
+		simboloMonedaExtranjera = selectedMonedaExtranjera
+				.getSimboloReferencial();
 
 		resetearFitrosTabla("formTableEmpresa:dataTableEmpresa");
 	}
 
-	//para pagina index.xhtml
+	// para pagina index.xhtml
 	public void onRowSelectEmpresa2(SelectEvent event) {
 		newEmpresa = selectedEmpresa;
 	}
 
 	public void onRowSelectGestion(SelectEvent event) {
 		this.selectedGestion = (Gestion) event.getObject();
-		//cargar siguiente pagina
-		try{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		// cargar siguiente pagina
+		try {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
 			session.setAttribute("empresa", selectedEmpresa.getRazonSocial());
 			session.setAttribute("gestion", selectedGestion.getGestion());
 
 			FacesContext.getCurrentInstance().getExternalContext()
-			.redirect("/webapp/pages/dashboard.xhtml");
-		}catch(Exception e){
+					.redirect("/webapp/pages/dashboard.xhtml");
+		} catch (Exception e) {
 		}
 	}
 
-	public void actualizarForm(){
+	public void actualizarForm() {
 		crear = true;
 		modificar = false;
 		registrar = false;
@@ -510,32 +583,35 @@ public class EmpresaController implements Serializable {
 		selectedEmpresa = new Empresa();
 	}
 
-	public void onRowUnSelect(UnselectEvent event){
-		FacesMessage msg = new FacesMessage("Grupo Centro Costo Selected", ((GrupoCentroCosto)event.getObject()).getNombre());
+	public void onRowUnSelect(UnselectEvent event) {
+		FacesMessage msg = new FacesMessage("Grupo Centro Costo Selected",
+				((GrupoCentroCosto) event.getObject()).getNombre());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
-	public void crearEmpresa(){
+	public void crearEmpresa() {
 		crear = false;
 		modificar = false;
 		registrar = true;
 	}
 
-	//	//button form index.xhtml
-	public void formButtonAtras(){
+	// //button form index.xhtml
+	public void formButtonAtras() {
 		seleccionadaFormEmpresa = true;
 		seleccionadaFormGestion = false;
 		formTitulo = "EMPRESA";
 		selectedEmpresa = new Empresa();
 	}
 
-	public String urlServletLogoEmpresa(){
-		String url = FacesUtil.getUrlPath()+"ServletLogoEmpresa?idFormatoEmpresa="+formatoEmpresa.getId();
-		log.info("url = "+url);
+	public String urlServletLogoEmpresa() {
+		String url = FacesUtil.getUrlPath()
+				+ "ServletLogoEmpresa?idFormatoEmpresa="
+				+ formatoEmpresa.getId();
+		log.info("url = " + url);
 		return url;
 	}
 
-	// ----------------   get and set  ----------------------
+	// ---------------- get and set ----------------------
 	public String getTituloPanel() {
 		return tituloPanel;
 	}
@@ -559,7 +635,8 @@ public class EmpresaController implements Serializable {
 	public void setSelectedEmpresa(Empresa selectedEmpresa) {
 		seleccionadaFormEmpresa = false;
 		seleccionadaFormGestion = true;
-		formTitulo = "GESTIÓN - "+selectedEmpresa.getRazonSocial().toUpperCase();
+		formTitulo = "GESTIÓN - "
+				+ selectedEmpresa.getRazonSocial().toUpperCase();
 		this.selectedEmpresa = selectedEmpresa;
 		listaGestion = gesionRepository.findAllByEmpresa(selectedEmpresa);
 	}
@@ -659,15 +736,16 @@ public class EmpresaController implements Serializable {
 	public void setSeleccionadaFormGestion(boolean seleccionadaFormGestion) {
 		this.seleccionadaFormGestion = seleccionadaFormGestion;
 	}
+
 	//
-	//	public boolean isSeleccionadaFormAgregarEmpresa() {
-	//		return seleccionadaFormAgregarEmpresa;
-	//	}
+	// public boolean isSeleccionadaFormAgregarEmpresa() {
+	// return seleccionadaFormAgregarEmpresa;
+	// }
 	//
-	//	public void setSeleccionadaFormAgregarEmpresa(
-	//			boolean seleccionadaFormAgregarEmpresa) {
-	//		this.seleccionadaFormAgregarEmpresa = seleccionadaFormAgregarEmpresa;
-	//	}
+	// public void setSeleccionadaFormAgregarEmpresa(
+	// boolean seleccionadaFormAgregarEmpresa) {
+	// this.seleccionadaFormAgregarEmpresa = seleccionadaFormAgregarEmpresa;
+	// }
 
 	public String getFormTitulo() {
 		return formTitulo;
@@ -677,14 +755,14 @@ public class EmpresaController implements Serializable {
 		this.formTitulo = formTitulo;
 	}
 
-	//	public boolean isSeleccionadaFormAgregarGestion() {
-	//		return seleccionadaFormAgregarGestion;
-	//	}
+	// public boolean isSeleccionadaFormAgregarGestion() {
+	// return seleccionadaFormAgregarGestion;
+	// }
 	//
-	//	public void setSeleccionadaFormAgregarGestion(
-	//			boolean seleccionadaFormAgregarGestion) {
-	//		this.seleccionadaFormAgregarGestion = seleccionadaFormAgregarGestion;
-	//	}
+	// public void setSeleccionadaFormAgregarGestion(
+	// boolean seleccionadaFormAgregarGestion) {
+	// this.seleccionadaFormAgregarGestion = seleccionadaFormAgregarGestion;
+	// }
 
 	public boolean isCrear() {
 		return crear;
@@ -726,7 +804,7 @@ public class EmpresaController implements Serializable {
 		this.nombreMonedaNacional = nombreMonedaNacional;
 		selectedMonedaNacional = buscarMonedaByLocal(nombreMonedaNacional);
 		simboloMonedaNacional = selectedMonedaNacional.getSimboloReferencial();
-		//cargarMonedas(nombreMonedaNacional, "NACIONAL");
+		// cargarMonedas(nombreMonedaNacional, "NACIONAL");
 	}
 
 	public String getNombreMonedaExtranjera() {
@@ -736,8 +814,9 @@ public class EmpresaController implements Serializable {
 	public void setNombreMonedaExtranjera(String nombreMonedaExtranjera) {
 		this.nombreMonedaExtranjera = nombreMonedaExtranjera;
 		selectedMonedaExtranjera = buscarMonedaByLocal(nombreMonedaExtranjera);
-		simboloMonedaExtranjera = selectedMonedaExtranjera.getSimboloReferencial();
-		//cargarMonedas(nombreMonedaExtranjera, "EXTRANJERA");
+		simboloMonedaExtranjera = selectedMonedaExtranjera
+				.getSimboloReferencial();
+		// cargarMonedas(nombreMonedaExtranjera, "EXTRANJERA");
 	}
 
 	public Moneda getSelectedMonedaNacional() {
@@ -818,5 +897,13 @@ public class EmpresaController implements Serializable {
 
 	public void setFormatoEmpresa(FormatoEmpresa formatoEmpresa) {
 		this.formatoEmpresa = formatoEmpresa;
+	}
+
+	public StreamedContent getContent() {
+		return content;
+	}
+
+	public void setContent(StreamedContent content) {
+		this.content = content;
 	}
 }

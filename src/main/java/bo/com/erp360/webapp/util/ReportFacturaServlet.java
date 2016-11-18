@@ -129,7 +129,10 @@ public class ReportFacturaServlet extends HttpServlet {
 					}
 
 					String urlQR = urlPath + "codeQR?qrtext=" + qr;
+					
+					logo = urlPath + "ServletLogoCompania?idEmpresa=" + factura.getEmpresa().getId();
 
+					System.out.println("logoURL: " + logo);
 					System.out.println("qrURL: " + urlQR);
 					System.out.println("SUBREPORT_DIR: " + urlsubReporte);
 					// create a map of parameters to pass to the report.

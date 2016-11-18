@@ -262,6 +262,7 @@ public class FacturaIndexController implements Serializable {
 
 			String urlLogo = urlPath + "resources/gfx/"
 					+ sucursalLogin.getPathLogo();
+			
 
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
 					empresaLogin, sucursalLogin).get(0);

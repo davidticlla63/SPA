@@ -246,7 +246,7 @@
 			<version>1.0.10</version>
 		</dependency>
 
-		<!-- subir archibvos, docs, imagenes -->
+	<!-- subir archibvos, docs, imagenes -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>

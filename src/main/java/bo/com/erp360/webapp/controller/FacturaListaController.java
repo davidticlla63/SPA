@@ -299,6 +299,8 @@ public class FacturaListaController implements Serializable {
 
 			String urlLogo = urlPath + "resources/gfx/"
 					+ sucursalLogin.getPathLogo();
+			
+			 urlLogo = urlPath + "ServletLogoCompania?idEmpresa=" + empresaLogin.getId();
 
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(empresaLogin,sucursalLogin)
 					.get(0);

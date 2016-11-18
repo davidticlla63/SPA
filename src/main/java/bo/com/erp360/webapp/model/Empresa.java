@@ -45,6 +45,13 @@ public class Empresa extends Validator implements Serializable {
 	
 	@Column(name="fecha_modificacion",nullable=true )
 	private Date fechaModificacion;
+	
+	@Column(name = "logo", nullable = true, insertable = true, updatable = true)
+	private byte[] logo;
+	
+	@Column(name = "peso_logo", nullable = true, insertable = true, updatable = true)
+	private Integer pesoLogo;
+
 
 	public Empresa() {
 		super();
@@ -53,7 +60,8 @@ public class Empresa extends Validator implements Serializable {
 		this.direccion = "";
 		this.telefono = "";
 		this.nit = "";
-		this.ciudad = "";		
+		this.ciudad = "";
+		this.pesoLogo=0;
 	}
 	
 	@Override
@@ -217,6 +225,22 @@ public class Empresa extends Validator implements Serializable {
 
 	public void setPropietario(String nombreDuenos) {
 		this.propietario = nombreDuenos;
+	}
+
+	public byte[] getLogo() {
+		return logo;
+	}
+
+	public void setLogo(byte[] logo) {
+		this.logo = logo;
+	}
+
+	public int getPesoLogo() {
+		return pesoLogo;
+	}
+
+	public void setPesoLogo(int pesoLogo) {
+		this.pesoLogo = pesoLogo;
 	}
 
 
