@@ -127,13 +127,13 @@ public class ReportFacturaServlet extends HttpServlet {
 						
 						URL_SERVLET_IMAGE_ANULADA =  urlPath + "resources/gfx/anulada.png";
 					}else{
-						logo = urlPath + "ServletBackgroundFactura?idSucursal=" + factura.getSucursal().getId();
+						URL_SERVLET_IMAGE_ANULADA = urlPath + "ServletBackgroundFactura?idSucursal=" + factura.getSucursal().getId();
 					}
 
 					String urlQR = urlPath + "codeQR?qrtext=" + qr;
 					
 					logo = urlPath + "ServletLogoCompania?idEmpresa=" + factura.getEmpresa().getId();
-
+					System.out.println("background URL: " + URL_SERVLET_IMAGE_ANULADA);
 					System.out.println("logoURL: " + logo);
 					System.out.println("qrURL: " + urlQR);
 					System.out.println("SUBREPORT_DIR: " + urlsubReporte);
