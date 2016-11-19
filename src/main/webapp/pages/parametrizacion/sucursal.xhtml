@@ -171,6 +171,19 @@
 													</div>
 
 													<div class="form-group ">
+														<div class="col-md-4">Marca Agua Factura</div>
+														<div class="col-md-8">
+															<p:selectBooleanCheckbox
+																value="#{sucursal2Controller.newSucursal.marcaAgua}"
+																style=" color: #555555; background-image: none;"
+																styleClass="input-sm form-control" >
+																<p:ajax event="change" update=":formTableDosificacion"  />
+															</p:selectBooleanCheckbox>
+
+														</div>
+													</div>
+
+													<div class="form-group ">
 														<div class="col-md-4">Estado</div>
 														<div class="col-md-8">
 															<h:selectOneMenu id="roles"
@@ -179,7 +192,7 @@
 																disabled="#{sucursal2Controller.newSucursal.estado =='SUPER'}"
 																immediate="true"
 																value="#{sucursal2Controller.nombreEstado}">
-																<f:ajax />
+																<f:ajax  />
 																<f:selectItems value="#{sucursal2Controller.listEstado}" />
 															</h:selectOneMenu>
 														</div>
@@ -384,11 +397,13 @@
 										</div>
 										<div class="box-content no-padding">
 											<p:fileUpload uploadLabel="Subir" cancelLabel="Cancelar"
+												rendered="#{sucursal2Controller.newSucursal.marcaAgua}"
 												fileUploadListener="#{dynamicBackgroundController.handleFileUpload}"
 												label="Subir" mode="advanced" skinSimple="true"
 												update="messages,fImageId" sizeLimit="10000000000"
 												auto="true" allowTypes="/(\.|\/)(gif|jpe?g|zip|png)$/" />
 											<p:graphicImage id="fImageId"
+												rendered="#{sucursal2Controller.newSucursal.marcaAgua}"
 												value="#{dynamicBackgroundController.streamedContentImage}"
 												cache="false" width="100%" height="100%">
 												<f:param name="param"

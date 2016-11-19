@@ -8,77 +8,86 @@ import javax.validation.constraints.Size;
 
 /**
  * Class Sucursal
+ * 
  * @author David.Ticlla.Felipe
  * @version v1.0
  * 
  */
 @Entity
 @SuppressWarnings("serial")
-@Table(name = "sucursal", schema = "public", uniqueConstraints = @UniqueConstraint(columnNames = {"nombre","id_empresa"}))
+@Table(name = "sucursal", schema = "public", uniqueConstraints = @UniqueConstraint(columnNames = {
+		"nombre", "id_empresa" }))
 public class Sucursal implements Serializable {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private String nombre;
-	
+
 	private String actividad;
-	
-	@Column(name="descripcion",nullable=true )
+
+	@Column(name = "descripcion", nullable = true)
 	private String descripcion;
 
-	@Column(name="telefono",nullable=true )
+	@Column(name = "telefono", nullable = true)
 	private String telefono;
-	
+
 	private String direccion;
-	
+
 	@Column(name = "logo", nullable = true)
 	private byte[] logo;
-	
+
 	@Column(name = "peso_logo", nullable = true)
 	private Integer pesoLogo;
-	
+
 	private String pathLogo;
-	
-	@ManyToOne(fetch=FetchType.EAGER, optional=false)
-    @JoinColumn(name="id_empresa", nullable=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "id_empresa", nullable = false)
 	private Empresa empresa;
-	
-	@Size(max = 2) //AC , IN
+
+	@Size(max = 2)
+	// AC , IN
 	private String estado;
-	
-	@Column(name="fecha_registro",nullable=false )
+
+	@Column(name = "fecha_registro", nullable = false)
 	private Date fechaRegistro;
-	
-	@Column(name="usuario_registro",nullable=false )
+
+	@Column(name = "usuario_registro", nullable = false)
 	private String UsuarioRegistro;
-	
-	@Column(name="fecha_modificacion",nullable=true )
+
+	@Column(name = "fecha_modificacion", nullable = true)
 	private Date fechaModificacion;
-	
-	@Column(name="credito_fiscal",nullable=false )
-	private boolean creditoFiscal=false;
+
+	@Column(name = "credito_fiscal", nullable = false)
+	private boolean creditoFiscal = false;
+
+	// MARCA DE AGUA DE LA FACTURA
+	@Column(name = "marca_agua", nullable = true)
+	private boolean marcaAgua;
 
 	public Sucursal() {
 		super();
 		this.id = 0;
-		this.actividad="COMERCIO";
-		this.pesoLogo=0;
+		this.actividad = "COMERCIO";
+		this.pesoLogo = 0;
+		this.marcaAgua = false;
 	}
-	
-	public Sucursal(Integer id,Empresa empresa) {
+
+	public Sucursal(Integer id, Empresa empresa) {
 		super();
 		this.id = id;
-		this.empresa=empresa;
-		this.pesoLogo=0;
+		this.empresa = empresa;
+		this.pesoLogo = 0;
+		this.marcaAgua = false;
 	}
 
 	@Override
 	public String toString() {
 		return nombre;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -88,15 +97,15 @@ public class Sucursal implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj==null){
+		if (obj == null) {
 			return false;
-		}else{
-			if(!(obj instanceof Sucursal)){
+		} else {
+			if (!(obj instanceof Sucursal)) {
 				return false;
-			}else{
-				if(((Sucursal)obj).id==this.id){
+			} else {
+				if (((Sucursal) obj).id == this.id) {
 					return true;
-				}else{
+				} else {
 					return false;
 				}
 			}
@@ -158,7 +167,7 @@ public class Sucursal implements Serializable {
 	public void setUsuarioRegistro(String usuarioRegistro) {
 		UsuarioRegistro = usuarioRegistro;
 	}
-	
+
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -223,6 +232,12 @@ public class Sucursal implements Serializable {
 		this.pesoLogo = pesoLogo;
 	}
 
+	public boolean isMarcaAgua() {
+		return marcaAgua;
+	}
+
+	public void setMarcaAgua(boolean marcaAgua) {
+		this.marcaAgua = marcaAgua;
+	}
+
 }
-
-

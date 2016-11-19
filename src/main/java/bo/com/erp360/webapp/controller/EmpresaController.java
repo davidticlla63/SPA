@@ -285,7 +285,7 @@ public class EmpresaController implements Serializable {
 				resetearFitrosTabla("formTableEmpresa:dataTableEmpresa");
 				return;
 			}
-			if (newEmpresa.getPropietario().length() == 0
+			if (newEmpresa.getPropietario() == ""
 					|| newEmpresa.getPropietario() == null) {
 				newEmpresa.setPropietario(null);
 			}
@@ -458,7 +458,7 @@ public class EmpresaController implements Serializable {
 			} else
 				newEmpresa.setPesoLogo(0);
 			FacesUtil.removeSessionAttribute("imagePersonal");
-			if (newEmpresa.getPropietario().length() == 0
+			if (newEmpresa.getPropietario() == ""
 					|| newEmpresa.getPropietario() == null) {
 				newEmpresa.setPropietario(null);
 			}

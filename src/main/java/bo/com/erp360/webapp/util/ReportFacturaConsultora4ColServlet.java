@@ -121,12 +121,12 @@ public class ReportFacturaConsultora4ColServlet extends HttpServlet {
 							+ "resources/report/Facturacion/";
 
 					String URL_SERVLET_IMAGE_ANULADA = "";
-					if (factura.getEstado().equals("A")) {
-
-						URL_SERVLET_IMAGE_ANULADA = urlPath
-								+ "resources/gfx/anulada.png";
+					if(factura.getEstado().equals("A")){						
+						URL_SERVLET_IMAGE_ANULADA =  urlPath + "resources/gfx/anulada.png";
 					}else{
-						URL_SERVLET_IMAGE_ANULADA = urlPath + "ServletBackgroundFactura?idSucursal=" + factura.getSucursal().getId();
+						if (factura.getSucursal().isMarcaAgua()) {
+							URL_SERVLET_IMAGE_ANULADA = urlPath + "ServletBackgroundFactura?idSucursal=" + factura.getSucursal().getId();
+						}						
 					}
 
 					logo = urlPath + "ServletLogoCompania?idEmpresa=" + factura.getEmpresa().getId();
