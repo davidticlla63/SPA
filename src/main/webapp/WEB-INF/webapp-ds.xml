@@ -19,12 +19,6 @@
 		in META-INF/persistence.xml -->
 	<datasource jta="false" jndi-name="java:jboss/datasources/SpaDS"
 		pool-name="SpaDS" enabled="true" use-ccm="false">
-		<!-- <connection-url>jdbc:edb://localhost:5444/contabilidadDB</connection-url> -->
-		<!-- <driver-class>com.edb.Driver</driver-class> -->
-		<!-- <driver>edb-jdbc14.jar</driver> -->
-
-
-
 
 		<connection-url>jdbc:edb://localhost:5432/consulting_db</connection-url>
 		<driver-class>com.edb.Driver</driver-class>
