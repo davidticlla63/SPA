@@ -55,7 +55,8 @@
 						<div class="col-md-12">
 							<div class="panel panel-default">
 								<strong> <span class="alert-warning"><h:outputText
-											lang="es" rendered="#{facturaController.diasrestantes lt 30 and facturaController.puedofacturar=='true'}"
+											lang="es"
+											rendered="#{facturaController.diasrestantes lt 30 and facturaController.puedofacturar=='true'}"
 											value="Faltan #{facturaController.diasrestantes} dias">
 											<f:convertNumber pattern="0######" />
 										</h:outputText></span> <span class="alert-danger"><h:outputText lang="es"
@@ -178,7 +179,6 @@
 													<p:ajax event="change" update=":formRegisterFacturacion" />
 												</p:selectOneButton>
 											</div>
-											<p:separator />
 											<p:fragment
 												rendered="#{facturaController.productoServicio=='producto'}">
 												<div class="row">
@@ -200,7 +200,7 @@
 																	value="#{facturaController.productoServicio}"
 																	for="event" />
 															</div>
-															
+
 															<div class="col-sm-3">
 																<p:commandLink id="buttonAceptarDialog1wsdf"
 																	value="Agregar" styleClass="btn btn-success btn-block">
@@ -328,129 +328,77 @@
 
 										</div>
 									</h:form>
-									<br />
-
 									<div class="row">
 										<div class="col-md-12">
 											<!-- start data table  FACTURA -->
 											<h:form id="formTableFacturacion">
 												<p:growl id="msgs" showDetail="true" />
-												<p:dataTable var="var" rendered="true"
+												<p:dataTable id="detalleID" var="var"
 													value="#{facturaController.listDetalleFactura}"
-													binding="#{facturaController.usersDataTable}"
 													emptyMessage="Agregue productos" reflow="true"
-													style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
-													editable="true">
+													style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;">
 													<f:facet name="header">
            												Productos
        												</f:facet>
-													<p:ajax event="rowEdit" update=":formTotales"
-														listener="#{facturaController.onRowEdit}" />
-													<p:column width="10%" headerText="Código"
-														disabledSelection="true">
-														<p:cellEditor>
-															<f:facet name="output">
-																<h:outputText value="#{var.codigoProducto}" />
-															</f:facet>
-															<f:facet name="input">
-																<h:outputText value="#{var.codigoProducto}"
-																	style="width:100%" />
-															</f:facet>
-														</p:cellEditor>
+													<p:column width="10%" headerText="Código">
+														<h:outputText value="#{var.codigoProducto}" />
 													</p:column>
 													<p:column width="35%" headerText="Concepto">
-														<p:cellEditor>
-															<f:facet name="output">
-																<h:outputText value="#{var.concepto}" />
-															</f:facet>
-															<f:facet name="input">
-																<p:commandLink id="buttonAceptarModal1"
-																	value="Seleccione Producto"
-																	onclick="PF('dlg0').show();">
-																	<p:ajax
-																		listener="#{facturaController.setSelectedIdEDFactura(var.id)}" />
-																</p:commandLink>
-															</f:facet>
-														</p:cellEditor>
+														<h:outputText value="#{var.concepto}" />
 													</p:column>
-													<p:column width="10%" headerText="Cantidad">
-														<p:cellEditor>
-															<f:facet name="output">
-																<ui:fragment rendered="#{var.cantidad == 0}">
-																	<h:outputText value="">
-																	</h:outputText>
-																</ui:fragment>
-																<ui:fragment rendered="#{var.cantidad != 0}">
-																	<h:outputText value="#{var.cantidad}">
-																	</h:outputText>
-																</ui:fragment>
-															</f:facet>
-															<f:facet name="input">
-																<p:inputText id="debeE" value="#{var.cantidad}"
-																	label="label">
-																</p:inputText>
-															</f:facet>
-														</p:cellEditor>
+													<p:column width="10%" headerText="Cantidad"
+														style="text-align:center;">
+														<h:outputText rendered="#{!var.editar}"
+															value="#{var.cantidad}" />
+														<p:inputText rendered="#{var.editar}" id="debeE"
+															value="#{var.cantidad}">
+															<p:ajax update="formTableFacturacion:detalleID"
+																listener="#{facturaController.calcular(var)}" />
+														</p:inputText>
 													</p:column>
-													<p:column headerText="Precio Unitario">
-														<p:cellEditor>
-															<f:facet name="output">
-																<ui:fragment rendered="#{var.precioUnitario == 0}">
-																	<h:outputText value="">
-																	</h:outputText>
-																</ui:fragment>
-																<ui:fragment rendered="#{var.precioUnitario != 0}">
-																	<h:outputText value="#{var.precioUnitario}">
-																		<f:convertNumber type="number" groupingUsed="true"
-																			minFractionDigits="2" pattern="#0.00" locale="en" />
-																	</h:outputText>
-																</ui:fragment>
-															</f:facet>
-															<f:facet name="input">
-																<p:inputText id="haberB" value="#{var.precioUnitario}"
-																	style="width:100%;" label="label">
-
-																</p:inputText>
-															</f:facet>
-														</p:cellEditor>
+													<p:column headerText="Precio Unitario"
+														style="text-align:center;">
+														<h:outputText rendered="#{!var.editar}"
+															value="#{var.precioUnitario}">
+															<f:convertNumber type="number" groupingUsed="true"
+																minFractionDigits="2" pattern="#0.00" locale="en" />
+														</h:outputText>
+														<p:inputText rendered="#{var.editar}" id="haberB"
+															value="#{var.precioUnitario}" style="width:100%;">
+															<p:ajax update="formTableFacturacion:detalleID"
+																listener="#{facturaController.calcular(var)}" />
+														</p:inputText>
 													</p:column>
-													<p:column headerText="Precio Total">
-														<p:cellEditor>
-															<f:facet name="output">
-																<ui:fragment rendered="#{var.precioTotal == 0}">
-																	<h:outputText value="" />
-																</ui:fragment>
-																<ui:fragment rendered="#{var.precioTotal != 0}">
-																	<h:outputText value="#{var.precioTotal}">
-																		<f:convertNumber type="number" groupingUsed="true"
-																			minFractionDigits="2" pattern="#0.00" locale="en" />
-																	</h:outputText>
-																</ui:fragment>
-															</f:facet>
-															<f:facet name="input">
-																<p:inputText id="precioTotalB"
-																	value="#{var.precioTotal}" style="width:100%;"
-																	label="label">
-
-																</p:inputText>
-															</f:facet>
-														</p:cellEditor>
+													<p:column headerText="Precio Total"
+														style="text-align:center;">
+														<h:outputText value="#{var.precioTotal}">
+															<f:convertNumber type="number" groupingUsed="true"
+																minFractionDigits="2" pattern="#0.00" locale="en" />
+														</h:outputText>
 													</p:column>
 
 
 													<p:column width="10%" headerText="Edición"
-														style="width:50px">
-														<p:rowEditor>
-														</p:rowEditor>
-														<p:cellEditor>
-															<f:facet name="output">
-																<p:commandLink id="deleteLink"
-																	styleClass="ui-icon ui-icon-trash" />
-															</f:facet>
-															<f:facet name="input">
-																<h:outputText value="" />
-															</f:facet>
-														</p:cellEditor>
+														style="width:50px; text-align:center;">
+
+														<p:commandLink rendered="#{var.editar=='false'}"
+															id="editLink" styleClass="btn-primary ion-edit">
+															<p:ajax update="formTableFacturacion:detalleID,formTotales"
+																listener="#{facturaController.editar(var)}" />
+														</p:commandLink>
+
+														<p:commandLink rendered="#{var.editar=='true'}"
+															id="saveLink" styleClass="btn-success ion-checkmark">
+															<p:ajax update="formTableFacturacion:detalleID,formTotales"
+																listener="#{facturaController.save(var)}" />
+														</p:commandLink>
+
+														<p:commandLink rendered="#{var.editar=='true'}"
+															id="deleteLink" styleClass="btn-danger ion-trash-b">
+															<p:ajax update="formTableFacturacion:detalleID,formTotales"
+																listener="#{facturaController.eliminar(var)}" />
+														</p:commandLink>
+
 													</p:column>
 												</p:dataTable>
 											</h:form>

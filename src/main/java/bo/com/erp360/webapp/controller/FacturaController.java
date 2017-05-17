@@ -523,6 +523,51 @@ public class FacturaController implements Serializable {
 	public void onRowEdit() {
 		log.info("Ingreso a onRowEdit");
 	}
+	
+	public void save(DetalleFactura detalleFactura){
+		System.out.println("Ingreso a editar");
+		for (int i = 0; i < listDetalleFactura.size(); i++) {
+			if (detalleFactura.getCorrelativo()==listDetalleFactura.get(i).getCorrelativo()) {
+				listDetalleFactura.get(i).setEditar(false);
+				calcularImporteTotal();
+				return;
+			}
+		}
+		
+	}
+	
+	public void editar(DetalleFactura detalleFactura){
+		System.out.println("Ingreso a editar");
+		for (int i = 0; i < listDetalleFactura.size(); i++) {
+			if (detalleFactura.getCorrelativo()==listDetalleFactura.get(i).getCorrelativo()) {
+				listDetalleFactura.get(i).setEditar(true);
+				calcularImporteTotal();
+				return;
+			}
+		}
+	}
+	
+	public void eliminar(DetalleFactura detalleFactura){
+		System.out.println("Ingreso a eliminar");
+		for (int i = 0; i < listDetalleFactura.size(); i++) {
+			if (detalleFactura.getCorrelativo()==listDetalleFactura.get(i).getCorrelativo()) {
+				listDetalleFactura.remove(i);
+				calcularImporteTotal();
+				return;
+			}
+		}
+	}
+	
+	public void calcular(DetalleFactura detalleFactura){
+		System.out.println("Ingreso a calcular");
+		for (int i = 0; i < listDetalleFactura.size(); i++) {
+			if (detalleFactura.getCorrelativo()==listDetalleFactura.get(i).getCorrelativo()) {
+				listDetalleFactura.get(i).setPrecioTotal(detalleFactura.getCantidad()*detalleFactura.getPrecioUnitario());
+				calcularImporteTotal();
+				return;
+			}
+		}
+	}
 
 	public void agregarProducto() {
 		try {
@@ -595,8 +640,11 @@ public class FacturaController implements Serializable {
 
 	private void calcularImporteTotal() {
 		totalImporte = 0;
+		int correl=0;
 		for (DetalleFactura detalleFactura : listDetalleFactura) {
 			totalImporte += detalleFactura.getPrecioTotal();
+			detalleFactura.setCorrelativo(correl+1);
+			correl++;
 		}
 		newFactura.setTotalFacturado(totalImporte);
 		newFactura.setTotalPagar(totalImporte);

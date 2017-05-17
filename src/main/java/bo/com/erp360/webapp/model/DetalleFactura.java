@@ -1,7 +1,5 @@
 package bo.com.erp360.webapp.model;
 
-import groovy.sql.Sql;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 /**
@@ -73,9 +72,10 @@ public class DetalleFactura implements java.io.Serializable {
 	private String usuarioRegistro;
 
 	private String origen;
-
-	/*private List<SubDetalleFactura> listSubDetalleFactura = new ArrayList<SubDetalleFactura>();*/
-
+	
+	@Transient
+	private boolean editar=false;
+	
 	public DetalleFactura() {
 		super();
 		this.id = 0;
@@ -262,6 +262,14 @@ public class DetalleFactura implements java.io.Serializable {
 
 	public void setUnidadMedida(String unidadMedida) {
 		this.unidadMedida = unidadMedida;
+	}
+
+	public boolean isEditar() {
+		return editar;
+	}
+
+	public void setEditar(boolean editar) {
+		this.editar = editar;
 	}
 
 	/*@OneToMany(mappedBy = "detalleFactura", fetch = FetchType.LAZY)
