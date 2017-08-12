@@ -44,6 +44,9 @@ public class DetalleFactura implements java.io.Serializable {
 	
 	@Column(name = "unidad_medida", length = 30, nullable = true)
 	private String unidadMedida;
+	
+	@Column(name = "periodo", nullable = true, length = 100)
+	private String periodo;
 
 	@Column(name = "concepto", nullable = false, length = 2000)
 	private String concepto;
@@ -270,6 +273,14 @@ public class DetalleFactura implements java.io.Serializable {
 
 	public void setEditar(boolean editar) {
 		this.editar = editar;
+	}
+
+	public String getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
 	}
 
 	/*@OneToMany(mappedBy = "detalleFactura", fetch = FetchType.LAZY)

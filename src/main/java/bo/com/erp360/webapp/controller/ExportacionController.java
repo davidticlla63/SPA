@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.event.Event;
@@ -41,7 +40,6 @@ import bo.com.erp360.webapp.model.Empresa;
 import bo.com.erp360.webapp.model.Factura;
 import bo.com.erp360.webapp.model.Gestion;
 import bo.com.erp360.webapp.model.Sucursal;
-import bo.com.erp360.webapp.model.Usuario;
 import bo.com.erp360.webapp.service.EstadoUsuarioLogin;
 
 @Named(value = "exportacionController")
@@ -227,7 +225,6 @@ public class ExportacionController implements Serializable {
 	}
 
 	private static File stream2fileExcel(InputStream in) throws IOException {
-
 		final File tempFile = File.createTempFile("Reporte", ".xls");
 		tempFile.deleteOnExit();
 
