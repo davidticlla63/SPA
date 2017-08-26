@@ -604,6 +604,7 @@ public class FacturaAlquilerController implements Serializable {
 				newFactura = UtilidadesFacturacion.calcularDatosFacturacion(
 						newFactura, dosificacion, nitCliente);
 				System.out.println("calculado datos ");
+				newFactura.setTipoFactura("ALQUILER");
 				newFactura=facturaRegistration.create(newFactura);
 				System.out.println("registrado..");
 				dosificacion.setNumeroSecuencia(dosificacion
@@ -1165,8 +1166,7 @@ public class FacturaAlquilerController implements Serializable {
 					empresaLogin, sucursalLogin).get(0);
 			if (formatoHoja.getNombre().equals("COMPLETO")) {
 					this.url =urlPath	+ "ReportFacturaAlquiler?"
-							+ UtilidadesFacturacion.urlFacturaServlet(newFactura, dosificacion, urlLogo, tamano);
-				
+							+ UtilidadesFacturacion.urlFacturaServlet(newFactura, dosificacion, urlLogo, tamano);				
 
 			}
 			if (formatoHoja.getNombre().equals("SIN LOGO")) {

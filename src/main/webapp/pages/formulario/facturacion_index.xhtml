@@ -50,6 +50,13 @@
 									action="#{facturaIndexController.armarUrl()}"
 									oncomplete="PF('dlgFacturaVistaPrevia').show();">
 								</p:commandLink>
+								<p:commandLink id="buttonModificarO" value="&#160; Imprimir Original"
+									styleClass="btn btn-info ion-printer"
+									rendered="#{facturaIndexController.seleccionarFactura and sessionMain.usuarioLoggin.state.equals('SU')}"
+									style="height:31px;" update=":formModalVistaPrevia"
+									action="#{facturaIndexController.armarUrlOriginal()}"
+									oncomplete="PF('dlgFacturaVistaPrevia').show();">
+								</p:commandLink>
 							</div>
 						</div>
 					</h:form>

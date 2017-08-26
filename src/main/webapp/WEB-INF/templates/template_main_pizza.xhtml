@@ -80,9 +80,9 @@
 				<div class="input-icon left" style="text-align: center;">
 					<i class="icon-briefcase"></i>
 					<p:inputText
-						placeholder=" TC: #{tipoCambioController.obtenerTipoCambioActual().unidad} - UFV:2.34  - #{sessionMain.empresaLoggin.razonSocial} - #{sessionMain.sucursalLoggin.descripcion} - GESTIÓN #{sessionMain.gestionLoggin.gestion}"
+						placeholder=" TC: #{tipoCambioController.obtenerTipoCambioActual().unidad} - UFV:2.34  - #{sessionMain.empresaLoggin.razonSocial} - GESTIÓN #{sessionMain.gestionLoggin.gestion}"
 						disabled="true"
-						style=" color: #555555; background-image: none; height:35px; width:500px;"
+						style=" color: #555555; background-image: none; height:35px; width:315px;"
 						styleClass="form-control input-sm input-dark" />
 				</div>
 			</form>
@@ -145,10 +145,7 @@
 								<li
 									class="#{(view.viewId.equals('/pages/parametrizacion/sucursal.xhtml')) ? 'active' : 'inactive'}"><a
 									href="#{request.contextPath}/pages/parametrizacion/sucursal.xhtml">Sucursal</a></li>
-								<li
-									class="#{(view.viewId.equals('/pages/parametrizacion/tipo_comprobante.xhtml')) ? 'active' : 'inactive'}"><a
-									href="#{request.contextPath}/pages/parametrizacion/tipo_comprobante.xhtml">Tipos
-										de Comprobantes</a></li>
+								
 								<li
 									class="#{(view.viewId.equals('/pages/parametrizacion/tipo_cambio.xhtml')) ? 'active' : 'inactive'}"><a
 									href="#{request.contextPath}/pages/parametrizacion/tipo_cambio.xhtml">Tipo
@@ -199,40 +196,16 @@
 								href="#{request.contextPath}/pages/parametrizacion/servicios.xhtml"><i
 									class="icon-globe-alt"></i><span class="sidebar-text">Servicios</span></a></li>
 
-
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/producto.xhtml')) ? 'active' : 'inactive'}"><a
 								href="#{request.contextPath}/pages/formulario/producto.xhtml"><i
 									class="icon-globe-alt"></i><span class="sidebar-text">Producto</span></a></li>
-									
-							<ui:fragment rendered='false'>
-							<li 
-								class="#{(view.viewId.equals('/pages/formulario/facturacion.xhtml')) ? 'active' :'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/facturacion.xhtml">
-									<i class="icon-briefcase"></i><span class="sidebar-text">Facturacion</span>
-							</a></li>
-							</ui:fragment>
-							<ui:fragment rendered='false'>
-							<li
-								class="#{(view.viewId.equals('/pages/formulario/facturacion-cons.xhtml')) ? 'active' :'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/facturacion-cons.xhtml">
-									<i class="icon-briefcase"></i><span class="sidebar-text">Facturacion 2 Columna</span>
-							</a></li> 
-							</ui:fragment>
-							<ui:fragment rendered='false'>
-							<li
-								class="#{(view.viewId.equals('/pages/formulario/facturacion-alquileres.xhtml')) ? 'active' :'inactive'}"><a
-								href="#{request.contextPath}/pages/formulario/facturacion-alquileres.xhtml">
-									<i class="icon-briefcase"></i><span class="sidebar-text">Factura Alquiler</span>
-							</a></li>   
-							</ui:fragment>
-							<ui:fragment rendered='true'>
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/facturacion-pizza.xhtml')) ? 'active' :'inactive'}"><a
 								href="#{request.contextPath}/pages/formulario/facturacion-pizza.xhtml">
 									<i class="icon-briefcase"></i><span class="sidebar-text">Facturacion</span>
 							</a></li>
-							</ui:fragment>
+
 							<li
 								class="#{(view.viewId.equals('/pages/formulario/facturacion_index.xhtml')) ? 'active' :'inactive'}"><a
 								href="#{request.contextPath}/pages/formulario/facturacion_index.xhtml">

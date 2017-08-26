@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2017-03-14T13:15:22 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tickets_cita" language="groovy" pageWidth="204" pageHeight="577" columnWidth="184" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" isIgnorePagination="true" uuid="b5a7327c-2f6c-48ca-8118-3e780db2cf10">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="con_spaps"/>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="qr" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT c.id, c.motivo,c.fecha_atencion,c.hora, c.fecha_registro,c.especialidad,
+p.nombre ||' '|| p.apellido_paterno ||' '|| p.apellido_materno as paciente, pe.nombre ||' '|| pe.apellido_paterno ||' '|| pe.apellido_materno as medico,
+case when co.reconsulta=0 then 'CONSULTA' ELSE 'RE-CONSULTA' end as consulta,case when co.tipo_atencion='P' then 'PARTICULAR' when co.tipo_atencion='S' then 'SEGURO' when co.tipo_atencion='E' then 'EMPRESA' ELSE '' end as tipo
+FROM cita c, paciente p, personal pe, consulta co
+WHERE c.id_consulta=co.id and c.id_individuo=p.id and c.id_personal=pe.id and c.id=$P{id}]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="motivo" class="java.lang.String"/>
+	<field name="fecha_atencion" class="java.sql.Timestamp"/>
+	<field name="hora" class="java.sql.Timestamp"/>
+	<field name="fecha_registro" class="java.sql.Timestamp"/>
+	<field name="especialidad" class="java.lang.String"/>
+	<field name="paciente" class="java.lang.String"/>
+	<field name="medico" class="java.lang.String"/>
+	<field name="consulta" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="67" splitType="Stretch">
+			<textField>
+				<reportElement x="-10" y="0" width="202" height="30" uuid="ac567a4b-4bca-471d-916e-29730b235c39"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="26" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="45" width="184" height="15" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="09c925ef-7bae-40d2-93f3-7ae5b8a8c84d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FICHA ASISTENCIA"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="66" width="184" height="1" forecolor="#000000" uuid="7a4db4be-2f94-49aa-9640-a938b3f98784"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="302" splitType="Stretch">
+			<line>
+				<reportElement x="-1" y="73" width="185" height="1" forecolor="#000000" uuid="f6b07922-8ec1-40d4-9664-974afbacb981"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="21" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="ad3344c2-047f-436a-bc50-5ca390cec1a3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PACIENTE: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="32" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="0890ba27-1e88-447a-8217-1b55ed39f3cd"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MOTIVO: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="43" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="60d8fc51-28c7-4e81-99c8-84413d0b55d8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MEDICO: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="81" y="21" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="6cd016e2-6c25-4ee0-8a80-0c3a921a3f2e"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{paciente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="81" y="32" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="ad56483f-41d8-42b4-9b54-9f808316ba52"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{motivo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="81" y="43" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="22b1bab8-6a96-49b0-825b-d6a1bd97741b"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{medico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="76" width="72" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="e607090d-c596-4f4e-8c20-2e1eafabf87a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA CITA: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-4" y="270" width="188" height="30" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="fc2b3fac-7747-4894-bc20-20ddb1f96ffa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["EL PACIENTE DEBE PRESENTARSE 15 MINUTOS ANTES DE LA CITA "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement x="73" y="76" width="57" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="8409f07c-c8ca-450e-9fba-0f2c573fdc73"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_atencion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="HH:mm">
+				<reportElement x="140" y="76" width="44" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="7221a049-0711-4cfb-9436-98a2e6c2398c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="130" y="76" width="10" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="b6ca22d8-d162-4238-8971-c0f9ef29050a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["- "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-1" y="55" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="c66caf9c-486b-4536-a5d2-46930453b297"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ESPECIALIDAD: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="80" y="55" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="7ab2b81a-600f-4256-a5ef-e98d005b69c6"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{especialidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="81" y="6" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="f6ac9e8f-a1e5-496f-a8e1-c1e18a4f36bd"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consulta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="6" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="9196a8d3-f108-432d-b2a1-98ca8dda64e1"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TIPO: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="80" y="90" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="6830560e-cc82-40c6-9403-3db21dbdc853"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_registro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-1" y="90" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="6eda1d10-fb0b-49b3-b2d5-8d730927f6a6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA EMISION: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-1" y="103" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="8a47f50a-f6d0-4018-b2b1-79edf60269b4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ATENCION: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="80" y="103" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="42098025-589f-4cda-aa0b-dacbcfd9043d"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="-1" y="115" width="81" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="9e57027f-9b68-4336-a0ad-944b582fc9f0"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NUMERO: "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="80" y="115" width="103" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" uuid="722e3c5a-e13b-4478-8ae5-9b8fed443023"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="4" y="135" width="169" height="134" forecolor="#000000" uuid="6a77d2dc-0cf7-4b2c-a6f6-277f9ca161c2"/>
+				<imageExpression><![CDATA[$P{qr}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14">
+			<line>
+				<reportElement x="0" y="2" width="184" height="1" forecolor="#000000" uuid="9a43f117-cce8-463e-a32c-7f2616081913"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+</jasperReport>

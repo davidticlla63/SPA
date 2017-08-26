@@ -85,7 +85,7 @@
 									style="border: 1px solid green; background-color: white; border-radius: 6px;">
 									<h:form id="formListaProducto">
 										<ui:fragment
-											rendered="#{facturaPizzeriaController.nuevo=='true'}">
+											rendered="#{facturaPizzeriaController.nuevo=='true' and facturaPizzeriaController.impresion=='false'}">
 											<p:selectOneButton
 												value="#{facturaPizzeriaController.pagina}"
 												style="  font-size: 12px;  font-weight:bold;  z-index: 9999; ">
@@ -222,7 +222,7 @@
 								<h:form id="formRegisterFacturacion">
 									<!-- start here register -->
 									<ui:fragment
-										rendered="#{facturaPizzeriaController.nuevo=='false'}">
+										rendered="#{facturaPizzeriaController.nuevo=='false' and facturaPizzeriaController.impresion=='false'}">
 										<div class="panel-heading">
 											<h3 class="panel-title">Registro de Facturación</h3>
 
@@ -396,7 +396,7 @@
 
 					<h:form id="formImpresion">
 						<ui:fragment
-							rendered="#{facturaPizzeriaController.impresion=='true'}">
+							rendered="#{facturaPizzeriaController.impresion=='true' and facturaPizzeriaController.nuevo=='FALSE'}">
 							<div class="row">
 								<div class="form-group ">
 									<div class="col-md-12" align="center">

@@ -218,6 +218,73 @@
 										</div>
 									</div>
 								</div>
+								<div class="col-md-8">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">Lista Clientes</h3>
+									</div>
+									<!-- start here datatable -->
+									<p:dataTable id="dataTableNITS" var="item"
+										widgetVar="clientesTable" value="#{listClientes}"
+										selectionMode="single"
+										style="font-size: 12px !important; line-height: 1.33846154 !important; font-family: sans-serif !important;"
+										emptyMessage="No se encontraron clientes"
+										selection="#{clientesController.selectedClientes}"
+										rowKey="#{item.id}" reflow="true"
+										filteredValue="#{clientesController.listFilterClientes}">
+										<p:ajax event="rowSelect"
+											listener="#{clientesController.onRowSelect}"
+											update=":formReg,:formBotonesHeader,:formTableClientes,:formReg:dataTableNITS" />
+										<p:column width="8%" headerText="Código"
+											filterStyle="width: 100%; height:25px;"
+											style="text-align:center;" filterBy="#{item.id}">
+											<h:outputText value="#{item.id}" />
+										</p:column>
+										<p:column headerText="Nombre"
+											filterStyle="width: 100%; height:25px;"
+											filterBy="#{item.nombre}">
+											<h:outputText value="#{item.nombre}" />
+										</p:column>
+										<p:column headerText="CI"
+											filterStyle="width: 100%; height:25px;"
+											filterBy="#{item.nit}">
+											<h:outputText value="#{item.ci}" />
+										</p:column>
+										<p:column headerText="Telefono" width="10%"
+											filterStyle="width: 100%; height:25px;"
+											filterBy="#{item.telefono}">
+											<h:outputText value="#{item.telefono}" />
+										</p:column>
+										<p:column width="10%" filterStyle="width: 100%; height:25px;"
+											headerText="Estado" style="text-align:center;"
+											filterBy="#{item.estado}">
+											<span class="label label-success"><h:outputText
+													rendered="#{item.estado=='AC'}" value="Activo" /></span>
+											<span class="label label-danger"><h:outputText
+													rendered="#{item.estado=='IN'}" value="Inactivo" /></span>
+										</p:column>
+										<p:column width="10%" filterStyle="width: 100%; height:25px;"
+											style="text-align:center;" headerText="Usuario Reg."
+											filterBy="#{item.usuarioRegistro}">
+											<h:outputText value="#{item.usuarioRegistro}" />
+										</p:column>
+										<p:column width="10%" headerText="Fecha Reg."
+											style="text-align:center;"
+											filterStyle="width: 100%; height:25px;"
+											filterBy="#{item.fechaRegistro}">
+											<h:outputText value="#{item.fechaRegistro}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+										<f:facet name="footer">
+											<h:outputText
+												value="#{listClientes.size()} Registros en Total" />
+										</f:facet>
+									</p:dataTable>
+									<!-- end here datatable -->
+									<div class="panel-body"></div>
+								</div>
+							</div>
 							</ui:fragment>
 						</h:form>
 						<h:form id="formTableClientes">

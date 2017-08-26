@@ -20,7 +20,7 @@
 	<datasource jta="false" jndi-name="java:jboss/datasources/SpaDS"
 		pool-name="SpaDS" enabled="true" use-ccm="false">
 
-		<connection-url>jdbc:edb://localhost:5432/consulting_db</connection-url>
+		<connection-url>jdbc:edb://localhost:5432/pizzeria_db</connection-url>
 		<driver-class>com.edb.Driver</driver-class>
 		<driver>edb-jdbc14.jar</driver>
 
@@ -33,8 +33,8 @@
 		</pool>
 
 		<security>
-			<user-name>consultora</user-name>
-			<password>consultora</password>
+			<user-name>pizzeria</user-name>
+			<password>pizzeria</password>
 		</security>
 		<validation>
 			<validate-on-match>false</validate-on-match>

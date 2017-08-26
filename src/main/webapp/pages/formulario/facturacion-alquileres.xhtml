@@ -305,15 +305,14 @@
 												<div class="col-md-2"></div>
 												<div class="col-md-2"></div>
 												<div class="col-md-2"></div>
-												<div class="col-md-2"></div>
 												<div class="col-md-2">
 													<h3>TOTAL
 														#{facturaAlquilerController.monedaEmpresa.simbolo}</h3>
 												</div>
-												<div class="col-md-2">
+												<div class="col-md-4">
 													<h:inputText
 														value="#{facturaAlquilerController.totalImporte}"
-														style="font-size: 20pt; color: #555555; background-image: none;"
+														style="font-size: 20pt;  text-align:right; color: #555555; background-image: none;"
 														styleClass="input-lg form-control" readonly="true">
 														<f:convertNumber type="number" groupingUsed="true"
 															minFractionDigits="2" pattern="#0.00" locale="en" />

@@ -116,10 +116,13 @@ public class Factura implements Serializable {
 	private double importeBaseDebitoFiscal;
 	private double debitoFiscal;// IVA
 	private String mes;
+	
+	private String tipoFactura;
 
 	public Factura() {
 		super();
 		this.id = 0;
+		tipoFactura="NONE";
 		importeICE = 0;
 		importeExportaciones = 0;
 		importeVentasGrabadasTasaCero = 0;
@@ -460,6 +463,14 @@ public class Factura implements Serializable {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+
+	public String getTipoFactura() {
+		return tipoFactura;
+	}
+
+	public void setTipoFactura(String tipoFactura) {
+		this.tipoFactura = tipoFactura;
 	}
 
 }

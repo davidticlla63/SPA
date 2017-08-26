@@ -266,7 +266,10 @@ public class FacturaIndexController implements Serializable {
 
 			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
 					empresaLogin, sucursalLogin).get(0);
-			
+			if (selectedFactura.getTipoFactura().equals("ALQUILER")) {
+				this.url =urlPath	+ "ReportFacturaAlquiler?"
+						+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+			}else{			
 			if (formatoHoja.getNombre().equals("COMPLETO")) {
 				if (this.formatoFactura.getNombre().equals("DOS COLUMNAS")) {
 					this.url =urlPath	+ "ReportFacturaConsultora?"
@@ -289,6 +292,60 @@ public class FacturaIndexController implements Serializable {
 				}
 
 			log.info("getURL() -> " + url);
+			}
+		} catch (Exception e) {
+		}
+	}
+	
+	public void armarUrlOriginal() {
+		try {
+
+			// TODO: handle exception
+			HttpServletRequest request = (HttpServletRequest) facesContext
+					.getExternalContext().getRequest();
+			String urlPath = request.getRequestURL().toString();
+			urlPath = urlPath.substring(0, urlPath.length()
+					- request.getRequestURI().length())
+					+ request.getContextPath() + "/";
+			selectedFactura.setImpresion(true);
+			selectedFactura=facturaRegistration.update(selectedFactura);
+
+			TamanoHoja tamanoHoja = tamanoHojaRepository.traerHojaActiva();
+			String tamano = tamanoHoja.getTamano();
+
+			String urlLogo = urlPath + "resources/gfx/"
+					+ sucursalLogin.getPathLogo();
+			
+
+			formatoHoja = formatoHojaRepository.findActivosByEmpresa(
+					empresaLogin, sucursalLogin).get(0);
+			if (selectedFactura.getTipoFactura().equals("ALQUILER")) {
+				this.url =urlPath	+ "ReportFacturaAlquiler?"
+						+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+			}else{			
+			if (formatoHoja.getNombre().equals("COMPLETO")) {
+				if (this.formatoFactura.getNombre().equals("DOS COLUMNAS")) {
+					this.url =urlPath	+ "ReportFacturaConsultora?"
+							+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+				}
+				if (this.formatoFactura.getNombre().equals("CUATRO COLUMNAS")) {
+					url = urlPath + "ReportFactura?"+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+				}
+				
+			}
+			if (formatoHoja.getNombre().equals("SIN LOGO")) {
+				url = urlPath
+						+ "ReportFacturaSinCredFiscal?"
+						+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+			}
+			if (formatoHoja.getNombre().equals("SIN LOGO, SIN BORDE")) {
+				url = urlPath
+						+ "ReportFacturaSinCredFiscal?"
+						+ UtilidadesFacturacion.urlFacturaServlet(selectedFactura, dosificacion, urlLogo, tamano);
+				}
+
+			log.info("getURL() -> " + url);
+			}
 		} catch (Exception e) {
 		}
 	}
